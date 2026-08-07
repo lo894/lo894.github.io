@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes, maximum-scale=1.5">
+  <title>龙欣悦 · 自然生长面试简历</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+SC:wght@400;500;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌿%3C/text%3E%3C/svg%3E">
+  <meta name="description" content="龙欣悦 · 自然生长的个人面试简历。08女大，热爱 AI 与创作，记录足迹、作品与成长。">
+  <meta name="keywords" content="龙欣悦,个人简历,面试,作品集,AI,学生">
+  <meta name="theme-color" content="#7a9f5a">
+  <meta property="og:title" content="龙欣悦 · 自然生长面试简历">
+  <meta property="og:description" content="记录足迹、作品与成长的个人简历。">
+  <meta property="og:type" content="website">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --bg:#f8faf5; --surface:rgba(255,255,250,0.65); --text:#2e3c28; --text-secondary:#5b734b;
+      --primary:#7a9f5a; --primary-light:#d4e3c5; --border:rgba(150,180,120,0.22);
+      --shadow:0 25px 45px rgba(70,90,50,0.08); --radius:2.5rem; --nav-height:4rem;
+      --accent:#e6b422; --track:#e3ead9;
+    }
+    body.dark {
+      --bg:#1e2618; --surface:rgba(30,38,24,0.72); --text:#e6edde; --text-secondary:#b6c6a6;
+      --primary:#9fbf8a; --primary-light:#3a4d2c; --border:rgba(180,200,140,0.25);
+      --accent:#d4b87a; --track:rgba(230,237,222,0.16);
+    }
+    body {
+      background-color:var(--bg); font-family:'Quicksand','PingFang SC','Microsoft YaHei',sans-serif;
+      color:var(--text); line-height:1.7; scroll-behavior:smooth;
+      background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop');
+      background-size:cover; background-attachment:fixed; background-position:center;
+      position:relative; padding-top:var(--nav-height); transition:background-color 0.35s,color 0.35s;
+      overflow-x:hidden;
+    }
+    body::before { content:""; position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(248,252,242,0.82); backdrop-filter:blur(12px); z-index:-1; }
+    body.dark::before { background:rgba(24,30,18,0.82); }
+    body.dark .hero-motto { background:rgba(40,55,30,0.55); color:#e6edde; }
+    @media(prefers-reduced-motion:reduce){*{animation-duration:0s!important;transition-duration:0s!important;}}
+    h1,h2,h3 { font-family:'Cormorant Garamond','Noto Serif SC',serif; font-weight:500; }
+    .container { max-width:1100px; margin:0 auto; padding:1rem 1.5rem 2rem; }
+    .navbar { position:fixed; top:0;left:0;right:0; height:var(--nav-height); background:var(--surface); backdrop-filter:blur(18px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 1.8rem; z-index:100; }
+    .nav-brand { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:600; color:var(--text); }
+    .nav-links { display:flex; gap:0.3rem; flex-wrap:wrap; }
+    .nav-links a { background:transparent; border:none; color:var(--text-secondary); font-size:0.85rem; padding:0.4rem 0.9rem; border-radius:2rem; cursor:pointer; text-decoration:none; font-weight:500; transition:0.3s; }
+    .nav-links a:hover { background:var(--primary-light); color:var(--text); }
+    .nav-actions { display:flex; gap:0.5rem; }
+    .icon-btn { width:2.4rem; height:2.4rem; border-radius:50%; border:1px solid var(--border); background:var(--surface); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1rem; color:var(--text-secondary); transition:0.3s; }
+    .icon-btn:hover { background:var(--primary-light); }
+
+    @keyframes softBreath { 0%{text-shadow:0 0 20px rgba(110,145,95,0.15);} 50%{text-shadow:0 0 35px rgba(130,170,110,0.35);} 100%{text-shadow:0 0 20px rgba(110,145,95,0.15);} }
+    @keyframes floatGentle { 0%{transform:translateY(0);} 50%{transform:translateY(-6px);} 100%{transform:translateY(0);} }
+    @keyframes leafFall { 0%{opacity:1; transform:translateY(0) rotate(0deg);} 100%{opacity:0; transform:translateY(180px) rotate(180deg);} }
+
+    .hero-fullscreen { display:flex; flex-direction:column; justify-content:center; align-items:center; min-height:90vh; text-align:center; animation:softBreath 6s infinite ease-in-out; }
+    .hero-title { font-size:5.5rem; font-weight:500; color:var(--text); letter-spacing:5px; animation:floatGentle 4s infinite ease-in-out; }
+    .hero-motto { font-size:1.5rem; font-style:italic; color:var(--text-secondary); margin-bottom:1.8rem; background:rgba(245,250,235,0.75); padding:0.5rem 2.5rem; border-radius:3rem; display:inline-block; }
+    .explore-btn { background:rgba(210,230,190,0.75); backdrop-filter:blur(12px); border:1px solid var(--primary); padding:1rem 3.2rem; border-radius:4rem; font-size:1.2rem; font-weight:600; color:#1e3514; cursor:pointer; transition:all 0.4s; box-shadow:0 12px 28px rgba(90,120,60,0.25); letter-spacing:2px; margin-top:1rem; display:inline-flex; align-items:center; gap:0.6rem; }
+    .explore-btn:hover { background:#c8e0b0; transform:translateY(-3px); }
+
+    .detail-section { display:none; } .detail-section.active { display:block; animation:fadeInUp 0.8s ease forwards; }
+    @keyframes fadeInUp { from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);} }
+    .card { background:var(--surface); backdrop-filter:blur(20px); border-radius:var(--radius); padding:2.2rem; margin-bottom:2rem; box-shadow:var(--shadow); border:1px solid var(--border); transition:0.4s; }
+    .card:hover { box-shadow:0 30px 50px rgba(70,100,50,0.15); }
+    h2 { font-size:2.1rem; color:var(--text); margin-bottom:1.4rem; display:flex; align-items:center; gap:0.6rem; border-left:5px solid var(--primary); padding-left:1.8rem; }
+    .btn-soft { background:rgba(220,240,200,0.75); border:1px solid #b6d4a0; padding:0.7rem 2rem; border-radius:3rem; font-weight:500; cursor:pointer; color:#1f3317; box-shadow:0 8px 18px rgba(100,130,70,0.2); display:inline-flex; align-items:center; gap:0.5rem; transition:0.3s; text-decoration:none; }
+    .btn-soft:hover { background:#c8e0b0; }
+    .image-placeholder { background:#eaf2e2; border-radius:1.8rem; overflow:hidden; box-shadow:0 10px 20px rgba(80,100,50,0.15); }
+    .image-placeholder img { width:100%; height:100%; object-fit:cover; display:block; }
+    .city-row { display:flex; align-items:center; gap:1rem; background:rgba(245,250,240,0.7); border-radius:1.5rem; padding:0.7rem 1.2rem; cursor:pointer; transition:0.25s; margin-bottom:0.6rem; border:1px solid transparent; }
+    .city-row:hover { background:#e0efcf; border-color:#b1cf8b; transform:translateX(4px); }
+    .city-row img { width:55px; height:55px; border-radius:1rem; object-fit:cover; }
+    .scroll-gallery { display:flex; gap:1rem; overflow-x:auto; padding:0.5rem 0; }
+    .gallery-img { height:150px; border-radius:1.5rem; box-shadow:0 6px 15px rgba(70,90,40,0.2); flex-shrink:0; }
+    .game-container { background:#e9f3df; border-radius:2rem; padding:1.5rem; display:flex; flex-direction:column; align-items:center; }
+
+    canvas { border-radius:1.2rem; box-shadow:0 12px 25px rgba(70,90,40,0.25); max-width:100%; }
+    .msg-input { flex:1 1 150px; padding:0.8rem 1.4rem; border-radius:2.5rem; border:1px solid #c2d9ad; background:#fefefb; font-family:'Quicksand',sans-serif; }
+
+    .city-modal-overlay { display:none; position:fixed; top:0;left:0;width:100%;height:100%; background:rgba(30,40,20,0.55); backdrop-filter:blur(10px); z-index:1000; justify-content:center; align-items:center; }
+    .city-modal-overlay.active { display:flex; }
+    .city-modal-box { background:#f6fbf0; border-radius:2.5rem; padding:2.2rem 2rem 1.8rem; max-width:620px; width:90%; max-height:85vh; overflow-y:auto; position:relative; border:3px solid #b1cf8b; box-shadow:0 0 30px rgba(120,160,80,0.35),0 20px 50px rgba(50,70,30,0.25); }
+    .city-modal-close { position:absolute; top:1rem; right:1.5rem; font-size:1.6rem; cursor:pointer; color:#5b734b; background:rgba(220,235,200,0.6); border-radius:50%; width:38px; height:38px; display:flex; align-items:center; justify-content:center; }
+    .city-modal-title { font-size:1.8rem; color:#314829; margin-bottom:0.3rem; text-align:center; }
+    .city-modal-gallery { display:flex; gap:1rem; overflow-x:auto; padding:0.5rem 0 1rem; }
+    .city-modal-gallery img { height:170px; border-radius:1.5rem; box-shadow:0 8px 20px rgba(70,90,40,0.2); border:2px solid rgba(160,190,120,0.4); }
+    /* 城市弹窗动画 */
+    @keyframes modalIn { 0%{opacity:0;transform:translateY(28px) scale(0.94);} 100%{opacity:1;transform:translateY(0) scale(1);} }
+    .city-modal-box.modal-in { animation:modalIn 0.5s cubic-bezier(0.2,0.9,0.4,1) both; }
+    @keyframes fadeUp { 0%{opacity:0;transform:translateY(14px);} 100%{opacity:1;transform:translateY(0);} }
+    .city-modal-desc { font-size:1rem; color:#5b734b; font-style:italic; margin:0.4rem 0 1.1rem; line-height:1.75; animation:fadeUp 0.6s ease both; animation-delay:0.12s; }
+    .city-modal-gallery img { animation:fadeUp 0.5s ease both; }
+    .city-modal-gallery img:nth-child(1){animation-delay:0.18s}
+    .city-modal-gallery img:nth-child(2){animation-delay:0.26s}
+    .city-modal-gallery img:nth-child(3){animation-delay:0.34s}
+    .city-modal-gallery img:nth-child(4){animation-delay:0.42s}
+    .city-modal-gallery img:nth-child(5){animation-delay:0.5s}
+    .city-modal-gallery img:nth-child(6){animation-delay:0.58s}
+    /* 技能卡 */
+    .skill-cell { background:rgba(235,245,220,0.7); border-radius:1.2rem; padding:0.9rem 1.1rem; transition:transform 0.25s, box-shadow 0.25s; }
+    .skill-cell:hover { transform:translateY(-3px); box-shadow:0 10px 22px rgba(90,120,50,0.2); }
+
+    .plant-card { text-align:center; cursor:pointer; transition:0.3s; background:rgba(235,245,220,0.8); }
+    .plant-card:hover { background:#d6e9c0; transform:scale(1.02); }
+    .plant-card .plant-icon { font-size:3.5rem; margin-bottom:0.5rem; }
+    .plant-card .plant-count { font-size:1.5rem; font-weight:700; color:#2b4122; }
+
+    /* 池塘 */
+    .lake-scene { position:fixed; bottom:1.5rem; right:4.5rem; z-index:99; width:220px; height:165px; cursor:pointer; transition:transform 0.25s; }
+    .lake-scene:hover { transform:scale(1.04); }
+    .lake-tooltip { position:absolute; bottom:105%; left:50%; transform:translateX(-50%); background:#1a3a5c; color:#e0f0ff; font-size:0.7rem; padding:0.3rem 1rem; border-radius:2rem; white-space:nowrap; opacity:0; transition:0.3s; pointer-events:none; z-index:5; }
+    .lake-scene:hover .lake-tooltip { opacity:1; }
+    .lake-water { position:absolute; bottom:8px; left:15px; right:15px; height:80px; background:linear-gradient(180deg, #b8dcf5 0%, #8cc8e8 30%, #5ab0d9 70%, #3a8fc2 100%); border-radius:42% 58% 48% 52% / 55% 45% 55% 45%; box-shadow:inset 0 3px 20px rgba(210,235,255,0.6), inset 0 -8px 20px rgba(20,50,90,0.4), 0 6px 25px rgba(20,60,100,0.3); border:1px solid rgba(130,190,220,0.5); overflow:visible; animation:waterShimmer 5s infinite ease-in-out; }
+    @keyframes waterShimmer { 0%,100%{ box-shadow:inset 0 3px 20px rgba(210,235,255,0.6), inset 0 -8px 20px rgba(20,50,90,0.4), 0 6px 25px rgba(20,60,100,0.3); } 50%{ box-shadow:inset 0 5px 25px rgba(220,240,255,0.7), inset 0 -6px 18px rgba(25,55,95,0.35), 0 8px 28px rgba(25,65,105,0.4); } }
+    .lake-water::after { content:''; position:absolute; top:5px; left:20%; width:40%; height:12px; background:rgba(255,255,255,0.5); border-radius:50%; animation:shimmerMove 4s infinite ease-in-out; }
+    @keyframes shimmerMove { 0%,100%{left:20%;opacity:0.4;} 50%{left:45%;opacity:0.6;} }
+    .lake-decor { position:absolute; pointer-events:none; font-size:1.3rem; z-index:2; }
+    .jumping-fish { position:absolute; font-size:2.2rem; pointer-events:none; z-index:10; animation:fishJumpOut 1.8s ease-out forwards; }
+    @keyframes fishJumpOut { 0%{transform:translateY(0) scale(0.3);opacity:0;} 15%{transform:translateY(-30px) scale(1.3);opacity:1;} 45%{transform:translateY(-65px) scale(1.5);opacity:1;} 70%{transform:translateY(-25px) scale(1.1);opacity:0.8;} 100%{transform:translateY(30px) scale(0.4);opacity:0;} }
+    .splash { position:absolute; width:4px; height:4px; background:rgba(200,230,255,0.9); border-radius:50%; pointer-events:none; z-index:9; animation:splashOut 0.7s ease-out forwards; }
+    @keyframes splashOut { 0%{transform:translate(0,0) scale(1);opacity:1;} 100%{transform:translate(var(--sx),var(--sy)) scale(0);opacity:0;} }
+    .fish-result-bubble {
+      position:fixed; top:40%; left:50%; transform:translate(-50%, -50%);
+      background:rgba(255,255,255,0.95); color:#1a3a5c; font-size:1rem;
+      padding:1rem 2rem; border-radius:2.5rem; z-index:300;
+      box-shadow:0 12px 35px rgba(0,0,0,0.25); animation:centerFloat 3.5s ease-out forwards;
+      text-align:center; white-space:nowrap; font-weight:600;
+    }
+    @keyframes centerFloat {
+      0%{opacity:0; transform:translate(-50%, -50%) scale(0.5);}
+      15%{opacity:1; transform:translate(-50%, -50%) scale(1.05);}
+      25%{opacity:1; transform:translate(-50%, -50%) scale(1);}
+      70%{opacity:1; transform:translate(-50%, -55%) scale(0.95);}
+      100%{opacity:0; transform:translate(-50%, -65%) scale(0.8);}
+    }
+    .feed-counter { position:absolute; top:-8px; right:5px; background:#fff; color:#2b5a8c; font-size:0.7rem; font-weight:700; padding:0.15rem 0.6rem; border-radius:1rem; box-shadow:0 2px 8px rgba(0,0,0,0.15); z-index:5; }
+    .season-weather-tag { position:absolute; top:-25px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.6); color:#fff; font-size:0.7rem; padding:0.2rem 0.9rem; border-radius:2rem; white-space:nowrap; pointer-events:none; z-index:10; backdrop-filter:blur(4px); letter-spacing:0.5px; }
+    .weather-particle { position:absolute; pointer-events:none; z-index:8; animation:fall linear forwards; }
+    @keyframes fall { 0%{transform:translateY(0) rotate(0deg); opacity:1;} 100%{transform:translateY(120px) rotate(360deg); opacity:0;} }
+    .back-top { position:fixed; bottom:2rem; right:2rem; background:#c0dba3; border-radius:50%; width:46px; height:46px; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 8px 20px rgba(80,110,50,0.3); z-index:98; border:none; font-size:1.1rem; color:#1f3317; }
+
+    /* 全屏飘落 */
+    .global-particle { position:fixed; pointer-events:none; z-index:150; animation:globalFall linear forwards; }
+    @keyframes globalFall { 0% { transform: translateY(-5vh) rotate(0deg); opacity:1; } 100% { transform: translateY(105vh) rotate(720deg); opacity:0; } }
+
+    .song-cover-img { width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:1.5rem; box-shadow:0 8px 18px rgba(80,110,50,0.2); border:2px solid rgba(150,180,120,0.35); transition:0.3s; }
+    .song-cover-img:hover { border-color:#9fbf8a; transform:translateY(-3px); box-shadow:0 12px 25px rgba(80,110,50,0.3); }
+    .song-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:1.5rem; margin-top:1.2rem; }
+    .song-item { text-align:center; }
+    .song-title { font-weight:600; color:#3a5431; font-size:1rem; margin-top:0.4rem; }
+
+    @media(max-width:700px){ .hero-title{font-size:3.2rem;} .lake-scene{width:170px;height:135px;right:3rem;bottom:1rem;} .lake-water{height:65px;} }
+    @media print{
+      body{background:#fff;padding-top:0;color:#000;}
+      body::before{display:none;}
+      .navbar,.back-top,.lake-scene,.plant-card,.game-container,.city-modal-overlay,.nav-toggle,.time-greeting,.qr-box,.local-note,.btn-soft,.explore-btn{display:none!important;}
+      .detail-section{display:block!important;}
+      .hero-fullscreen{display:none;}
+      .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;background:#fff;page-break-inside:avoid;}
+      .container{max-width:100%;}
+    }
+    /* 阅读进度条 */
+    #readProgress { position:fixed; top:var(--nav-height); left:0; height:3px; width:0%; background:linear-gradient(90deg,var(--primary),var(--accent)); z-index:101; transition:width 0.1s; }
+    /* 时段问候 */
+    .time-greeting { font-size:1.1rem; color:var(--text-secondary); margin-bottom:0.6rem; }
+    /* 汉堡菜单 */
+    .nav-toggle { display:none; background:transparent; border:none; font-size:1.4rem; cursor:pointer; color:var(--text-secondary); }
+    @media(max-width:830px){ .nav-toggle{ display:block; } .nav-links{ display:none; position:absolute; top:var(--nav-height); left:0; right:0; flex-direction:column; gap:0.2rem; background:var(--surface); backdrop-filter:blur(18px); padding:1rem; border-bottom:1px solid var(--border); } .nav-links.open{ display:flex; } }
+    /* 微信/二维码 */
+    .qr-box { width:140px; height:140px; border-radius:1rem; background:#fff; display:flex; align-items:center; justify-content:center; border:1px solid rgba(150,180,120,0.35); box-shadow:0 6px 16px rgba(0,0,0,0.08); overflow:hidden; }
+    .local-note { font-size:0.82rem; color:var(--text-secondary); font-style:italic; margin-top:0.8rem; }
+
+    /* ===== 桌面大屏视觉优化（≥1100px） ===== */
+    @media(min-width:1100px){
+      .container{ max-width:1180px; padding:1.5rem 2.5rem 3rem; }
+      .hero-title{ font-size:6.4rem; letter-spacing:8px; }
+      .hero-motto{ font-size:1.7rem; padding:0.6rem 3rem; }
+      .hero-fullscreen p[style]{ font-size:1.35rem; max-width:640px; margin-left:auto; margin-right:auto; line-height:1.85; }
+      .card{ padding:3rem; margin-bottom:2.6rem; border-radius:2.8rem; }
+      .card h2{ font-size:2.4rem; margin-bottom:1.8rem; padding-left:2rem; }
+      #aboutFootprint > div{ align-items:flex-start; }
+      #aboutFootprint .image-placeholder{ width:240px; height:240px; border-radius:2rem; border:4px solid #fff; box-shadow:0 16px 35px rgba(80,100,50,0.22); }
+      .city-row{ padding:0.95rem 1.5rem; }
+      #contact .qr-box{ width:130px; height:130px; font-size:0.8rem; }
+      .project-card{ border:1px solid var(--border); box-shadow:0 14px 32px rgba(70,100,50,0.1); transition:transform .35s,box-shadow .35s; }
+      .project-card:hover{ transform:translateY(-4px); box-shadow:0 22px 44px rgba(70,100,50,0.16); }
+      .project-card img{ border:3px solid #fff; border-radius:1.6rem; }
+      #skillsSection > div[style]{ gap:1.6rem 2.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar"><span class="nav-brand">龙欣悦</span><button class="nav-toggle" id="navToggle" aria-label="菜单">☰</button><div class="nav-links" id="navLinks"><a href="#top">首页</a><a href="#aboutFootprint">关于·足迹</a><a href="#experience">经历</a><a href="#awards">奖项</a><a href="#learning">学习</a><a href="#skillsSection">技能</a><a href="#gameSection">游戏</a><a href="#contact">联系</a><a href="#messages">留言</a></div><div class="nav-actions"><button id="themeToggle" class="icon-btn">🌓</button><button id="printBtn" class="icon-btn">🖨️</button></div>  </nav>
+  <div id="readProgress"></div>
+  <div class="container" id="top">
+    <div class="hero-fullscreen" id="homeScreen"><div><h1 class="hero-title">龙欣悦</h1><p class="hero-motto">解开昔日旧枷锁，今日方知我是我</p><p class="time-greeting" id="timeGreeting"></p><p style="font-size:1.2rem;color:var(--text-secondary);">🌱 哈喽，我是08女大，金牛座♉️，爱追剧📺听歌🎸，对AI🤖和Blender充满好奇，贪玩但很慢热🥰</p><button class="explore-btn" id="exploreBtn"><i class="fas fa-leaf"></i> 进一步了解我</button></div></div>
+    <div class="detail-section" id="detailSection">
+      <div class="card" id="aboutFootprint"><h2><i class="fas fa-user-leaf"></i> 关于我 · 足迹</h2><div style="display:flex;flex-wrap:wrap;gap:2rem;"><div style="flex:1;"><p>✨ 探索ing · 在留言区留下你的印象吧</p><p>生活城市：<strong>长沙</strong> 🍊</p><p>大学目标：<strong>实现经济独立 · 看一次演唱会 · 拥有自己的作品集</strong></p><div style="margin-top:1.5rem;"><p><strong>🌍 走过的城市</strong></p><div class="city-row" onclick="openCityModal('武汉')"><img src="./3.jpg" onerror="this.src='https://images.unsplash.com/photo-1583417319070-4a0db71a1d4b?q=80&w=400';"><div><strong>武汉</strong></div></div><div class="city-row" onclick="openCityModal('南昌')"><img src="./6.jpg" onerror="this.src='https://images.unsplash.com/photo-1605565348518-2d0e5c5a0c9f?q=80&w=400';"><div><strong>南昌</strong></div></div><div class="city-row" onclick="openCityModal('南京')"><img src="./11.jpg" onerror="this.src='https://images.unsplash.com/photo-1528072164453-f4e8e0b0e1c9?q=80&w=400';"><div><strong>南京</strong></div></div><div class="city-row" onclick="openCityModal('杭州')"><img src="./16.jpg" onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85f82e?q=80&w=400';"><div><strong>杭州</strong></div></div><div class="city-row" onclick="openCityModal('厦门')"><img src="./21.jpg" onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85f82e?q=80&w=400';"><div><strong>厦门</strong></div></div><div class="city-row" onclick="openCityModal('湄江')"><img src="./28.jpg" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400';"><div><strong>湄江</strong></div></div></div></div><div class="image-placeholder" style="width:200px;height:200px;"><img src="./2.jpg" onerror="this.src='https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?q=80&w=400';"></div></div><button class="btn-soft" style="margin-top:1.5rem;" onclick="document.getElementById('experience').scrollIntoView({behavior:'smooth'})">进入下一章 <i class="fas fa-arrow-right"></i></button></div>
+      <div class="card" id="experience"><h2><i class="fas fa-history"></i> 过往经历</h2><p>📘 大一在读，自学AI与计算机，像海绵一样吸收新知识。</p><p style="color:var(--text-secondary);font-style:italic;">"还在完善ing，每一段空白都是未来的序章。"</p>
+      <div style="margin:1.2rem 0;padding:1.2rem;border-radius:1rem;background:rgba(177,207,139,0.12);border:1px solid rgba(177,207,139,0.25);">
+        <div style="display:flex;flex-wrap:wrap;gap:1.2rem;align-items:flex-start;">
+          <img src="./hucai-guide.jpg" style="width:180px;max-width:100%;border-radius:0.8rem;box-shadow:0 4px 12px rgba(0,0,0,0.1);" onerror="this.src='https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=400';" alt="湖财新生指南截图">
+          <div style="flex:1;min-width:220px;">
+            <h3 style="margin:0 0 0.5rem 0;color:var(--text-primary);font-size:1.15rem;">🏫 湖财新生指南 · 2026 迎新季</h3>
+            <p style="margin:0 0 0.6rem 0;color:var(--text-secondary);font-size:0.92rem;line-height:1.6;">
+              独立策划并搭建湖南财政经济学院 2026 级新生入学指南网站，聚合专业培养、校园地图、入学清单、军训指南、电脑选购、政策文件与学习资源等 10+ 核心模块；通过清晰的交互与信息分层，帮助新生一站式获取入学所需信息，并内置 AI 学长问答入口，显著降低信息检索成本。
+            </p>
+            <p style="margin:0 0 0.8rem 0;color:var(--text-secondary);font-size:0.85rem;">
+              🔗 访问口令：<code style="background:rgba(177,207,139,0.2);padding:0.15rem 0.4rem;border-radius:0.3rem;">hucai2026</code>
+            </p>
+            <a href="https://d3ab281d47a1474cae4de5c214cd6a81.bj3.agentos-app.net" target="_blank" class="btn-soft" style="display:inline-block;text-decoration:none;">查看项目 <i class="fas fa-external-link-alt"></i></a>
+          </div>
+        </div>
+      </div>
+      <div style="margin:1.2rem 0;padding:1.2rem;border-radius:1rem;background:rgba(177,207,139,0.12);border:1px solid rgba(177,207,139,0.25);">
+        <div style="display:flex;flex-wrap:wrap;gap:1.2rem;align-items:flex-start;">
+          <div style="font-size:3.2rem;flex-shrink:0;line-height:1;">🛒</div>
+          <div style="flex:1;min-width:220px;">
+            <h3 style="margin:0 0 0.5rem 0;color:var(--text-primary);font-size:1.15rem;">个人二手电商项目主理人（独立操盘）</h3>
+            <p style="margin:0 0 0.6rem 0;color:var(--text-secondary);font-size:0.92rem;line-height:1.6;">
+              以单人模式全流程运营闲鱼店铺，实现"选品—上架—获客—转化—履约—售后"端到端闭环，2 天内完成 12 单高时效转化。独立承担流量承接、销售谈判、供应链履约与客户生命周期管理，在零资源协同下以结果导向驱动增长，沉淀了对"小生意增长飞轮"的实战体感与成本-效率平衡意识。
+            </p>
+          </div>
+        </div>
+      </div><button class="btn-soft" style="margin-top:1.5rem;" onclick="document.getElementById('awards').scrollIntoView({behavior:'smooth'})">下一章 <i class="fas fa-arrow-right"></i></button></div>
+      <div class="card" id="awards"><h2><i class="fas fa-award"></i> 获得的奖项</h2><div class="scroll-gallery"><img class="gallery-img" src="./1.jpg" onerror="this.src='https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=400';"><img class="gallery-img" src="./ai-trainer-advanced.jpg" alt="阿里巴巴人工智能训练师高级认证" onerror="this.style.display='none';"></div><div style="background:#f0f7e5;border-radius:1.5rem;padding:1.2rem;margin-top:1.2rem;display:flex;align-items:center;gap:1rem;"><div style="font-size:2.3rem;">🏅</div><div><strong>阿里云达摩院 · 机器智能技术事业认证</strong><p>人工智能训练师证书</p><p style="margin-top:0.3rem;font-size:0.85rem;color:#6b8a52;">由阿里云达摩院官方认证，系统掌握机器学习与机器智能核心技术栈，具备将前沿 AI 理论转化为工程实践的综合能力。</p></div></div><div style="background:#f0f7e5;border-radius:1.5rem;padding:1.2rem;margin-top:0.8rem;display:flex;align-items:center;gap:1rem;"><div style="font-size:2.3rem;">🌟</div><div><strong>优秀共青团员</strong><p>不忘初心，砥砺前行</p><p style="margin-top:0.3rem;font-size:0.85rem;color:#6b8a52;">在校期间积极投身志愿服务与团组织工作，以责任与热忱获评优秀共青团员，是信念与行动力的双重肯定。</p></div></div><div style="background:#f0f7e5;border-radius:1.5rem;padding:1.2rem;margin-top:0.8rem;display:flex;align-items:center;gap:1rem;"><img src="./ai-trainer-advanced.jpg" alt="阿里巴巴人工智能训练师高级认证" style="width:80px;height:80px;object-fit:cover;border-radius:1rem;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,0.12);flex-shrink:0;"><div><strong>🏆 阿里巴巴橙点同学 · 人工智能训练师（高级）</strong><p style="margin-top:0.3rem;font-size:0.85rem;color:#6b8a52;">以优异成绩通过阿里巴巴橙点同学官方高级认证，系统掌握大模型训练、数据标注、Prompt 工程与 AI 应用落地能力，标志着已具备将人工智能转化为生产力的专业级实力，是从 AI 学习者向 AI 实践者跨越的重要里程碑。</p></div></div><button class="btn-soft" style="margin-top:1.5rem;" onclick="document.getElementById('learning').scrollIntoView({behavior:'smooth'})">继续探索 <i class="fas fa-arrow-right"></i></button></div>
+      <div class="card" id="learning"><h2><i class="fas fa-lightbulb"></i> 我关注与学习</h2><div style="display:flex;gap:1rem;margin-bottom:1.5rem;"><span style="background:#d9ebc5;padding:0.6rem 2rem;border-radius:3rem;">🤖 AI</span><span style="background:#d9ebc5;padding:0.6rem 2rem;border-radius:3rem;">✂️ 剪辑</span><span style="background:#d9ebc5;padding:0.6rem 2rem;border-radius:3rem;">🎸 音乐</span></div><p>正在学习AI软件、AI短视频、PPT与剪辑。</p><div style="margin-top:1.8rem;"><p style="font-weight:600;">🎵 我的歌单</p><div class="song-grid"><div class="song-item"><a href="https://163cn.tv/bcuT2urm" target="_blank"><img class="song-cover-img" src="./诀别无尽夏.jpg" alt="诀别无尽夏" onerror="this.style.background='#d4e3c5';"></a><div class="song-title">诀别无尽夏</div></div><div class="song-item"><a href="https://163cn.tv/bcuTObDX" target="_blank"><img class="song-cover-img" src="./不只是场梦.jpg" alt="不只是场梦" onerror="this.style.background='#d4e3c5';"></a><div class="song-title">不只是场梦</div></div><div class="song-item"><a href="https://163cn.tv/bcuTWiDf" target="_blank"><img class="song-cover-img" src="./小镇姑娘.jpg" alt="小镇姑娘" onerror="this.style.background='#d4e3c5';"></a><div class="song-title">小镇姑娘</div></div><div class="song-item"><a href="https://163cn.tv/bcuTLGFg" target="_blank"><img class="song-cover-img" src="./是是非非.jpg" alt="是是非非" onerror="this.style.background='#d4e3c5';"></a><div class="song-title">是是非非</div></div></div></div><button class="btn-soft" style="margin-top:1.5rem;" onclick="document.getElementById('skillsSection').scrollIntoView({behavior:'smooth'})">下一章 <i class="fas fa-arrow-right"></i></button></div>
+      <div class="card" id="skillsSection"><h2><i class="fas fa-palette"></i> 技能与爱好</h2><div style="display:flex;gap:0.9rem;margin-bottom:1.5rem;"><span style="background:#e1f0d3;padding:0.5rem 1.8rem;border-radius:2.5rem;">✨ 努力ing</span><span style="background:#e1f0d3;padding:0.5rem 1.8rem;border-radius:2.5rem;">📷 音乐摄影</span></div>
+        <div style="margin:1.2rem 0 0.4rem;padding:1.2rem;border-radius:1rem;background:rgba(177,207,139,0.12);border:1px solid rgba(177,207,139,0.25);">
+          <div style="display:flex;gap:1rem;align-items:flex-start;">
+            <div style="font-size:2.4rem;flex-shrink:0;line-height:1;">💻</div>
+            <div>
+              <h3 style="margin:0 0 0.4rem 0;color:var(--text-primary);font-size:1.1rem;">我的 Vibe Coding 能力</h3>
+              <p style="margin:0;color:var(--text-secondary);font-size:0.92rem;line-height:1.65;">
+                熟练借助 AI 编程（Vibe Coding）把创意快速落地为真实可用的网站与产品——从需求拆解、原型设计到前端实现与云端部署，全流程自主驱动。已用 Vibe Coding 独立产出「湖财新生指南」「飞机大战小游戏」「个人简历站」等多个项目，能在「说人话的需求」与「能跑的代码」之间架起桥梁，让想法变成看得见、用得上的作品。
+              </p>
+            </div>
+          </div>
+        </div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.3rem;"><div class="skill-cell"><div style="display:flex;justify-content:space-between;font-weight:500;margin-bottom:0.35rem;"><span>💻 Vibe Coding / AI 辅助编程</span><span>72%</span></div><div style="background:var(--track);height:6px;border-radius:10px;"><div style="width:72%;height:6px;background:var(--primary);border-radius:10px;"></div></div></div><div class="skill-cell"><div style="display:flex;justify-content:space-between;font-weight:500;margin-bottom:0.35rem;"><span>AI / 机器学习</span><span>55%</span></div><div style="background:var(--track);height:6px;border-radius:10px;"><div style="width:55%;height:6px;background:var(--primary);border-radius:10px;"></div></div></div><div class="skill-cell"><div style="display:flex;justify-content:space-between;font-weight:500;margin-bottom:0.35rem;"><span>视频剪辑</span><span>68%</span></div><div style="background:var(--track);height:6px;border-radius:10px;"><div style="width:68%;height:6px;background:var(--primary);border-radius:10px;"></div></div></div><div class="skill-cell"><div style="display:flex;justify-content:space-between;font-weight:500;margin-bottom:0.35rem;"><span>PPT 制作</span><span>75%</span></div><div style="background:var(--track);height:6px;border-radius:10px;"><div style="width:75%;height:6px;background:var(--primary);border-radius:10px;"></div></div></div><div class="skill-cell"><div style="display:flex;justify-content:space-between;font-weight:500;margin-bottom:0.35rem;"><span>摄影</span><span>62%</span></div><div style="background:var(--track);height:6px;border-radius:10px;"><div style="width:62%;height:6px;background:var(--primary);border-radius:10px;"></div></div></div><div class="skill-cell"><div style="display:flex;justify-content:space-between;font-weight:500;margin-bottom:0.35rem;"><span>🤖 Prompt 工程 / AI 工具</span><span>65%</span></div><div style="background:var(--track);height:6px;border-radius:10px;"><div style="width:65%;height:6px;background:var(--primary);border-radius:10px;"></div></div></div><div class="skill-cell"><div style="display:flex;justify-content:space-between;font-weight:500;margin-bottom:0.35rem;"><span>🎨 Blender 3D 建模</span><span>42%</span></div><div style="background:var(--track);height:6px;border-radius:10px;"><div style="width:42%;height:6px;background:var(--primary);border-radius:10px;"></div></div></div><div class="skill-cell"><div style="display:flex;justify-content:space-between;font-weight:500;margin-bottom:0.35rem;"><span>📣 新媒体运营</span><span>58%</span></div><div style="background:var(--track);height:6px;border-radius:10px;"><div style="width:58%;height:6px;background:var(--primary);border-radius:10px;"></div></div></div><div class="skill-cell"><div style="display:flex;justify-content:space-between;font-weight:500;margin-bottom:0.35rem;"><span>🗣️ 英语口语</span><span>68%</span></div><div style="background:var(--track);height:6px;border-radius:10px;"><div style="width:68%;height:6px;background:var(--primary);border-radius:10px;"></div></div></div></div>
+        <div style="display:flex;flex-wrap:wrap;gap:2rem;margin-top:2rem;">
+          <div class="project-card" style="flex:1;min-width:250px;background:#f4fae8;border-radius:2rem;padding:1.5rem;display:flex;gap:1.5rem;align-items:center;">
+            <img src="./39.jpg" style="width:140px;border-radius:1.5rem;box-shadow:0 8px 20px rgba(0,0,0,0.15);" onerror="this.style.background='#d4e3c5';">
+            <div>
+              <h3>📊 个人简介PPT · 视觉叙事</h3>
+              <p style="font-size:0.9rem;color:var(--text-secondary);">仅用一个暑假，从零独立完成这份演示文稿，每一页皆为精心雕琢的视觉诗篇，彰显出超越年龄的审美敏感与高效执行力。</p>
+              <span class="btn-soft" style="margin-top:0.5rem;font-size:0.85rem;">作品集展示</span>
+            </div>
+          </div>
+          <div class="project-card" style="flex:1;min-width:250px;background:#f4fae8;border-radius:2rem;padding:1.5rem;display:flex;gap:1.5rem;align-items:center;">
+            <img src="./38.jpg" style="width:140px;border-radius:1.5rem;box-shadow:0 8px 20px rgba(0,0,0,0.15);" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22140%22 height=%22100%22%3E%3Crect fill=%22%23d4e3c5%22 width=%22140%22 height=%22100%22/%3E%3Ctext x=%2230%22 y=%2260%22%3E飞机大战%3C/text%3E%3C/svg%3E';">
+            <div>
+              <h3>🚀 飞机大战 · AI 匠心之作</h3>
+              <p style="font-size:0.9rem;color:var(--text-secondary);">独立运用人工智能辅助开发，从零构建的飞行射击游戏网站，绚丽特效与智能算法彰显前端实力。</p>
+              <a href="https://adb2e0f7759c475ebe593a45f1aa9b4a.bj5.agentos-app.net" id="planeGameLink" class="btn-soft" target="_blank" style="margin-top:0.5rem;font-size:0.85rem;">🚀 体验游戏</a>
+            </div>
+          </div>
+        </div>
+        <button class="btn-soft" style="margin-top:1.5rem;" onclick="document.getElementById('plantSection').scrollIntoView({behavior:'smooth'})">下一章 <i class="fas fa-leaf"></i></button>
+      </div>
+      <div class="card plant-card" id="plantSection"><div class="plant-icon" id="plantIcon">🌱</div><div class="plant-count" id="miniLeafCount">0</div><p>播种希望</p><p class="plant-tooltip">点击卡片，撒下叶子吧 🍃</p></div>
+      <div class="card" id="gameSection"><h2><i class="fas fa-gamepad"></i> 🌿 收集叶子跑酷</h2><div class="game-container"><canvas id="gameCanvas" width="600" height="300"></canvas><p style="margin-top:0.6rem;font-size:0.9rem;color:#6b8a52;">🖥️ 游玩请在电脑端（键盘 ↑↓←→ 控制移动）</p><div style="margin-top:0.8rem;"><span>🍃 得分：<span id="gameScore">0</span></span> <span>🏆 最高分：<span id="highScoreDisplay">0</span></span> <button id="startGameBtn" class="btn-soft">开始</button></div><div id="playerNameArea" style="margin-top:0.8rem;"><input type="text" id="playerNameInput" class="msg-input" placeholder="昵称"><button id="setPlayerNameBtn" class="btn-soft">锁定</button></div><div class="leaderboard" style="margin-top:1rem;background:#f8fff2;border-radius:1.8rem;padding:1rem;"><strong>🏅 排行榜</strong><ol id="leaderList"></ol><button id="saveScoreBtn" class="btn-soft">提交分数</button></div></div></div>
+      <div class="card" id="contact"><h2><i class="fas fa-envelope-open-text"></i> 联系与合作</h2><p>📧 2909246447@qq.com &nbsp; 📞 13308404029</p><div style="display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;margin:1rem 0;"><div class="qr-box"><img src="./wechat-qr.jpg" alt="微信二维码" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentNode.textContent='二维码加载失败';"></div><div><p style="font-weight:600;">微信：<span id="wechatId">Rat_millet5015</span></p><button id="copyWechatBtn" class="btn-soft">复制微信号</button></div></div><div style="display:flex;flex-wrap:wrap;gap:0.8rem;"><button id="copyEmailBtn" class="btn-soft">复制邮箱</button> <a href="mailto:2909246447@qq.com" class="btn-soft">发送邮件</a> <button id="downloadResumeBtn" class="btn-soft">⬇️ 下载简历PDF</button></div></div>
+      <div class="card" id="messages"><h2><i class="fas fa-comments"></i> 留言区</h2><p class="local-note">💡 当前为本地体验版：留言与排行榜仅保存在你的浏览器，换设备/清缓存会丢失。需要公开展示可接入云端。</p><div id="nicknamePanel" style="margin-bottom:1rem;display:flex;align-items:center;gap:0.8rem;"><span id="nickDisplay"></span><input type="text" id="nicknameInput" class="msg-input" placeholder="设定昵称（仅一次）"><button id="setNickBtn" class="btn-soft">保存</button></div><div style="display:flex;gap:0.8rem;"><textarea id="msgContent" class="msg-input" rows="2" placeholder="对我说点什么吧..."></textarea><button id="submitMsgBtn" class="btn-soft">发布</button></div><div id="messageList" style="max-height:400px;overflow-y:auto;"></div></div>
+    </div>
+  </div>
+
+  <!-- 池塘 -->
+  <div class="lake-scene" id="lakeScene">
+    <span class="lake-tooltip">🐟 点击水面，遇见惊喜</span>
+    <span class="feed-counter" id="feedCounter">🎣 0次</span>
+    <span class="season-weather-tag" id="seasonWeatherTag">🌸 春 · 晴</span>
+    <div class="lake-water" id="lakeWater"></div>
+    <span class="lake-decor" style="bottom:2px;left:5px;">🪨</span><span class="lake-decor" style="bottom:0px;right:8px;">🪨</span>
+    <span class="lake-decor" style="bottom:55px;left:2px;font-size:1.1rem;">🌿</span><span class="lake-decor" style="bottom:60px;right:5px;font-size:1rem;">🌾</span>
+    <span class="lake-decor" style="bottom:50px;left:30px;">🌸</span><span class="lake-decor" style="bottom:48px;right:25px;">🌼</span>
+  </div>
+
+  <button class="back-top" id="backTop">↑</button>
+  <div class="city-modal-overlay" id="cityModalOverlay"><div class="city-modal-box"><span class="city-modal-close" onclick="closeCityModal()">&times;</span><div class="city-modal-title" id="cityModalTitle"></div><div class="city-modal-desc" id="cityModalDesc"></div><div class="city-modal-gallery" id="cityModalGallery"></div></div></div>
+
+  <script>
+    (function() {
+      document.getElementById('themeToggle').addEventListener('click',()=>{ document.body.classList.toggle('dark'); localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light'); });
+      if(localStorage.getItem('theme')==='dark') document.body.classList.add('dark');
+      document.getElementById('printBtn').addEventListener('click',()=>window.print());
+      const backTop=document.getElementById('backTop');
+      window.addEventListener('scroll',()=>backTop.style.display=window.scrollY>400?'flex':'none');
+      backTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+      document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',function(e){e.preventDefault();document.querySelector(this.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});}));
+      document.getElementById('exploreBtn').addEventListener('click',()=>{document.getElementById('homeScreen').style.display='none';document.getElementById('detailSection').classList.add('active');});
+      document.getElementById('copyEmailBtn').addEventListener('click',()=>{navigator.clipboard.writeText('2909246447@qq.com').then(()=>alert('邮箱已复制'));});
+
+      // 城市弹窗（杭州已删除14号）
+      const cityData={ '武汉':{tag:'🌉',desc:'长江穿城而过，黄鹤楼的檐角挑着千年的风。热干面的香气、江汉路的霓虹、珞珈山的樱花——这座火炉城市，藏着我最滚烫的青春记忆。',images:['./3.jpg','./4.jpg','./5.jpg']}, '南昌':{tag:'🏛️',desc:'赣江静静流淌，滕王阁的灯火映着「秋水共长天一色」。红色故都的厚重与赣味的鲜辣，让每一次到访都像翻开一页鲜活的历史。',images:['./6.jpg','./7.jpg','./8.jpg','./9.jpg','./10.jpg','./33.jpg']}, '南京':{tag:'🍂',desc:'梧桐叶落满街，民国建筑的轮廓里藏着六朝烟水。鸡鸣寺的钟声、先锋书店的墨香——这座城市的温柔，是要慢慢走的。',images:['./11.jpg','./12.jpg','./13.jpg','./14.jpg','./15.jpg']}, '杭州':{tag:'🌿',desc:'西湖烟雨朦胧，断桥边的柳絮年年如约。一口龙井、一段江南，诗意在不知不觉间，落进了我的镜头与笔尖。',images:['./16.jpg','./17.jpg','./18.jpg','./19.jpg','./20.jpg','./32.jpg']}, '厦门':{tag:'🌊',desc:'鼓浪屿的海风轻拂，三角梅爬满红砖墙。环岛路的风、沙坡尾的文艺、曾厝垵的烟火——在这里，时间都变得轻软。',images:['./21.jpg','./22.jpg','./23.jpg','./24.jpg','./25.jpg','./26.jpg','./27.jpg','./34.jpg','./36.jpg']}, '湄江':{tag:'⛰️',desc:'碧水丹崖，山水如画。湄江的奇石与溶洞藏着自然的鬼斧神工，一次行走，便是一场与山野的温柔对话。',images:['./28.jpg','./29.jpg','./30.jpg','./31.jpg','./35.jpg','./37.jpg']} };
+      window.openCityModal=function(city){ const d=cityData[city]; if(!d)return; document.getElementById('cityModalTitle').textContent=(d.tag?d.tag+' ':'')+city; document.getElementById('cityModalDesc').textContent=d.desc||''; document.getElementById('cityModalGallery').innerHTML=d.images.map(u=>`<img src="${u}" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=500';">`).join(''); const box=document.querySelector('.city-modal-box'); box.classList.remove('modal-in'); void box.offsetWidth; box.classList.add('modal-in'); document.getElementById('cityModalOverlay').classList.add('active'); };
+      window.closeCityModal=()=>document.getElementById('cityModalOverlay').classList.remove('active');
+
+      // 播种+成长树
+      const plantCard=document.getElementById('plantSection'), leafSpan=document.getElementById('miniLeafCount'), plantIcon=document.getElementById('plantIcon');
+      let leafCount=parseInt(localStorage.getItem('leafCount'))||0; leafSpan.textContent=leafCount;
+      if(leafCount>=20) plantIcon.textContent='🌳';
+      plantCard.addEventListener('click',function(){ leafCount++; localStorage.setItem('leafCount',leafCount); leafSpan.textContent=leafCount; if(leafCount>=20) plantIcon.textContent='🌳'; for(let i=0;i<8;i++) setTimeout(()=>{ const l=document.createElement('div'); l.innerHTML='🍃'; l.style.cssText=`position:fixed; left:${Math.random()*window.innerWidth}px; top:${Math.random()*window.innerHeight*0.6}px; font-size:1.8rem; pointer-events:none; z-index:999; animation:leafFall 2.2s forwards;`; document.body.appendChild(l); l.addEventListener('animationend',()=>l.remove()); },i*60); });
+
+      // 跑酷游戏 (保留)
+      const canvas=document.getElementById('gameCanvas'); if(canvas){ const ctx=canvas.getContext('2d'); let player={x:100,y:150},obstacles=[],leaves=[],score=0,gameRunning=false,animationId,speed=1.8,frameCount=0,keys={}; let highScores=JSON.parse(localStorage.getItem('pixelRunScores'))||[],runPlayerName=localStorage.getItem('runPlayerName')||''; function updateHighScore(){ document.getElementById('highScoreDisplay').textContent=highScores.length?Math.max(...highScores.map(s=>s.score)):0; } function renderLeaderboard(){ highScores.sort((a,b)=>b.score-a.score); highScores=highScores.slice(0,5); document.getElementById('leaderList').innerHTML=highScores.map(s=>`<li>${s.name}:${s.score}🍃</li>`).join(''); updateHighScore(); } function drawBg(){ const g=ctx.createLinearGradient(0,0,0,canvas.height); g.addColorStop(0,'#e1edcc'); g.addColorStop(0.7,'#c8dca8'); ctx.fillStyle=g; ctx.fillRect(0,0,canvas.width,canvas.height); } function drawPlayer(){ ctx.font='26px sans-serif'; ctx.fillText('🥳',player.x,player.y+24); } function drawObstacle(o){ if(o.type==='rock'){ ctx.fillStyle='#7a8b6e'; ctx.beginPath(); ctx.ellipse(o.x+11,o.y+11,11,10,0,0,Math.PI*2); ctx.fill(); } else if(o.type==='stump'){ ctx.fillStyle='#6b4e3d'; ctx.fillRect(o.x,o.y,22,22); } else { ctx.fillStyle='#8b5e3c'; ctx.beginPath(); ctx.moveTo(o.x,o.y+22); ctx.lineTo(o.x+11,o.y); ctx.lineTo(o.x+22,o.y+22); ctx.fill(); } } function drawLeafItem(l){ ctx.fillText('🍃',l.x,l.y+16); } function reset(){ player.x=100;player.y=150;obstacles=[];leaves=[];score=0;speed=1.8;frameCount=0;document.getElementById('gameScore').textContent='0'; } function spawn(){ if(frameCount%100===0){ let y=Math.random()*(canvas.height-40)+10; let type=Math.random()<0.5?'rock':(Math.random()<0.8?'stump':'spike'); obstacles.push({x:canvas.width,y,w:22,h:22,type}); } if(frameCount%140===0) leaves.push({x:canvas.width,y:Math.random()*(canvas.height-30)}); } function update(){ if(!gameRunning)return; frameCount++; if(frameCount%700===0) speed+=0.2; spawn(); if(keys['ArrowUp']) player.y=Math.max(0,player.y-3.2); if(keys['ArrowDown']) player.y=Math.min(canvas.height-28,player.y+3.2); if(keys['ArrowLeft']) player.x=Math.max(0,player.x-3.2); if(keys['ArrowRight']) player.x=Math.min(canvas.width-28,player.x+3.2); obstacles.forEach(o=>o.x-=speed); leaves.forEach(l=>l.x-=speed); for(let o of obstacles){ if(player.x<o.x+22&&player.x+28>o.x&&player.y<o.y+22&&player.y+28>o.y){ gameOver();return; } } leaves=leaves.filter(l=>{ if(player.x<l.x+18&&player.x+28>l.x&&player.y<l.y+18&&player.y+28>l.y){ score+=10; document.getElementById('gameScore').textContent=score; return false; } return l.x>-30; }); obstacles=obstacles.filter(o=>o.x>-30); } function draw(){ drawBg(); drawPlayer(); obstacles.forEach(drawObstacle); leaves.forEach(drawLeafItem); } function loop(){ update(); draw(); animationId=requestAnimationFrame(loop); } function gameOver(){ gameRunning=false; cancelAnimationFrame(animationId); ctx.fillStyle='rgba(0,0,0,0.4)'; ctx.fillRect(0,0,canvas.width,canvas.height); ctx.fillStyle='#fff'; ctx.font='24px serif'; ctx.fillText('游戏结束',canvas.width/2-55,canvas.height/2); document.getElementById('startGameBtn').textContent='重新开始'; } document.getElementById('startGameBtn').addEventListener('click',()=>{ if(animationId) cancelAnimationFrame(animationId); reset(); gameRunning=true; document.getElementById('startGameBtn').textContent='重新开始'; loop(); }); document.getElementById('saveScoreBtn').addEventListener('click',()=>{ if(!runPlayerName||score===0)return; const e=highScores.find(s=>s.name===runPlayerName); if(e){ if(score>e.score) e.score=score; }else highScores.push({name:runPlayerName,score}); 
+
+
+      renderLeaderboard(); }); document.getElementById('setPlayerNameBtn').addEventListener('click',()=>{ const n=document.getElementById('playerNameInput').value.trim(); if(n){ runPlayerName=n; localStorage.setItem('runPlayerName',n); document.getElementById('playerNameInput').style.display='none'; document.getElementById('setPlayerNameBtn').style.display='none'; } }); window.addEventListener('keydown',e=>{ keys[e.key]=true; if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) e.preventDefault(); }); window.addEventListener('keyup',e=>{ keys[e.key]=false; }); renderLeaderboard(); draw(); }
+
+      // 留言
+      const nicknameInput=document.getElementById('nicknameInput'), setNickBtn=document.getElementById('setNickBtn');
+      let userNick=localStorage.getItem('userNickname')||'';
+      function updateNickUI(){ if(userNick){ document.getElementById('nickDisplay').textContent='👤 '+userNick; nicknameInput.style.display='none'; setNickBtn.style.display='none'; } }
+      setNickBtn.addEventListener('click',()=>{ if(!userNick){ const n=nicknameInput.value.trim(); if(n){ userNick=n; localStorage.setItem('userNickname',n); updateNickUI(); } } }); updateNickUI();
+      const STORAGE_KEY='nature_msgs_v13'; let messages=JSON.parse(localStorage.getItem(STORAGE_KEY))||[];
+      function saveMsgs(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(messages)); }
+      function renderMsgs(){ const div=document.getElementById('messageList'); if(messages.length===0){ div.innerHTML='<p style="color:#8aa87d;text-align:center;">🌱 留下你的足迹吧～</p>'; return; } div.innerHTML=messages.map((m,i)=>`<div style="background:#f9fff5;border-radius:1.8rem;padding:1.2rem;margin-bottom:1rem;"><strong>${m.name}</strong> <small>${m.time}</small><p>${m.content}</p></div>`).join(''); }
+      document.getElementById('submitMsgBtn').addEventListener('click',()=>{ const c=document.getElementById('msgContent').value.trim(); if(!c||!userNick)return; messages.push({name:userNick,content:c,time:new Date().toLocaleString()}); saveMsgs(); renderMsgs(); document.getElementById('msgContent').value=''; }); renderMsgs();
+
+      // 池塘+飘落
+      const lakeScene=document.getElementById('lakeScene'), lakeWater=document.getElementById('lakeWater'), feedCounter=document.getElementById('feedCounter'), seasonTag=document.getElementById('seasonWeatherTag');
+      let feedCount=parseInt(localStorage.getItem('lakeFeedCount'))||0; feedCounter.textContent='🎣 '+feedCount+'次';
+      const seasons=['🌸 春','☀️ 夏','🍂 秋','❄️ 冬'], weathers={ spring:['☁️ 晴','🌧️ 小雨','🌈 多云'], summer:['☀️ 晴','⛅ 多云','🌦️ 阵雨'], autumn:['🍂 晴','🌥️ 多云','🌧️ 秋雨'], winter:['❄️ 雪','☁️ 阴','🌨️ 大雪'] };
+      let currentSeason=parseInt(localStorage.getItem('lakeSeason'))||0, currentWeather=parseInt(localStorage.getItem('lakeWeather'))||0;
+      function updateSeasonWeatherTag(){ const s=seasons[currentSeason], wList=currentSeason===0?weathers.spring:currentSeason===1?weathers.summer:currentSeason===2?weathers.autumn:weathers.winter; seasonTag.textContent=`${s} · ${wList[currentWeather%wList.length]}`; }
+      updateSeasonWeatherTag();
+
+      function spawnGlobalParticle(){ const p=document.createElement('div'); p.className='global-particle'; p.style.left=Math.random()*100+'%'; p.style.top='-5vh'; const season=currentSeason; p.textContent=season===3?'❄️':(season===0?(Math.random()>0.5?'🌸':'🌼'):(season===2?(Math.random()>0.5?'🍂':'🍁'):(Math.random()>0.5?'🍃':'✨'))); p.style.fontSize=(0.8+Math.random()*0.5)+'rem'; p.style.animationDuration=(7+Math.random()*10)+'s'; document.body.appendChild(p); p.addEventListener('animationend',()=>p.remove()); }
+      setInterval(spawnGlobalParticle, 800);
+
+      function spawnLakeParticle(){ const p=document.createElement('div'); p.className='weather-particle'; p.style.left=Math.random()*90+5+'%'; p.style.top='-10px'; const season=currentSeason; p.textContent=season===3?'❄️':(season===0?(Math.random()>0.5?'🌸':'🌼'):(season===2?(Math.random()>0.5?'🍂':'🍁'):(Math.random()>0.5?'🍃':'✨'))); p.style.fontSize='0.7rem'; p.style.animationDuration=(2+Math.random()*3)+'s'; lakeScene.appendChild(p); p.addEventListener('animationend',()=>p.remove()); }
+      setInterval(spawnLakeParticle, 1200);
+
+      const fishPool=[{emoji:'🐟',name:'锦鲤·幸运星'},{emoji:'🐠',name:'热带鱼·彩虹尾'},{emoji:'🐡',name:'河豚·小气球'},{emoji:'🦈',name:'鲨鱼宝宝·勇敢心'},{emoji:'🐬',name:'海豚·微笑天使'},{emoji:'🐳',name:'鲸鱼·大大梦想'},{emoji:'🦀',name:'螃蟹·横着走'},{emoji:'🐙',name:'章鱼·八爪智慧'},{emoji:'🐚',name:'贝壳·珍珠藏'},{emoji:'🐢',name:'海龟·慢悠悠'}];
+      const blessings=['🌟 今天也是闪闪发光的一天！','🍀 好运正在向你游来~','💫 你是自己故事里的主角','✨ 所念皆星河，所爱如月色','🌊 保持热爱，奔赴山海','☀️ 愿你成为自己的太阳','🚀 前路浩浩荡荡，万事尽可期待','💖 你值得世间所有美好','🛤️ 愿你所求皆如愿，所行化坦途','🌄 心中有光，脚下有路','🌸 所有美好都会如期而至','🌌 愿你眼中有星辰，身边有微风','📚 好运藏在努力里','🍃 温柔半两，从容一生','🕊️ 愿你活得淋漓通透，自由洒脱','🐟 今日也是被锦鲤眷顾的一天','😊 你笑起来真像好天气','✨ 每一个平凡的日子都会闪闪发光','🌿 愿你的世界永远生机勃勃','🎵 生活是一首欢快的歌'];
+
+      lakeScene.addEventListener('click', function(e){
+        if(lakeScene.dataset.animating==='true') return;
+        lakeScene.dataset.animating='true';
+        setTimeout(()=>{ lakeScene.dataset.animating='false'; },1500);
+        feedCount++; localStorage.setItem('lakeFeedCount', feedCount); feedCounter.textContent = '🎣 ' + feedCount + '次';
+        if(feedCount%10===0){ currentSeason=(currentSeason+1)%4; localStorage.setItem('lakeSeason',currentSeason); currentWeather=0; localStorage.setItem('lakeWeather',currentWeather); updateSeasonWeatherTag(); for(let i=0;i<12;i++) setTimeout(spawnGlobalParticle,i*80); }
+        if(feedCount%5===0){ const wList=currentSeason===0?weathers.spring:currentSeason===1?weathers.summer:currentSeason===2?weathers.autumn:weathers.winter; currentWeather=(currentWeather+1)%wList.length; localStorage.setItem('lakeWeather',currentWeather); updateSeasonWeatherTag(); }
+        const fish = fishPool[Math.floor(Math.random()*fishPool.length)];
+        const waterRect = lakeWater.getBoundingClientRect(), lakeRect = lakeScene.getBoundingClientRect();
+        const fishX = waterRect.left - lakeRect.left + waterRect.width/2 - 18, fishY = waterRect.top - lakeRect.top + waterRect.height - 25;
+        const fishEl = document.createElement('span'); fishEl.className='jumping-fish'; fishEl.textContent=fish.emoji; fishEl.style.left=fishX+'px'; fishEl.style.top=fishY+'px'; lakeScene.appendChild(fishEl); fishEl.addEventListener('animationend', ()=> fishEl.remove());
+        for(let i=0;i<6;i++){ const splash=document.createElement('div'); splash.className='splash'; splash.style.left=(fishX+8)+'px'; splash.style.top=(fishY+5)+'px'; splash.style.setProperty('--sx',(Math.random()*30-15)+'px'); splash.style.setProperty('--sy',(Math.random()*-25-5)+'px'); lakeScene.appendChild(splash); splash.addEventListener('animationend',()=>splash.remove()); }
+        const blessing = blessings[Math.floor(Math.random()*blessings.length)];
+        const existing=document.querySelector('.fish-result-bubble'); if(existing) existing.remove();
+        const bubble=document.createElement('div'); bubble.className='fish-result-bubble'; bubble.innerHTML=`🎣 抽中了 <strong>${fish.name}</strong>！<br><span style="font-weight:400;">${blessing}</span>`; document.body.appendChild(bubble);
+        bubble.addEventListener('animationend',()=>bubble.remove());
+        try{ const audioCtx=new(window.AudioContext||window.webkitAudioContext)(); const osc=audioCtx.createOscillator(); const gain=audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); osc.frequency.value=700; gain.gain.value=0.04; osc.start(); osc.stop(audioCtx.currentTime+0.1); }catch(e){}
+      });
+      function updateEnvironment(){ const hour=new Date().getHours(); lakeWater.style.background=hour>18||hour<6?'linear-gradient(180deg, #7faed4 0%, #4e8ab5 40%, #2b6496 100%)':'linear-gradient(180deg, #b8dcf5 0%, #8cc8e8 30%, #5ab0d9 70%, #3a8fc2 100%)'; }
+      // 阅读进度条
+      const readProgress=document.getElementById('readProgress');
+      window.addEventListener('scroll',()=>{ const h=document.documentElement; const sc=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100; readProgress.style.width=(isFinite(sc)?sc:0)+'%'; });
+      // 时段问候
+      (function(){ const g=document.getElementById('timeGreeting'); const h=new Date().getHours(); const t=h<6?'凌晨好':h<11?'早上好':h<13?'中午好':h<18?'下午好':h<22?'晚上好':'夜深了，注意休息'; g.textContent='👋 '+t+'，欢迎来到我的小世界'; })();
+      // 汉堡菜单
+      const navToggle=document.getElementById('navToggle'), navLinks=document.getElementById('navLinks');
+      navToggle?.addEventListener('click',()=>navLinks.classList.toggle('open'));
+      navLinks?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
+      // 下载简历PDF（调用浏览器打印→另存为PDF）
+      document.getElementById('downloadResumeBtn')?.addEventListener('click',()=>window.print());
+      // 微信复制
+      document.getElementById('copyWechatBtn')?.addEventListener('click',()=>{ const w=document.getElementById('wechatId').textContent.trim(); if(w&&w!=='（待填）'){ navigator.clipboard.writeText(w).then(()=>alert('微信号已复制')).catch(()=>alert('复制失败，请手动复制')); } else alert('还没填微信号哦～在源码里把（待填）改成你的微信号即可'); });
+
+      updateEnvironment(); setInterval(updateEnvironment,60000);
+    })();
+  </script>
+<footer class="site-footer" style="text-align:center;padding:2.2rem 1rem 2.6rem;color:#8aa87d;font-size:0.82rem;line-height:1.8;border-top:1px solid rgba(140,168,125,0.25);margin-top:2rem;">
+  <p>🌱 本网站由本人通过 Vibe Coding（AI 辅助编程）自主设计与开发</p>
+  <div style="margin-top:0.9rem;">
+    <img src="./site-qr.png" alt="扫码访问本站" style="width:120px;height:120px;border-radius:8px;background:#fff;padding:6px;box-shadow:0 2px 8px rgba(70,90,40,0.2);">
+    <p style="margin-top:0.35rem;font-size:0.85rem;">📱 扫码访问本站</p>
+  </div>
+  <p style="margin-top:0.3rem;opacity:0.8;">© 2026 龙欣悦 · 保留所有权利</p>
+<p style="margin-top:0.3rem;opacity:0.8;">未经授权禁止转载、复制或盗用本站内容</p></footer>
+
+<div style="position:fixed;left:10px;bottom:10px;z-index:9999;font-size:0.72rem;color:rgba(110,138,82,0.4);pointer-events:none;user-select:none;">© 龙欣悦</div>
+<script>
+// 版权保护：前端尽力措施，防止随意盗用 / 盗图
+(function(){
+  // 禁用右键菜单（防图片另存、防查看元素）
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  // 禁用常见盗用快捷键：F12 / Ctrl+Shift+I / Ctrl+U(查看源码) / Ctrl+S(保存网页)
+  document.addEventListener('keydown', function(e){
+    var k = e.key ? e.key.toLowerCase() : '';
+    if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && (k==='i'||k==='j')) || (e.ctrlKey && k==='u') || (e.ctrlKey && k==='s')){
+      e.preventDefault();
+    }
+  });
+  // 防止被别人 iframe 嵌套套走（anti-framing）
+  try { if(window.self !== window.top){ window.top.location = window.self.location; } } catch(_){}
+  // 图片防盗：禁止拖拽、禁止选中
+  document.querySelectorAll('img').forEach(function(im){
+    im.setAttribute('draggable','false');
+    im.style.cssText += ';-webkit-user-drag:none;user-select:none;';
+  });
+})();
+</script>
+
+</body>
