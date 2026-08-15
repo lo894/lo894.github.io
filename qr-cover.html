@@ -102,6 +102,18 @@
     .enter-btn .arrow{transition:transform 0.3s;}
     .enter-btn:hover .arrow{transform:translateX(4px);}
 
+    .links-row{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;margin:0.2rem 0 1.4rem;}
+    .link-btn{
+      display:inline-flex;align-items:center;gap:0.4rem;
+      background:rgba(210,230,190,0.75);backdrop-filter:blur(12px);
+      border:1px solid var(--primary);
+      padding:0.7rem 1.6rem;border-radius:3rem;
+      font-size:0.95rem;font-weight:600;color:#1e3514;
+      cursor:pointer;transition:all 0.4s;text-decoration:none;
+      box-shadow:0 8px 20px rgba(90,120,60,0.18);letter-spacing:1px;
+    }
+    .link-btn:hover{background:#c8e0b0;transform:translateY(-3px);box-shadow:0 12px 26px rgba(90,120,60,0.28);}
+
     .cover-footer{margin-top:1.8rem;font-size:0.74rem;color:var(--text-secondary);opacity:0.6;letter-spacing:1px;}
 
     @media(max-width:480px){
@@ -131,7 +143,15 @@
       <p class="qr-hint">手机扫一扫 · 或点击下方按钮进入</p>
     </div>
 
-    <p class="cover-url">https://0078e1391e514029ab9dd908e19e88b5.gz4.agentos-app.net</p>
+    <p class="cover-url">
+      主站：https://0078e1391e514029ab9dd908e19e88b5.gz4.agentos-app.net<br>
+      备份：https://lo894.github.io/
+    </p>
+
+    <div class="links-row">
+      <a href="https://0078e1391e514029ab9dd908e19e88b5.gz4.agentos-app.net" target="_blank" class="link-btn">🌐 访问主站</a>
+      <a href="https://lo894.github.io/" target="_blank" class="link-btn">📦 访问备份</a>
+    </div>
 
     <a href="index.html" class="enter-btn">
       进入简历 <span class="arrow">→</span>
