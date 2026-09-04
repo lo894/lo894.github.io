@@ -190,10 +190,37 @@
       .project-card img{ border:3px solid #fff; border-radius:1.6rem; }
       #skillsSection > div[style]{ gap:1.6rem 2.6rem; }
     }
+    /* ===== 双版本查看切换：电脑版 / 手机版（右上角按钮） ===== */
+    .view-pill{ display:inline-flex; align-items:center; gap:2px; background:var(--surface); border:1px solid var(--border); border-radius:2.2rem; padding:3px; margin-right:0.35rem; box-shadow:0 4px 12px rgba(70,90,50,0.08); }
+    .view-btn{ display:inline-flex; align-items:center; gap:0.35rem; border:none; background:transparent; color:var(--text-secondary); font-family:inherit; font-size:0.8rem; font-weight:600; line-height:1; padding:0.5rem 0.85rem; border-radius:2rem; cursor:pointer; transition:0.25s; white-space:nowrap; }
+    .view-btn:hover{ background:var(--primary-light); color:var(--text); }
+    .view-btn.active{ background:linear-gradient(135deg,#7a9f5a,#98b97a); color:#fff; box-shadow:0 4px 10px rgba(122,159,90,0.35); }
+    @media(max-width:700px){ .view-btn{ padding:0.45rem 0.55rem; } .view-btn span{ display:none; } .view-pill{ margin-right:0.2rem; } }
+
+    /* 手机版查看：无论屏幕多宽，都按手机布局渲染（窄栏 + 汉堡菜单） */
+    html.view-phone body{ background-attachment:scroll; }
+    html.view-phone .container{ max-width:440px; padding:0.8rem 0.75rem 2rem; }
+    html.view-phone .navbar{ padding:0 0.7rem; }
+    html.view-phone .card{ padding:1.45rem 1.1rem; border-radius:1.9rem; margin-bottom:1.5rem; }
+    html.view-phone .card h2{ font-size:1.5rem; padding-left:1rem; margin-bottom:1rem; }
+    html.view-phone .hero-fullscreen{ min-height:86vh; }
+    html.view-phone .hero-title{ font-size:3.4rem; letter-spacing:4px; }
+    html.view-phone .hero-motto{ font-size:1.12rem; padding:0.45rem 1.5rem; margin-bottom:1.3rem; }
+    html.view-phone .explore-btn{ padding:0.9rem 2.2rem; font-size:1.06rem; }
+    html.view-phone .nav-toggle{ display:block; }
+    html.view-phone .nav-links{ display:none; position:absolute; top:var(--nav-height); left:0; right:0; flex-direction:column; gap:0.15rem; background:var(--surface); backdrop-filter:blur(18px); padding:0.7rem 1rem; border-bottom:1px solid var(--border); }
+    html.view-phone .nav-links.open{ display:flex; }
+    html.view-phone .city-modal-box{ max-width:100%; padding:1.6rem 1.1rem 1.3rem; }
+    html.view-phone #aboutFootprint > div[style]{ gap:1.2rem; }
+    html.view-phone .song-grid{ grid-template-columns:repeat(auto-fill,minmax(115px,1fr)); gap:1.1rem; }
+    html.view-phone .lake-scene{ width:150px; height:118px; right:1.1rem; bottom:1.1rem; }
+    html.view-phone .lake-water{ height:60px; }
+    html.view-phone .game-container{ padding:1rem; }
+    html.view-phone .back-top{ bottom:1.2rem; right:1.1rem; width:42px; height:42px; }
   </style>
 </head>
 <body>
-  <nav class="navbar"><span class="nav-brand">龙欣悦</span><button class="nav-toggle" id="navToggle" aria-label="菜单">☰</button><div class="nav-links" id="navLinks"><a href="#top">首页</a><a href="#aboutFootprint">关于·足迹</a><a href="#experience">经历</a><a href="#awards">奖项</a><a href="#learning">学习</a><a href="#skillsSection">技能</a><a href="#gameSection">游戏</a><a href="#contact">联系</a><a href="#messages">留言</a></div><div class="nav-actions"><button id="themeToggle" class="icon-btn">🌓</button><button id="printBtn" class="icon-btn">🖨️</button></div>  </nav>
+  <nav class="navbar"><span class="nav-brand">龙欣悦</span><button class="nav-toggle" id="navToggle" aria-label="菜单">☰</button><div class="nav-links" id="navLinks"><a href="#top">首页</a><a href="#aboutFootprint">关于·足迹</a><a href="#experience">经历</a><a href="#awards">奖项</a><a href="#learning">学习</a><a href="#skillsSection">技能</a><a href="#gameSection">游戏</a><a href="#contact">联系</a><a href="#messages">留言</a></div><div class="view-pill" id="viewPill" role="group" aria-label="电脑版 / 手机版切换"><button type="button" class="view-btn active" data-view="desktop" title="切换到电脑版查看">💻<span>电脑版</span></button><button type="button" class="view-btn" data-view="phone" title="切换到手机版查看">📱<span>手机版</span></button></div><div class="nav-actions"><button id="themeToggle" class="icon-btn">🌓</button><button id="printBtn" class="icon-btn">🖨️</button></div>  </nav>
   <div id="readProgress"></div>
   <div class="container" id="top">
     <div class="hero-fullscreen" id="homeScreen"><div><h1 class="hero-title">龙欣悦</h1><p class="hero-motto">解开昔日旧枷锁，今日方知我是我</p><p class="time-greeting" id="timeGreeting"></p><p style="font-size:1.2rem;color:var(--text-secondary);">🌱 哈喽，我是08女大，金牛座♉️，爱追剧📺听歌🎸，对AI🤖和Blender充满好奇，贪玩但很慢热🥰</p><button class="explore-btn" id="exploreBtn"><i class="fas fa-leaf"></i> 进一步了解我</button></div></div>
@@ -398,6 +425,18 @@
       const navToggle=document.getElementById('navToggle'), navLinks=document.getElementById('navLinks');
       navToggle?.addEventListener('click',()=>navLinks.classList.toggle('open'));
       navLinks?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
+      // 双版本查看切换（电脑版 / 手机版）
+      const viewBtns=document.querySelectorAll('#viewPill .view-btn');
+      function applyView(v){
+        document.documentElement.classList.toggle('view-phone', v==='phone');
+        document.documentElement.classList.toggle('view-desktop', v==='desktop');
+        viewBtns.forEach(b=>b.classList.toggle('active', b.dataset.view===v));
+        try{ localStorage.setItem('resumeView', v); }catch(e){}
+      }
+      let resumeView=null; try{ resumeView=localStorage.getItem('resumeView'); }catch(e){}
+      if(resumeView!=='phone' && resumeView!=='desktop') resumeView=window.matchMedia('(max-width:830px)').matches?'phone':'desktop';
+      applyView(resumeView);
+      viewBtns.forEach(b=>b.addEventListener('click', ()=> applyView(b.dataset.view)));
       // 下载简历PDF（调用浏览器打印→另存为PDF）
       document.getElementById('downloadResumeBtn')?.addEventListener('click',()=>window.print());
       // 微信复制
