@@ -217,6 +217,22 @@
     html.view-phone .lake-water{ height:60px; }
     html.view-phone .game-container{ padding:1rem; }
     html.view-phone .back-top{ bottom:1.2rem; right:1.1rem; width:42px; height:42px; }
+
+    /* ===== 手机版「一张一张翻」分屏模式（点下一张才进下一屏） ===== */
+    html.view-phone.phone-pager .hero-fullscreen{ display:none; }
+    html.view-phone.phone-pager .detail-section.active .card{ display:none; }
+    html.view-phone.phone-pager .detail-section.active .card.phone-page{ display:block; animation:fadeInUp 0.45s ease forwards; }
+    html.view-phone.phone-pager .lake-scene, html.view-phone.phone-pager .back-top{ display:none; }
+    html.view-phone.phone-pager .container{ padding-bottom:7rem; }
+    #phonePager{ position:fixed; left:50%; bottom:10px; transform:translateX(-50%); width:min(calc(100% - 24px),440px); z-index:220; display:flex; align-items:center; justify-content:space-between; gap:0.5rem; background:var(--surface); backdrop-filter:blur(18px); border:1px solid var(--border); border-radius:2.4rem; padding:0.5rem 0.6rem; box-shadow:0 14px 30px rgba(60,80,40,0.25); }
+    #phonePager button{ border:none; cursor:pointer; font-family:inherit; font-weight:600; border-radius:2rem; padding:0.6rem 1.1rem; font-size:0.9rem; transition:0.25s; white-space:nowrap; }
+    #pagerPrev{ background:transparent; color:var(--text-secondary); border:1px solid var(--border); }
+    #pagerPrev:disabled{ opacity:0.35; cursor:default; }
+    #pagerNext{ background:linear-gradient(135deg,#7a9f5a,#98b97a); color:#fff; box-shadow:0 6px 14px rgba(122,159,90,0.35); }
+    #pagerNext:disabled{ opacity:0.45; cursor:default; box-shadow:none; }
+    #pagerInfo{ font-size:0.76rem; color:var(--text-secondary); text-align:center; line-height:1.35; }
+    #pagerInfo strong{ color:var(--text); font-weight:600; }
+    @media print{ #phonePager{ display:none; } html.view-phone.phone-pager .detail-section .card{ display:block!important; } html.view-phone.phone-pager .hero-fullscreen{ display:flex; } }
   </style>
 </head>
 <body>
@@ -427,11 +443,58 @@
       navLinks?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
       // 双版本查看切换（电脑版 / 手机版）
       const viewBtns=document.querySelectorAll('#viewPill .view-btn');
+      // 手机分屏翻页：每个板块一屏，点「下一张」才跳下一屏
+      const PAGES=[{ids:['aboutFootprint'],label:'关于我 · 足迹'},{ids:['experience'],label:'过往经历'},{ids:['awards'],label:'获得的奖项'},{ids:['learning'],label:'关注与学习'},{ids:['skillsSection'],label:'技能与爱好'},{ids:['plantSection','gameSection'],label:'游戏互动'},{ids:['contact'],label:'联系合作'},{ids:['messages'],label:'留言区'}];
+      let pagerOn=false,pageIndex=0,pagerBar=null,pagerPrev=null,pagerNext=null,pagerInfo=null;
+      function buildPager(){
+        if(pagerBar) return;
+        pagerBar=document.createElement('div'); pagerBar.id='phonePager';
+        pagerBar.innerHTML='<button type="button" id="pagerPrev">← 上一张</button><div id="pagerInfo"></div><button type="button" id="pagerNext">下一张 →</button>';
+        document.body.appendChild(pagerBar);
+        pagerPrev=pagerBar.querySelector('#pagerPrev'); pagerNext=pagerBar.querySelector('#pagerNext'); pagerInfo=pagerBar.querySelector('#pagerInfo');
+        pagerPrev.addEventListener('click',()=>showPage(pageIndex-1));
+        pagerNext.addEventListener('click',()=>showPage(pageIndex+1));
+      }
+      function showPage(i){
+        i=Math.max(0,Math.min(PAGES.length-1,i)); pageIndex=i;
+        PAGES.forEach(function(p,idx){ p.ids.forEach(function(id){ const el=document.getElementById(id); if(el) el.classList.toggle('phone-page', idx===i); }); });
+        pagerPrev.disabled = i===0;
+        pagerNext.disabled = i===PAGES.length-1;
+        pagerNext.textContent = i===PAGES.length-1 ? '完成 ✓' : '下一张 →';
+        pagerInfo.innerHTML = (i+1)+' / '+PAGES.length+'<br><strong>'+PAGES[i].label+'</strong>';
+        window.scrollTo(0,0);
+      }
+      function enablePager(){
+        if(pagerOn) return; pagerOn=true;
+        document.documentElement.classList.add('phone-pager');
+        const home=document.getElementById('homeScreen'); if(home) home.style.display='none';
+        const ds=document.getElementById('detailSection'); if(ds) ds.classList.add('active');
+        buildPager(); showPage(0);
+        if(pagerBar) pagerBar.style.display='flex';
+      }
+      function disablePager(){
+        pagerOn=false;
+        document.documentElement.classList.remove('phone-pager');
+        PAGES.forEach(function(p){ p.ids.forEach(function(id){ const el=document.getElementById(id); if(el) el.classList.remove('phone-page'); }); });
+        const home=document.getElementById('homeScreen'); if(home) home.style.display='';
+        const ds=document.getElementById('detailSection'); if(ds) ds.classList.remove('active');
+        if(pagerBar) pagerBar.style.display='none';
+      }
+      // 手机分屏：点汉堡菜单锚点 = 直达对应屏；点卡片内「下一章/继续探索」= 翻下一张
+      document.addEventListener('click', function(ev){
+        if(!pagerOn) return;
+        const t=ev.target;
+        const navA=t.closest? t.closest('.nav-links a'):null;
+        if(navA){ const href=navA.getAttribute('href')||''; if(href.charAt(0)==='#'){ const id=href.slice(1); for(let pi=0;pi<PAGES.length;pi++){ if(PAGES[pi].ids.indexOf(id)>-1){ ev.preventDefault(); showPage(pi); return; } } } }
+        const chap=t.closest? t.closest('.detail-section .btn-soft'):null;
+        if(chap && chap.getAttribute && chap.getAttribute('onclick') && chap.getAttribute('onclick').indexOf('scrollIntoView')>-1){ showPage(pageIndex+1); }
+      });
       function applyView(v){
         document.documentElement.classList.toggle('view-phone', v==='phone');
         document.documentElement.classList.toggle('view-desktop', v==='desktop');
         viewBtns.forEach(b=>b.classList.toggle('active', b.dataset.view===v));
         try{ localStorage.setItem('resumeView', v); }catch(e){}
+        if(v==='phone') enablePager(); else disablePager();
       }
       let resumeView=null; try{ resumeView=localStorage.getItem('resumeView'); }catch(e){}
       if(resumeView!=='phone' && resumeView!=='desktop') resumeView=window.matchMedia('(max-width:830px)').matches?'phone':'desktop';
