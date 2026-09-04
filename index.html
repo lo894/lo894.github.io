@@ -233,6 +233,19 @@
     #pagerInfo{ font-size:0.76rem; color:var(--text-secondary); text-align:center; line-height:1.35; }
     #pagerInfo strong{ color:var(--text); font-weight:600; }
     @media print{ #phonePager{ display:none; } html.view-phone.phone-pager .detail-section .card{ display:block!important; } html.view-phone.phone-pager .hero-fullscreen{ display:flex; } }
+
+    /* 手机版：保留窄栏，宽屏预览时两侧加绿色系柔光装饰（真机上不显示，不影响阅读） */
+    @media(min-width:900px){
+      html.view-phone body::after{ content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+        background:
+          radial-gradient(560px 480px at 6% 26%, rgba(150,195,105,0.22), transparent 64%),
+          radial-gradient(720px 540px at 96% 20%, rgba(205,228,168,0.32), transparent 64%),
+          radial-gradient(540px 580px at 93% 84%, rgba(170,210,130,0.22), transparent 62%),
+          radial-gradient(480px 420px at 4% 78%, rgba(190,215,150,0.18), transparent 60%);
+      }
+    }
+    /* 手机版：压小每屏下方的空白 */
+    html.view-phone.phone-pager .container{ padding-bottom:4.6rem; }
   </style>
 </head>
 <body>
