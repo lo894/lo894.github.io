@@ -457,7 +457,7 @@
       // 双版本查看切换（电脑版 / 手机版）
       const viewBtns=document.querySelectorAll('#viewPill .view-btn');
       // 手机分屏翻页：每个板块一屏，点「下一张」才跳下一屏
-      const PAGES=[{ids:['aboutFootprint'],label:'关于我 · 足迹'},{ids:['experience'],label:'过往经历'},{ids:['awards'],label:'获得的奖项'},{ids:['learning'],label:'关注与学习'},{ids:['skillsSection'],label:'技能与爱好'},{ids:['plantSection','gameSection'],label:'游戏互动'},{ids:['contact'],label:'联系合作'},{ids:['messages'],label:'留言区'}];
+      const PAGES=[{ids:['experience'],label:'过往经历'},{ids:['awards'],label:'获得的奖项'},{ids:['learning'],label:'关注与学习'},{ids:['skillsSection'],label:'技能与爱好'},{ids:['aboutFootprint'],label:'关于我 · 足迹'},{ids:['plantSection','gameSection'],label:'游戏互动'},{ids:['contact'],label:'联系合作'},{ids:['messages'],label:'留言区'}];
       let pagerOn=false,pageIndex=0,pagerBar=null,pagerPrev=null,pagerNext=null,pagerInfo=null;
       function buildPager(){
         if(pagerBar) return;
