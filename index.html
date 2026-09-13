@@ -402,11 +402,62 @@
       .hs-ring{ animation:none; opacity:.8; }
       .avatar-disc{ animation:none; }
     }
+    
+    /* ---------- 封面照片与模糊底图柔和衔接（桌面端也是一整幅的感觉） ---------- */
+    .cover-photo{
+      -webkit-mask-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, #000 6.5%, #000 93.5%, rgba(0,0,0,0) 100%),
+                          linear-gradient(180deg, rgba(0,0,0,0) 0%, #000 5%, #000 95%, rgba(0,0,0,0) 100%);
+      -webkit-mask-composite:source-in; mask-composite:intersect;
+      mask-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, #000 6.5%, #000 93.5%, rgba(0,0,0,0) 100%),
+                 linear-gradient(180deg, rgba(0,0,0,0) 0%, #000 5%, #000 95%, rgba(0,0,0,0) 100%);
+    }
+
+    /* ================= 手机端封面适配 ================= */
+    @media (max-width:760px){
+      /* 文字：压缩高度，给图片让出空间 */
+      .cover-a-text{ top:4.2%; gap:.42rem; padding:0 1rem; }
+      .cover-a-text::before{ top:-18px; width:130vw; height:calc(100% + 40px);
+        background:radial-gradient(ellipse at center, rgba(22,36,14,.44) 0%, rgba(22,36,14,.22) 52%, rgba(22,36,14,0) 78%); }
+      .cover-a-text .hero-title{ font-size:2.45rem; letter-spacing:3px; }
+      .cover-a-text .hero-motto{ font-size:.9rem; padding:.34rem 1.1rem; }
+      .cover-a-text .time-greeting{ font-size:.83rem; }
+      .cover-a-welcome{ font-size:.83rem; line-height:1.62; max-width:93vw; }
+
+      /* 入口按钮：单行、贴底，不再压住照片 */
+      .cover-hint{ flex-direction:row; align-items:center; gap:.38rem; bottom:3.2%;
+        font-size:.88rem; padding:.55rem 1.2rem; white-space:nowrap; }
+      .cover-hint .hint-arrow{ font-size:1rem; }
+
+      /* 模糊底图：降饱和、加柔光，不再是一团红绿糊 */
+      .cover-fill{ filter:blur(58px) saturate(.78) brightness(1.1); transform:scale(1.5); }
+      .cover-fill::after{ content:''; position:absolute; inset:0;
+        background:linear-gradient(180deg, rgba(240,248,230,.46) 0%, rgba(234,245,220,.28) 44%,
+                                           rgba(208,230,188,.26) 74%, rgba(78,104,58,.2) 100%); }
+
+      /* 封面B 手机端 */
+      .cover-b-title{ font-size:.85rem; padding:.4rem 1rem; top:3.6%; max-width:60vw; }
+      .back-cover{ top:3.6%; font-size:.83rem; padding:.4rem .78rem; }
+      .cover-b-hint2{ font-size:.75rem; bottom:2.4%; }
+    }
+
+    
+    /* 首屏加载提示 */
+    #bootLoading{ position:fixed; inset:0; z-index:99999; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:1rem; background:#f2f7e9; color:#4a6b34;
+      font-family:inherit; transition:opacity .4s ease; }
+    #bootLoading .bl-spin{ width:38px; height:38px; border-radius:50%; border:3px solid rgba(122,164,92,.28);
+      border-top-color:#6f9b4e; animation:blSpin .9s linear infinite; }
+    #bootLoading p{ margin:0; font-size:.95rem; letter-spacing:1px; }
+    #bootLoading.bl-done{ opacity:0; pointer-events:none; }
+    @keyframes blSpin{ to{ transform:rotate(360deg); } }
+
     @media print{ .cover-stage{ display:none!important; } }
 
   </style>
 </head>
 <body>
+  <div id="bootLoading" aria-hidden="true"><div class="bl-spin"></div><p>正在打开我的小世界…</p></div>
+  <script>window.addEventListener('load',function(){var b=document.getElementById('bootLoading');if(b){b.className='bl-done';setTimeout(function(){if(b)b.style.display='none';},450);}});setTimeout(function(){var b=document.getElementById('bootLoading');if(b)b.style.display='none';},16000);</script>
   <nav class="navbar"><span class="nav-brand">龙欣悦</span><button class="nav-toggle" id="navToggle" aria-label="菜单">☰</button><div class="nav-links" id="navLinks"><a href="#top">首页</a><a href="#aboutFootprint">关于·足迹</a><a href="#experience">经历</a><a href="#awards">奖项</a><a href="#learning">学习</a><a href="#skillsSection">技能</a><a href="#gameSection">游戏</a><a href="#contact">联系</a><a href="#messages">留言</a></div><div class="view-pill" id="viewPill" role="group" aria-label="电脑版 / 手机版切换"><button type="button" class="view-btn active" data-view="desktop" title="切换到电脑版查看">💻<span>电脑版</span></button><button type="button" class="view-btn" data-view="phone" title="切换到手机版查看">📱<span>手机版</span></button></div><div class="nav-actions"><button id="themeToggle" class="icon-btn">🌓</button><button id="printBtn" class="icon-btn">🖨️</button></div>  </nav>
   <div id="readProgress"></div>
   <div class="container" id="top">
@@ -691,25 +742,39 @@
         pagerBar.innerHTML='<button type="button" id="pagerPrev">← 上一张</button><div id="pagerInfo"></div><button type="button" id="pagerNext">下一张 →</button>';
         document.body.appendChild(pagerBar);
         pagerPrev=pagerBar.querySelector('#pagerPrev'); pagerNext=pagerBar.querySelector('#pagerNext'); pagerInfo=pagerBar.querySelector('#pagerInfo');
-        pagerPrev.addEventListener('click',()=>showPage(pageIndex-1));
-        pagerNext.addEventListener('click',()=>showPage(pageIndex+1));
+        pagerPrev.addEventListener('click',()=>showPage(pageIndex-1,true));
+        pagerNext.addEventListener('click',()=>showPage(pageIndex+1,true));
       }
-      function showPage(i){
+      function showPage(i,fromUser){
         i=Math.max(0,Math.min(PAGES.length-1,i)); pageIndex=i;
         PAGES.forEach(function(p,idx){ p.ids.forEach(function(id){ const el=document.getElementById(id); if(el) el.classList.toggle('phone-page', idx===i); }); });
         pagerPrev.disabled = i===0;
         pagerNext.disabled = i===PAGES.length-1;
         pagerNext.textContent = i===PAGES.length-1 ? '完成 ✓' : '下一张 →';
         pagerInfo.innerHTML = (i+1)+' / '+PAGES.length+'<br><strong>'+PAGES[i].label+'</strong>';
-        window.scrollTo(0,0);
+        var home=document.getElementById('homeScreen');
+        var coverVisible=!!(home && getComputedStyle(home).display!=='none');
+        var entered=coverVisible && home.classList.contains('state-b');
+        if(pagerBar){
+          if(fromUser && entered) pagerBar.style.display='flex';
+          else if(!entered) pagerBar.style.display='none';
+        }
+        if(fromUser && entered){
+          var hr=home.getBoundingClientRect();
+          window.scrollTo({top:Math.round(hr.top+window.pageYOffset+hr.height),behavior:'smooth'});
+        } else if(!entered){
+          window.scrollTo(0,0);
+        }
       }
       function enablePager(){
         if(pagerOn) return; pagerOn=true;
         document.documentElement.classList.add('phone-pager');
-        const home=document.getElementById('homeScreen'); if(home) home.style.display='none';
+        /* 封面（木窗/森林）作为手机版入口，保持可见 */
+        const home=document.getElementById('homeScreen'); if(home) home.style.display='';
         const ds=document.getElementById('detailSection'); if(ds) ds.classList.add('active');
         buildPager(); showPage(0);
-        if(pagerBar) pagerBar.style.display='flex';
+        /* 站在封面时先不出翻页条，走进森林并点了小动物之后再出 */
+        if(pagerBar) pagerBar.style.display='none';
       }
       function disablePager(){
         pagerOn=false;
@@ -724,9 +789,9 @@
         if(!pagerOn) return;
         const t=ev.target;
         const navA=t.closest? t.closest('.nav-links a'):null;
-        if(navA){ const href=navA.getAttribute('href')||''; if(href.charAt(0)==='#'){ const id=href.slice(1); for(let pi=0;pi<PAGES.length;pi++){ if(PAGES[pi].ids.indexOf(id)>-1){ ev.preventDefault(); showPage(pi); return; } } } }
+        if(navA){ const href=navA.getAttribute('href')||''; if(href.charAt(0)==='#'){ const id=href.slice(1); for(let pi=0;pi<PAGES.length;pi++){ if(PAGES[pi].ids.indexOf(id)>-1){ ev.preventDefault(); showPage(pi,true); return; } } } }
         const chap=t.closest? t.closest('.detail-section .btn-soft'):null;
-        if(chap && chap.getAttribute && chap.getAttribute('onclick') && chap.getAttribute('onclick').indexOf('scrollIntoView')>-1){ showPage(pageIndex+1); }
+        if(chap && chap.getAttribute && chap.getAttribute('onclick') && chap.getAttribute('onclick').indexOf('scrollIntoView')>-1){ showPage(pageIndex+1,true); }
       });
       function applyView(v){
         document.documentElement.classList.toggle('view-phone', v==='phone');
@@ -920,7 +985,10 @@
           '  disp+=(md/mr)*(sin(mr*0.042-uTime*2.2)+0.55*sin(mr*0.1+uTime*1.6))*7.0*mf;',
           '  vec2 ip=(p-uRect.xy)/uRect.zw;',
           '  vec2 suv=ip+disp/uRect.zw;',
-          '  float m=step(-0.002,suv.x)*step(suv.x,1.002)*step(-0.002,suv.y)*step(suv.y,1.002);',
+          '  float ex=0.062; float ey=0.052;',
+          '  float mx=smoothstep(-ex,ex*0.42,suv.x)*(1.0-smoothstep(1.0-ex,1.0+ex*0.42,suv.x));',
+          '  float my=smoothstep(-ey,ey*0.42,suv.y)*(1.0-smoothstep(1.0-ey,1.0+ey*0.42,suv.y));',
+          '  float m=mx*my;',
           '  vec4 c=texture2D(uTex,clamp(suv,0.0,1.0));',
           '  float hl=clamp((disp.x+disp.y)/26.0,-0.3,0.3);',
           '  c.rgb+=hl*0.2;',
@@ -1010,10 +1078,29 @@
           /* 顶部导航在文档流内，封面高度扣掉它，保证底部提示按钮首屏可见 */
           var nav=document.querySelector('.navbar');
           var navH=nav?nav.offsetHeight:0;
-          var sh=Math.max(380,(window.innerHeight||H)-navH);
+          /* 封面在文档中的起点可能比导航高（body 顶部留白），按真实起点算高度，
+             否则封面底部会超出视口、底部提示文字被裁掉 */
+          var docTop=stage.getBoundingClientRect().top+(window.pageYOffset||0);
+          var topOff=(docTop>40 && docTop<320)?docTop:navH;
+          var sh=Math.max(380,(window.innerHeight||H)-topOff);
           if(Math.abs(stage.offsetHeight-sh)>2){ stage.style.height=sh+'px'; stage.style.minHeight=sh+'px'; }
           W=stage.clientWidth||W; H=stage.clientHeight||H;
-          rectA=fitRect(AR,W,H); rectB=fitRect(BR,W,H);
+          var narrow=((window.innerWidth||W)<=760);
+          if(narrow){
+            /* 窄屏：文字在上、图片居中、按钮在下，三者不重叠 */
+            var sr=stage.getBoundingClientRect();
+            var txtEl=document.querySelector('.cover-a-text');
+            var hintEl=document.getElementById('coverHint');
+            var tb=txtEl?Math.max(0,txtEl.getBoundingClientRect().bottom-sr.top):0;
+            var ht=hintEl?Math.max(0,hintEl.getBoundingClientRect().top-sr.top):H;
+            var avail=Math.max(110,ht-20-tb);
+            var rwA=Math.min(W,AR*avail), rhA=rwA/AR;
+            rectA={x:(W-rwA)/2, y:tb+12+Math.max(0,(avail-rhA)/2), w:rwA, h:rhA};
+            var rwB=Math.min(W,BR*(H*0.70)), rhB=rwB/BR;
+            rectB={x:(W-rwB)/2, y:Math.max(72,Math.round((H-rhB)*0.56)), w:rwB, h:rhB};
+          } else {
+            rectA=fitRect(AR,W,H); rectB=fitRect(BR,W,H);
+          }
           setRect(photoA,rectA); setRect(photoB,rectB);
           setRect(shutterL,rectA); setRect(shutterR,rectA);
           var d=Math.round(rectB.w*0.20);
@@ -1022,7 +1109,7 @@
           avatarBox.style.top=Math.round(rectB.y+rectB.h*0.283-d/2)+'px';
           HOTS.forEach(function(h){
             if(!h.el) return;
-            var dd=Math.round(rectB.w*h.d/100);
+            var dd=Math.round(rectB.w*h.d/100); if(narrow) dd=Math.max(46,Math.min(96,dd));
             h.px=rectB.x+rectB.w*h.x/100; h.py=rectB.y+rectB.h*h.y/100;
             h.el.style.width=dd+'px'; h.el.style.height=dd+'px';
             h.el.style.left=Math.round(h.px-dd/2)+'px';
@@ -1099,6 +1186,7 @@
             busy=false; state='a';
             HOTS.forEach(function(h){ if(h.el) h.el.style.transitionDelay=''; });
           }, fast?520:1800);
+          if(typeof pagerOn!=='undefined' && pagerOn && pagerBar) pagerBar.style.display='none';
           window.scrollTo({top:0,behavior:fast?'auto':'smooth'});
         }
 
@@ -1106,14 +1194,30 @@
         if(hintBtn) hintBtn.addEventListener('click',function(e){ e.stopPropagation(); toForest(); });
         if(backBtn) backBtn.addEventListener('click',function(e){ e.stopPropagation(); toWindow(); });
         hsLayer.addEventListener('click',function(e){
-          var hs=e.target.closest('.hotspot'); if(!hs) return;
-          e.preventDefault(); e.stopPropagation();
           if(busy) return;
-          var id=hs.dataset.target;
+          /* 相邻光圈会互相重叠，取「离点击点最近的那只」，避免点到叠在上面的那一只 */
+          var lr=hsLayer.getBoundingClientRect();
+          var cx=e.clientX-lr.left, cy=e.clientY-lr.top;
+          var best=null, bd=1e9;
+          HOTS.forEach(function(h){
+            if(!h.el || !h.el.offsetWidth) return;
+            var dx=cx-(h.px-lr.left), dy=cy-(h.py-lr.top);
+            var d=Math.sqrt(dx*dx+dy*dy);
+            var rad=Math.max(26,h.el.offsetWidth*0.62);
+            if(d<=rad && d<bd){ bd=d; best=h; }
+          });
+          if(!best){
+            var t=e.target.closest? e.target.closest('.hotspot'):null;
+            if(!t) return;
+            HOTS.forEach(function(h){ if(h.el===t) best=h; });
+          }
+          if(!best) return;
+          e.preventDefault(); e.stopPropagation();
+          var id=best.t;
           if(typeof pagerOn!=='undefined' && pagerOn){
             var idx=-1;
             for(var i=0;i<PAGES.length;i++){ if(PAGES[i].ids.indexOf(id)>-1){ idx=i; break; } }
-            if(idx>=0){ showPage(idx); return; }
+            if(idx>=0){ showPage(idx,true); return; }
           }
           activateDetail();
           var card=document.getElementById(id);
