@@ -1,0 +1,16 @@
+{
+  "name": "龙欣悦 · 我的小世界",
+  "short_name": "龙欣悦",
+  "description": "龙欣悦的个人网站：足迹、经历、奖项、作品与联系",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f8ee",
+  "theme_color": "#7a9f5a",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
