@@ -2,7 +2,7 @@
    Service Worker —— 首屏外壳离线缓存
    策略：导航请求 network-first（保证更新），静态资源 cache-first
    ============================================================ */
-var CACHE = 'lxy-site-v6';
+var CACHE = 'lxy-site-v7';
 var SHELL = [
   './',
   './index.html',
@@ -36,6 +36,11 @@ self.addEventListener('fetch', function (e) {
   var req = e.request;
   if (req.method !== 'GET') return;
   var url = new URL(req.url);
+
+  /* 音频不进 Cache Storage：几 MB 的 mp3 缓存起来太占空间，
+     而且没必要拦 —— 不接管 Range 请求，拖动进度条才顺畅 */
+  if (/\.(mp3|m4a|ogg|wav|flac)$/i.test(url.pathname)) return;
+
 
   /* 导航请求：网络优先，离线回退缓存首页 */
   if (req.mode === 'navigate') {

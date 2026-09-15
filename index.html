@@ -3631,10 +3631,13 @@ body.dark .lb img{ border-color:#232C25; }
     TRACKS.push({ name: vn ? vn.textContent.trim() : (a.getAttribute("title")||"") ,
                   cover: im ? im.src : "", link: a.getAttribute("href")||"" });
   });
-  /* ✏️ 想接真音乐：把 mp3 放进 assets/music/，按下面顺序填文件名即可；
-     留空数组不会报错，播放器显示「音乐准备中」。
-     例：["assets/music/1.mp3","assets/music/2.mp3","assets/music/3.mp3","assets/music/4.mp3"] */
-  var AUDIO_SRC = [];
+  /* ✏️ 曲目音源：下标跟上面 TRACKS 顺序一一对应
+     0 诀别无尽夏 / 1 不只是场梦 / 2 小镇姑娘 / 3 是是非非
+     有歌就填 "assets/music/N.mp3"，还没有的就留空字符串 "" ——
+     留空不会报错，播放器会显示「音乐准备中」。
+     目前只接入了第 2 首《不只是场梦》（assets/music/2.mp3，128kbps / 3:32）。
+     以后补歌：把 mp3 拷进 assets/music/ 按序号命名，再把对应下标的 "" 换成路径就行。 */
+  var AUDIO_SRC = ["", "assets/music/2.mp3", "", ""];
   var idx=0, playing=false, audio=null, ht=0;
   function hint(t){
     if(!elHint) return; elHint.textContent=t; elHint.classList.add("show");
@@ -3659,6 +3662,9 @@ body.dark .lb img{ border-color:#232C25; }
       if(!audio){ audio=new Audio(); audio.preload="none";
         audio.addEventListener("error", function(){ stop(); if(elSub) elSub.textContent="这首暂时放不了"; });
         audio.addEventListener("ended", function(){ next(true); });
+        /* 点下 ▶ 到真正出声之间有 1~2 秒下载时间，给个反馈免得以为没点上 */
+        audio.addEventListener("waiting", function(){ if(playing && elSub) elSub.textContent="正在缓冲…"; });
+        audio.addEventListener("playing", function(){ if(playing) paint(); });
       }
       audio.src=AUDIO_SRC[idx];
       var pr=audio.play();
@@ -3667,8 +3673,15 @@ body.dark .lb img{ border-color:#232C25; }
       if(elPlay){ elPlay.textContent="⏸"; elPlay.setAttribute("aria-label","暂停"); }
     }catch(e){ stop(); }
   }
-  function next(auto){ idx=(idx+1)%TRACKS.length; paint(); if(auto||playing) play(); else stop(); }
+  function next(auto){
+    idx=(idx+1)%TRACKS.length; paint();
+    if(!hasSrc(idx)){ stop(); hint("这一首还没准备好 🎧"); return; }
+    if(auto||playing) play(); else stop();
+  }
   function prev(){ idx=(idx-1+TRACKS.length)%TRACKS.length; paint(); if(playing) play(); }
+  /* 打开页面先停在真正有音频的那首，免得用户手动翻好几下才听得到 */
+  for(var k=0;k<TRACKS.length;k++){ if(hasSrc(k)){ idx=k; break; } }
+  paint();
   if(document.getElementById("mpNext")) document.getElementById("mpNext").addEventListener("click", function(){ next(false); });
   if(document.getElementById("mpPrev")) document.getElementById("mpPrev").addEventListener("click", prev);
   if(elPlay) elPlay.addEventListener("click", function(){ playing ? stop() : play(); });
