@@ -2,7 +2,7 @@
    Service Worker —— 首屏外壳离线缓存
    策略：导航请求 network-first（保证更新），静态资源 cache-first
    ============================================================ */
-var CACHE = 'lxy-site-v5';
+var CACHE = 'lxy-site-v6';
 var SHELL = [
   './',
   './index.html',
