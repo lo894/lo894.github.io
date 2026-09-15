@@ -2,14 +2,19 @@
    Service Worker —— 首屏外壳离线缓存
    策略：导航请求 network-first（保证更新），静态资源 cache-first
    ============================================================ */
-var CACHE = 'lxy-site-v7';
+var CACHE = 'lxy-site-v8';
 var SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  './icons/apple-touch-icon.png'
+  './icons/apple-touch-icon.png',
+  /* 本地化的字体与背景图：不走外网，首屏不再等任何外部资源 */
+  './assets/fonts/fonts-local.css',
+  './assets/fonts/fa-local.css',
+  './assets/bg/forest_bg.jpg',
+  './assets/bg/forest_bg_sm.jpg'
 ];
 
 self.addEventListener('install', function (e) {

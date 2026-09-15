@@ -1,0 +1,52 @@
+/* ============================================================
+   拉丁字体 · 精简本地版（离线可用）
+   ------------------------------------------------------------
+   为什么本地化：原先走 Google Fonts + jsDelivr，这两个域名在国内
+   手机上经常超时。更糟的是 Google Fonts 那条 <link rel=stylesheet>
+   是"阻塞渲染"的，它不返回，浏览器就不画页面 —— 首屏直接白屏。
+   现在全部换成本地 woff2，首屏不再等任何外部资源。
+
+   ⚠️ 只含拉丁字符（unicode-range 限定了范围），中文一律走系统字体栈
+      （PingFang SC / 宋体 / 微软雅黑），不加载几 MB 的中文 webfont。
+   ============================================================ */
+
+/* ---- Cormorant Garamond：标题衬线 ---- */
+@font-face{ font-family:'Cormorant Garamond'; font-style:normal; font-weight:400; font-display:swap;
+  src:url('cormorant-garamond-latin-400-normal.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+
+@font-face{ font-family:'Cormorant Garamond'; font-style:normal; font-weight:500; font-display:swap;
+  src:url('cormorant-garamond-latin-500-normal.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+
+@font-face{ font-family:'Cormorant Garamond'; font-style:normal; font-weight:600; font-display:swap;
+  src:url('cormorant-garamond-latin-600-normal.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+
+@font-face{ font-family:'Cormorant Garamond'; font-style:italic; font-weight:400; font-display:swap;
+  src:url('cormorant-garamond-latin-400-italic.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+
+/* ---- Quicksand：正文无衬线 ---- */
+@font-face{ font-family:'Quicksand'; font-style:normal; font-weight:400; font-display:swap;
+  src:url('quicksand-latin-400-normal.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+
+@font-face{ font-family:'Quicksand'; font-style:normal; font-weight:500; font-display:swap;
+  src:url('quicksand-latin-500-normal.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+
+@font-face{ font-family:'Quicksand'; font-style:normal; font-weight:600; font-display:swap;
+  src:url('quicksand-latin-600-normal.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+
+/* ---- Anton：大标题展示体 ---- */
+@font-face{ font-family:'Anton'; font-style:normal; font-weight:400; font-display:swap;
+  src:url('anton-latin-400-normal.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+
+/* ---- Caveat：手写体 ---- */
+@font-face{ font-family:'Caveat'; font-style:normal; font-weight:400; font-display:swap;
+  src:url('caveat-latin-400-normal.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+

@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes, maximum-scale=1.5">
   <title>龙欣悦 · 自然生长面试简历</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+SC:wght@400;500;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- 字体已全部本地化：原来这里加载 Google Fonts（含中文 Noto Serif SC），
+       国内手机会阻塞渲染导致首屏白屏，现改为 assets/fonts/fonts-local.css -->
+  <link rel="stylesheet" href="assets/fonts/fonts-local.css">
+  <!-- Font Awesome 精简本地版：只保留全站用到的 4 个 solid 图标，离线也能显示 -->
+  <link rel="stylesheet" href="assets/fonts/fa-local.css">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌿%3C/text%3E%3C/svg%3E">
   <meta name="description" content="龙欣悦 · 自然生长的个人面试简历。08女大，热爱 AI 与创作，记录足迹、作品与成长。">
   <meta name="keywords" content="龙欣悦,个人简历,面试,作品集,AI,学生">
@@ -31,7 +32,7 @@
     body {
       background-color:var(--bg); font-family:'Quicksand','PingFang SC','Microsoft YaHei',sans-serif;
       color:var(--text); line-height:1.7; scroll-behavior:smooth;
-      background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop');
+      background-image:url('assets/bg/forest_bg.jpg');
       background-size:cover; background-attachment:fixed; background-position:center;
       position:relative; padding-top:var(--nav-height); transition:background-color 0.35s,color 0.35s;
       overflow-x:hidden;
@@ -1005,15 +1006,15 @@ body.dark #messages .msg-item { background:rgba(255,255,255,.045); border-color:
 /* 走 jsDelivr（国内多数网络可直连）；加载失败会自动落到本地系统字体，
    下面每个 font-family 都写了本地兜底，断网也不会掉版式。 */
 @font-face{ font-family:'Cormorant Garamond'; font-style:normal; font-weight:500; font-display:swap;
-  src:url('https://cdn.jsdelivr.net/npm/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-normal.woff2') format('woff2'); }
+  src:url('assets/fonts/cormorant-garamond-latin-500-normal.woff2') format('woff2'); }
 @font-face{ font-family:'Cormorant Garamond'; font-style:normal; font-weight:600; font-display:swap;
-  src:url('https://cdn.jsdelivr.net/npm/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-600-normal.woff2') format('woff2'); }
+  src:url('assets/fonts/cormorant-garamond-latin-600-normal.woff2') format('woff2'); }
 @font-face{ font-family:'Cormorant Garamond'; font-style:italic; font-weight:400; font-display:swap;
-  src:url('https://cdn.jsdelivr.net/npm/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-400-italic.woff2') format('woff2'); }
+  src:url('assets/fonts/cormorant-garamond-latin-400-italic.woff2') format('woff2'); }
 @font-face{ font-family:'AntonX'; font-style:normal; font-weight:400; font-display:swap;
-  src:url('https://cdn.jsdelivr.net/npm/@fontsource/anton/files/anton-latin-400-normal.woff2') format('woff2'); }
+  src:url('assets/fonts/anton-latin-400-normal.woff2') format('woff2'); }
 @font-face{ font-family:'CaveatX'; font-style:normal; font-weight:400; font-display:swap;
-  src:url('https://cdn.jsdelivr.net/npm/@fontsource/caveat/files/caveat-latin-400-normal.woff2') format('woff2'); }
+  src:url('assets/fonts/caveat-latin-400-normal.woff2') format('woff2'); }
 
 /* ---------- 1. 设计 token ---------- */
 :root{
@@ -1843,7 +1844,7 @@ html.reduce-motion #bootLoading .bl-ink i { animation: none; }
 
 /* ---------- 2. 迷你黑胶播放器 ---------- */
 .mp { position: fixed; left: 18px; bottom: 18px; z-index: 116; font-family: inherit; }
-.mp-toggle {
+.mp .mp-toggle {
   display: none; width: 46px; height: 46px; border-radius: 50%; cursor: pointer;
   border: 1px solid var(--line); background: var(--paper-2); color: var(--ink-2);
   font-size: 1.05rem; box-shadow: var(--sd-2); align-items: center; justify-content: center;
@@ -1857,7 +1858,7 @@ html.reduce-motion #bootLoading .bl-ink i { animation: none; }
   border: 1px solid var(--line); box-shadow: var(--sd-2);
   max-width: min(76vw, 330px);
 }
-.mp-disc {
+.mp .mp-disc {
   position: relative; width: 46px; height: 46px; flex: 0 0 auto; border-radius: 50%;
   overflow: hidden; background: #1C241D; box-shadow: 0 6px 16px -8px rgba(0, 0, 0, .6);
 }
@@ -1870,16 +1871,16 @@ html.reduce-motion #bootLoading .bl-ink i { animation: none; }
 }
 .mp.playing .mp-disc { animation: mpSpin 5.2s linear infinite; }
 @keyframes mpSpin { to { transform: rotate(360deg); } }
-.mp-info { min-width: 0; flex: 1 1 auto; }
-.mp-name {
+.mp .mp-info { min-width: 0; flex: 1 1 auto; }
+.mp .mp-name {
   margin: 0; font-size: .82rem; font-weight: 600; color: var(--ink);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.mp-sub {
+.mp .mp-sub {
   margin: .08rem 0 0; font-size: .66rem; color: var(--ink-3);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .04em;
 }
-.mp-ctl { display: flex; align-items: center; gap: .12rem; flex: 0 0 auto; }
+.mp .mp-ctl { display: flex; align-items: center; gap: .12rem; flex: 0 0 auto; }
 .mp-ctl button {
   width: 30px; height: 30px; border-radius: 50%; border: none; cursor: pointer;
   background: transparent; color: var(--ink-2); font-size: .8rem; line-height: 1;
@@ -1889,12 +1890,12 @@ html.reduce-motion #bootLoading .bl-ink i { animation: none; }
 .mp-ctl #mpPlay { background: var(--forest); color: #FFFDF6; width: 34px; height: 34px; font-size: .86rem; }
 .mp-ctl #mpPlay:hover { background: var(--forest-2); color: #16200F; }
 .mp-ctl button:disabled { opacity: .35; cursor: default; }
-.mp-fold-hide {
+.mp .mp-fold-hide {
   width: 22px; height: 22px; border-radius: 50%; border: none; background: transparent;
   color: var(--ink-3); cursor: pointer; font-size: .72rem; line-height: 1; flex: 0 0 auto;
 }
 .mp-fold-hide:hover { color: var(--ink); }
-.mp-hint {
+.mp .mp-hint {
   position: absolute; left: 0; bottom: calc(100% + 8px); white-space: nowrap;
   background: rgba(45, 62, 32, .92); color: #F2F8E8; font-size: .68rem;
   padding: .3rem .66rem; border-radius: 1rem; opacity: 0; transform: translateY(4px);
@@ -2027,7 +2028,11 @@ body.dark .gb-card .gb-bg { opacity: .1; }
   .mp-body { max-width: calc(100vw - 24px); padding: .46rem .7rem .46rem .46rem; }
   .mp-disc { width: 40px; height: 40px; }
   .mp-name { font-size: .78rem; }
-  .quiet-wm { background-image: none; }
+  
+  /* 手机用压缩过的小图，省流量；同时关掉 fixed ——
+     iOS Safari 上 background-attachment:fixed 会让背景图不显示或错位 */
+  body { background-image: url('assets/bg/forest_bg_sm.jpg'); background-attachment: scroll; }
+.quiet-wm { background-image: none; }
   .quiet-wm .qw-cat { bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
   .night-tip { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); flex-wrap: wrap; }
   .night-tip .nt-txt { white-space: normal; }
@@ -2035,6 +2040,9 @@ body.dark .gb-card .gb-bg { opacity: .1; }
   #bootLoading .bl-name { font-size: 1.22rem; }
 }
 html.is-mobile .mp { left: 12px; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+  /* 手机端用原生底部播放条（#mPlayer），桌面迷你播放器让位，避免两套并存。
+     断点跟 .m-player 的 ≤768px 保持一致，中间不留空档。 */
+  @media (max-width: 768px) { #miniPlayer { display: none !important; } }
 html.is-mobile .mp-body { max-width: calc(100vw - 24px); }
 html.is-mobile .quiet-wm { background-image: none; }
 html.is-mobile .gb-leaves { gap: .45rem; }
@@ -3112,8 +3120,8 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
 <div class="m-player" id="mPlayer">
   <div class="mp-disc"></div>
   <div class="mp-txt">
-    <div class="mp-name">点击展开播放器</div>
-    <div class="mp-sub">🎧 音乐筹备中 · 敬请期待</div>
+    <div class="mp-name">不只是场梦</div>
+    <div class="mp-sub">第 2 / 4 首</div>
   </div>
   <button type="button" class="mp-prev" aria-label="上一首">⏮</button>
   <button type="button" class="mp-play" aria-label="播放或暂停">▶</button>
@@ -3132,7 +3140,7 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
     <button type="button" class="mp-play" aria-label="播放或暂停">▶</button>
     <button type="button" class="mp-next" aria-label="下一首">⏭</button>
   </div>
-  <p class="mp-note">🎵 背景音乐筹备中 · 后续版本接入</p>
+  <p class="mp-note">🎵 音乐陆续接入中 · 现在可以听《不只是场梦》</p>
 </div>
 
 <div class="m-lightbox" id="mLightbox">
@@ -3287,14 +3295,53 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
   }
   function closeLightbox(){ if(lb) lb.classList.remove('open'); }
 
-  /* ---------- 音乐播放器（占位示例，阶段二接真音频） ---------- */
-  var SONGS = [
-    { t:'不只是场梦',   a:'🎧 筹备中 · 敬请期待' },
-    { t:'小镇姑娘',     a:'🎧 筹备中 · 敬请期待' },
-    { t:'是是非非',     a:'🎧 筹备中 · 敬请期待' },
-    { t:'诀别无尽夏',   a:'🎧 筹备中 · 敬请期待' }
-  ];
-  var mp = { i:0, playing:false, pos:0, dur:186, timer:0, els:{} };
+  /* ---------- 音乐播放器（已接真实音频） ---------- */
+  /* ✏️ 全站曲目与音源只有这一份：桌面左下角迷你播放器和手机面板都读它。
+     顺序：0 诀别无尽夏 / 1 不只是场梦 / 2 小镇姑娘 / 3 是是非非
+     补新歌：把 mp3 放进 assets/music/，再把 src 里对应下标的 "" 换成路径就行。
+     留空不会报错，播放器会友好提示「还没准备好」。 */
+  var MUSIC = window.__LXY_MUSIC__ || {
+    tracks: ['诀别无尽夏', '不只是场梦', '小镇姑娘', '是是非非'],
+    src:    ['', 'assets/music/2.mp3', '', '']
+  };
+  window.__LXY_MUSIC__ = MUSIC;
+  var SONGS = MUSIC.tracks.map(function(t, i){ return { t: t, src: (MUSIC.src[i] || '') }; });
+  var mp = { i: 0, playing: false, els: {}, audio: null, loaded: -1 };
+
+  function hasSrc(i){ return !!(SONGS[i] && SONGS[i].src); }
+  function firstReady(){ for(var k = 0; k < SONGS.length; k++){ if(hasSrc(k)) return k; } return -1; }
+  function fmt(s){
+    if(!isFinite(s) || s < 0) return '--:--';
+    s = Math.floor(s);
+    var m = Math.floor(s / 60); s = s % 60;
+    return m + ':' + (s < 10 ? '0' : '') + s;
+  }
+  function sub(t){
+    if(mp.els.sub)  mp.els.sub.textContent  = t;
+    if(mp.els.ssub) mp.els.ssub.textContent = t;
+  }
+  function audioEl(){
+    if(mp.audio) return mp.audio;
+    var a = new Audio();
+    a.preload = 'none';
+    a.addEventListener('loadedmetadata', function(){ mp.els.tDur.textContent = fmt(a.duration); });
+    a.addEventListener('timeupdate', function(){
+      if(!a.duration) return;
+      mp.els.bar.style.width = (a.currentTime / a.duration * 100) + '%';
+      mp.els.tCur.textContent = fmt(a.currentTime);
+    });
+    a.addEventListener('waiting', function(){ sub('正在缓冲…'); });
+    a.addEventListener('playing', function(){ sub('第 ' + (mp.i + 1) + ' / ' + SONGS.length + ' 首'); });
+    a.addEventListener('ended', function(){ step(1); });
+    a.addEventListener('error', function(){ stop(); sub('这一首暂时放不了 🎧'); });
+    mp.audio = a;
+    return a;
+  }
+  function ensure(){                       /* 只在切歌时换 src，避免重复下载 */
+    var a = audioEl();
+    if(mp.loaded !== mp.i){ a.src = SONGS[mp.i].src; a.load(); mp.loaded = mp.i; }
+    return a;
+  }
   function initPlayer(){
     var p = document.getElementById('mPlayer'), sheet = document.getElementById('mPlayerSheet');
     if(!p || !sheet) return;
@@ -3310,6 +3357,7 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
       sname: sheet.querySelector('.mp-sheet-name'),
       ssub: sheet.querySelector('.mp-sheet-sub'),
       bar: sheet.querySelector('.mp-bar > i'),
+      barWrap: sheet.querySelector('.mp-bar'),
       tCur: sheet.querySelector('.mp-t-cur'),
       tDur: sheet.querySelector('.mp-t-dur'),
       sPlay: sheet.querySelector('.mp-play'),
@@ -3329,50 +3377,62 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
     mp.els.sNext.addEventListener('click', function(){ step(1); });
     mp.els.close.addEventListener('click', closeSheet);
     sheet.addEventListener('click', function(e){ if(e.target === sheet) closeSheet(); });
+    if(mp.els.barWrap){                    /* 点进度条跳到对应位置 */
+      mp.els.barWrap.addEventListener('click', function(e){
+        var a = mp.audio;
+        if(!a || !a.duration) return;
+        var r = this.getBoundingClientRect();
+        var ratio = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+        a.currentTime = ratio * a.duration;
+      });
+    }
+    var f = firstReady();
+    mp.i = (f >= 0) ? f : 0;               /* 打开就落在第一首有音源的曲目上 */
     render();
-  }
-  function fmt(s){
-    s = Math.max(0, Math.floor(s));
-    var m = Math.floor(s / 60); s = s % 60;
-    return m + ':' + (s < 10 ? '0' : '') + s;
   }
   function render(){
-    var song = SONGS[mp.i];
-    mp.els.name.textContent = song.t;
-    mp.els.sub.textContent = song.a;
-    mp.els.sname.textContent = song.t;
-    mp.els.ssub.textContent = song.a;
+    var s = SONGS[mp.i], a = mp.audio;
+    mp.els.name.textContent = s.t;
+    mp.els.sname.textContent = s.t;
+    sub(hasSrc(mp.i) ? ('第 ' + (mp.i + 1) + ' / ' + SONGS.length + ' 首') : '音乐准备中 · 音频待接入');
     mp.els.disc.classList.toggle('playing', mp.playing);
     mp.els.sd.classList.toggle('playing', mp.playing);
-    mp.els.play.textContent = mp.playing ? '⏸' : '▶';
+    mp.els.play.textContent  = mp.playing ? '⏸' : '▶';
     mp.els.sPlay.textContent = mp.playing ? '⏸' : '▶';
-    mp.els.bar.style.width = (mp.pos / mp.dur * 100) + '%';
-    mp.els.tCur.textContent = fmt(mp.pos);
-    mp.els.tDur.textContent = fmt(mp.dur);
+    /* 没有音源的曲目不显示上一首残留的时长和进度 */
+    var live = a && hasSrc(mp.i) && isFinite(a.duration) && a.duration > 0;
+    mp.els.tDur.textContent = live ? fmt(a.duration) : '--:--';
+    mp.els.tCur.textContent = live ? fmt(a.currentTime) : '0:00';
+    mp.els.bar.style.width  = live ? ((a.currentTime / a.duration * 100) + '%') : '0%';
   }
-  function tick(){
-    mp.pos += 1;
-    if(mp.pos >= mp.dur){ step(1); return; }
-    mp.els.bar.style.width = (mp.pos / mp.dur * 100) + '%';
-    mp.els.tCur.textContent = fmt(mp.pos);
-  }
-  var __mpTip = 0;
-  function toggle(){
-    openSheet();
-    try{ var s = mp.els.ssub; if(s) s.textContent = '🎧 背景音乐正在筹备，下次来就能听到啦'; }catch(e){}
-    clearTimeout(__mpTip);
-    __mpTip = setTimeout(function(){ try{ mp.els.ssub.textContent = SONGS[mp.i].a; }catch(e){} }, 2400);
-    return;
-    mp.playing = !mp.playing;
-    if(mp.playing){ mp.timer = setInterval(tick, 1000); }
-    else { clearInterval(mp.timer); }
+  function play(){
+    if(!hasSrc(mp.i)){ sub('这一首还没准备好 🎧'); return; }
+    sub('正在缓冲…');
+    var a = ensure();
+    mp.playing = true;
+    var pr = a.play();
+    if(pr && pr.catch) pr.catch(function(){ stop(); sub('再点一下就能播放 🎧'); });
     render();
   }
-  function step(d){
-    clearInterval(mp.timer);
-    mp.i = (mp.i + d + SONGS.length) % SONGS.length;
-    mp.pos = 0; mp.playing = false;
+  function pause(){
+    if(mp.audio){ try{ mp.audio.pause(); }catch(e){} }
+    mp.playing = false;
     render();
+  }
+  function stop(){
+    if(mp.audio){ try{ mp.audio.pause(); }catch(e){} }
+    mp.playing = false;
+    render();
+  }
+  function toggle(){ if(mp.playing) pause(); else play(); }
+  function step(k){
+    var wasPlaying = mp.playing;
+    stop();
+    mp.i = (mp.i + k + SONGS.length) % SONGS.length;
+    if(mp.audio){ try{ mp.audio.currentTime = 0; }catch(e){} }
+    render();
+    if(wasPlaying) play();                 /* 播着的时候切歌 / 自动下一首，接着放 */
+    else if(!hasSrc(mp.i)) sub('这一首还没准备好 🎧');
   }
   function openSheet(){ mp.els.sheet.classList.add('open'); }
   function closeSheet(){ mp.els.sheet.classList.remove('open'); }
@@ -3637,7 +3697,7 @@ body.dark .lb img{ border-color:#232C25; }
      留空不会报错，播放器会显示「音乐准备中」。
      目前只接入了第 2 首《不只是场梦》（assets/music/2.mp3，128kbps / 3:32）。
      以后补歌：把 mp3 拷进 assets/music/ 按序号命名，再把对应下标的 "" 换成路径就行。 */
-  var AUDIO_SRC = ["", "assets/music/2.mp3", "", ""];
+  var AUDIO_SRC = (window.__LXY_MUSIC__ && window.__LXY_MUSIC__.src) || ["", "assets/music/2.mp3", "", ""];
   var idx=0, playing=false, audio=null, ht=0;
   function hint(t){
     if(!elHint) return; elHint.textContent=t; elHint.classList.add("show");

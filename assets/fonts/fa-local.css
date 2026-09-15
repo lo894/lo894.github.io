@@ -1,0 +1,36 @@
+/* ============================================================
+   Font Awesome 6 Free —— 精简本地版（离线可用，不依赖 cdnjs）
+   全站只用到 4 个 solid 图标，没必要加载官方 84KB 的完整 CSS，
+   这里保留 @font-face + 基础类 + 4 条图标规则，共 1KB 左右。
+
+   ⚠️ 以后要加新图标：
+      1. 打开 https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css
+      2. 搜 .fa-新图标:before，把 content 抄到下面
+      3. 如果加的是 regular / brands 风格，还要另外下载对应 woff2
+   ============================================================ */
+@font-face{
+  font-family:"Font Awesome 6 Free";
+  font-style:normal;
+  font-weight:900;
+  font-display:block;
+  src:url("fa-solid-900.woff2") format("woff2");
+}
+
+/* ---- 基础类 ---- */
+.fa,.fas{
+  font-family:"Font Awesome 6 Free";
+  font-weight:900;
+  font-style:normal;
+  font-variant:normal;
+  line-height:1;
+  display:inline-block;
+  text-rendering:auto;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* ---- 用到的图标 ---- */
+.fa-leaf:before{content:"\f06c"}
+.fa-gamepad:before{content:"\f11b"}
+.fa-envelope-open-text:before{content:"\f658"}
+.fa-arrow-right:before{content:"\f061"}
