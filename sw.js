@@ -2,7 +2,9 @@
    Service Worker —— 首屏外壳离线缓存
    策略：导航请求 network-first（保证更新），静态资源 cache-first
    ============================================================ */
-var CACHE = 'lxy-site-v8';
+/* v9：6.6MB 的 base64 内联图已抽成 assets/in/*.jpg 外部文件（HTML 7.19MB -> 0.28MB）。
+   旧缓存里存的是 7MB 的胖版本，升版本号会在 activate 时整包删掉，强制拉轻量新版。 */
+var CACHE = 'lxy-site-v9';
 var SHELL = [
   './',
   './index.html',
@@ -13,8 +15,11 @@ var SHELL = [
   /* 本地化的字体与背景图：不走外网，首屏不再等任何外部资源 */
   './assets/fonts/fonts-local.css',
   './assets/fonts/fa-local.css',
+  './assets/fonts/fa-solid-900.woff2',
   './assets/bg/forest_bg.jpg',
   './assets/bg/forest_bg_sm.jpg'
+  /* assets/in/*.jpg 不预缓存：22 张共 1.66MB，按需缓存即可，
+     首页只下载 HTML(0.28MB) + 首屏几张图，图片自己带 loading="lazy" */
 ];
 
 self.addEventListener('install', function (e) {
