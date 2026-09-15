@@ -444,7 +444,7 @@
 
 @media (max-width: 768px) {
   /* ========== 0. 基础与性能 ========== */
-  :root { --nav-height: 52px; --m-tab: 58px; }
+  :root { --nav-height: 52px; --m-tab: 58px; --m-mp: 0px; }
 
   html { -webkit-text-size-adjust: 100%; }
 
@@ -586,13 +586,13 @@
   .back-cover { top: 3%; font-size: .8rem; padding: .38rem .7rem; min-height: 40px; }
   .cover-b-hint2 { display: none; }
   .cover-hint { font-size: .92rem; padding: .6rem 1.3rem;
-    bottom: calc(var(--m-tab) + env(safe-area-inset-bottom, 0px) + 18px); }
+    bottom: calc(var(--m-tab) + env(safe-area-inset-bottom, 0px) + var(--m-mp) + 18px); }
   /* 手机上不再用动物热区，改森林目录卡片 */
   .hotspot-layer { display: none !important; }
 
   /* ---- 2×3 森林目录圆角卡片 ---- */
   .m-dir {
-    position: absolute; left: 0; right: 0; bottom: calc(var(--m-tab) + env(safe-area-inset-bottom, 0px) + 10px); z-index: 9;
+    position: absolute; left: 0; right: 0; bottom: calc(var(--m-tab) + env(safe-area-inset-bottom, 0px) + var(--m-mp) + 10px); z-index: 9;
     display: grid; grid-template-columns: 1fr 1fr; gap: .46rem;
     padding: 0 max(.6rem, env(safe-area-inset-left)) 0 max(.6rem, env(safe-area-inset-right));
     opacity: 0; visibility: hidden;
@@ -1843,8 +1843,19 @@ body.dark #messages .msg-item { background:rgba(255,255,255,.045); border-color:
         }
 
         /* ---------- 布局 ---------- */
+        /* 迷你播放条真实高度 -> --m-mp（未被渲染时为 0） */
+        function syncMpVar(){
+          var el=document.getElementById('mPlayer');
+          var h=0;
+          if(el){ var rc=el.getBoundingClientRect();
+            if(rc.height>0.5 && getComputedStyle(el).display!=='none') h=Math.round(rc.height)+8; }
+          document.documentElement.style.setProperty('--m-mp', h+'px');
+          return h;
+        }
+
         function layout(){
           var W=stage.clientWidth||window.innerWidth, H=stage.clientHeight||window.innerHeight;
+          var mpH=syncMpVar();
           if(!W||!H) return;
           /* 顶部导航在文档流内，封面高度扣掉它，保证底部提示按钮首屏可见 */
           var nav=document.querySelector('.navbar');
@@ -1867,8 +1878,14 @@ body.dark #messages .msg-item { background:rgba(255,255,255,.045); border-color:
             var avail=Math.max(110,ht-20-tb);
             var rwA=Math.min(W,AR*avail), rhA=rwA/AR;
             rectA={x:(W-rwA)/2, y:tb+12+Math.max(0,(avail-rhA)/2), w:rwA, h:rhA};
-            var rwB=Math.min(W,BR*(H*0.70)), rhB=rwB/BR;
-            rectB={x:(W-rwB)/2, y:Math.max(72,Math.round((H-rhB)*0.56)), w:rwB, h:rhB};
+            /* 顶部让出「🪟回到窗前 + 标题」，底部让出「森林目录 + 迷你播放条 + Tab 栏」 */
+            var dirEl=document.getElementById('mDir');
+            var tabH=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--m-tab'))||58;
+            var dirH=(dirEl&&dirEl.offsetHeight)?dirEl.offsetHeight:178;
+            var topB=62, botB=tabH+mpH+dirH+16;
+            var availB=Math.max(150,H-topB-botB);
+            var rwB=Math.min(W-14,BR*availB), rhB=rwB/BR;
+            rectB={x:Math.round((W-rwB)/2), y:Math.round(topB+Math.max(0,(availB-rhB)/2)), w:rwB, h:rhB};
           } else {
             rectA=fitRect(AR,W,H); rectB=fitRect(BR,W,H);
           }
@@ -2043,6 +2060,9 @@ body.dark #messages .msg-item { background:rgba(255,255,255,.045); border-color:
         document.addEventListener('visibilitychange',updateRun);
         var rT=0;
         window.addEventListener('resize',function(){ clearTimeout(rT); rT=setTimeout(layout,140); });
+        /* 迷你播放条为 fixed 定位，首次 layout() 时它还没撑开，启动后二次校正一次 */
+        ['load','transitionend'].forEach(function(ev){ window.addEventListener(ev,function(){ setTimeout(layout,260); }); });
+        setTimeout(layout,320); setTimeout(layout,900);
         window.addEventListener('orientationchange',function(){ setTimeout(layout,320); });
         document.querySelectorAll('#viewPill .view-btn').forEach(function(b){
           b.addEventListener('click',function(){ setTimeout(function(){
