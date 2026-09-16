@@ -4,7 +4,7 @@
    ============================================================ */
 /* v9：6.6MB 的 base64 内联图已抽成 assets/in/*.jpg 外部文件（HTML 7.19MB -> 0.28MB）。
    旧缓存里存的是 7MB 的胖版本，升版本号会在 activate 时整包删掉，强制拉轻量新版。 */
-var CACHE = 'lxy-site-v9';
+var CACHE = 'lxy-site-v10';
 var SHELL = [
   './',
   './index.html',

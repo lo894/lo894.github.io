@@ -196,7 +196,10 @@
     html.view-phone #aboutFootprint > div[style]{ gap:1.2rem; }
     html.view-phone .song-grid{ grid-template-columns:repeat(auto-fill,minmax(115px,1fr)); gap:1.1rem; }
     html.view-phone .game-container{ padding:1rem; }
-    html.view-phone .back-top{ bottom:1.2rem; right:1.1rem; width:42px; height:42px; }
+    /* 修复：手机端底部有播放条(z=118, 高59) + Tab 栏(z=120, 高64)，
+       原 bottom:1.2rem 会把「回目录」(z=98) 整个压进 Tab 栏底下，手指点不到。
+       抬到两层固定条之上（58+59+12+安全区 ≈ 135px）。 */
+    html.view-phone .back-top{ bottom:calc(58px + 59px + 12px + env(safe-area-inset-bottom, 0px)); right:1.1rem; width:42px; height:42px; }
 
     /* ===== 手机版「一张一张翻」分屏模式（点下一张才进下一屏） ===== */
     html.view-phone.phone-pager .hero-fullscreen{ display:none; }
@@ -2059,6 +2062,160 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
 .visit-line[hidden] { display: none !important; }
 
 </style>
+<style id="mq-cover-v1">
+/* ===== 手机播放器封面（黑胶造型） · 与电脑端同一套封面图 v1 ===== */
+/* 圆盘要成为裁剪容器；播放条圆盘原本是 display:flex，不设 relative 的话
+   绝对定位的 img 会跑去找更外层祖先 */
+.m-player .mp-disc,
+.mp-big-disc { position: relative; overflow: hidden; }
+
+/* 封面铺满圆盘。必须 absolute：圆盘是 flex 容器，img 若留在文档流里
+   会跟中心孔（::after 也是 flex item）并排，把布局撑破 */
+.mp-disc img.mp-cover,
+.mp-big-disc img.mp-cover {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover; object-position: center;
+  border-radius: 50%; display: block; z-index: 1;
+  /* 弱网占位：默认透明，露出下面同色系黑胶圆底 + 歌名，加载完淡入，不留白塌陷 */
+  opacity: 0; transition: opacity .38s ease;
+}
+.mp-disc img.mp-cover.is-loaded,
+.mp-big-disc img.mp-cover.is-loaded { opacity: 1; }
+
+/* 大圆盘原本的中心白圆占 28% 直径，会糊住封面 —— 收成小唱片孔 */
+.m-player-sheet .mp-big-disc::after { inset: 45%; background: rgba(245,248,236,.92); }
+
+/* 播放条小圆盘：中心孔保持原样的 9px，只需压在封面之上 */
+.m-player .mp-disc::after { position: relative; z-index: 2; flex: 0 0 auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mp-disc img.mp-cover, .mp-big-disc img.mp-cover { transition: none; }
+}
+</style>
+<style id="aq-v1">
+/* ================= 水互动 v1 =================
+   全部效果都落在唯一一层 #aqLayer 上；没有第二个 WebGL，也没有给卡片挂 canvas */
+#aqLayer{ position:fixed; inset:0; pointer-events:none; z-index:110; overflow:hidden; }
+#aqLayer > i{ position:absolute; display:block; pointer-events:none; font-style:normal; }
+
+/* --- 点击水花：从点击点向外溢出的一圈浅水光 --- */
+.aq-splash{
+  width:16px; height:16px; margin:-8px 0 0 -8px; border-radius:50%;
+  border:1.5px solid rgba(132,178,112,.55);
+  box-shadow:0 0 10px rgba(132,178,112,.26), inset 0 0 10px rgba(206,234,186,.30);
+  animation:aqSplash .58s cubic-bezier(.18,.72,.28,1) forwards;
+}
+@keyframes aqSplash{
+  0%  { transform:scale(.32); opacity:.95; }
+  62% { opacity:.45; }
+  100%{ transform:scale(var(--aqs,3.4)); opacity:0; }
+}
+
+/* --- 水滴粒子：单次最多 6 颗 --- */
+.aq-drop{
+  width:5px; height:5px; margin:-2.5px 0 0 -2.5px; border-radius:50%;
+  background:radial-gradient(circle at 34% 28%, #f2fbeb, #a6d28f 62%, rgba(150,196,130,0));
+  animation:aqDrop .6s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes aqDrop{
+  0%  { transform:translate(0,0) scale(1); opacity:.95; }
+  100%{ transform:translate(var(--dx,0),var(--dy,-14px)) scale(.28); opacity:0; }
+}
+
+/* --- 导航 / Tab：被点项下方一道细窄水波横向扫过（200ms 内完成） --- */
+.aq-sweep{ position:relative; }
+.aq-sweep::after{
+  content:''; position:absolute; left:10%; right:10%; bottom:1px; height:2px; border-radius:2px;
+  background:linear-gradient(90deg,transparent,rgba(132,178,112,.9),transparent);
+  transform-origin:50% 50%; pointer-events:none;
+  animation:aqSweep .2s ease-out forwards;
+}
+@keyframes aqSweep{
+  0%  { transform:scaleX(0); opacity:.95; }
+  65% { transform:scaleX(1); opacity:.6; }
+  100%{ transform:scaleX(1); opacity:0; }
+}
+
+/* --- 叶子：留言落定（停留片刻后自然消散） --- */
+.aq-leaf{
+  font-size:1.05rem; line-height:1;
+  animation:aqLeafFall 1.05s cubic-bezier(.25,.6,.35,1) forwards,
+            aqLeafFade .55s ease 2.3s forwards;
+}
+@keyframes aqLeafFall{
+  0%  { transform:translate3d(0,0,0) rotate(0deg); opacity:0; }
+  14% { opacity:1; }
+  100%{ transform:translate3d(var(--lx,0),var(--ly,120px),0) rotate(var(--lr,196deg)); opacity:1; }
+}
+@keyframes aqLeafFade{ to{ opacity:0; } }
+
+/* --- 叶子：从按钮飘走 --- */
+.aq-leaf-fly{ animation:aqLeafFly .78s cubic-bezier(.3,.5,.4,1) forwards; }
+@keyframes aqLeafFly{
+  0%  { transform:translate3d(0,0,0) rotate(0deg); opacity:1; }
+  100%{ transform:translate3d(var(--fx,18px),var(--fy,-70px),0) rotate(150deg); opacity:0; }
+}
+
+/* --- 涟漪两种：迎宾（扩散） / 回目录（向内收） --- */
+.aq-welcome, .aq-implode{ border-radius:50%; border:1.5px solid rgba(146,190,126,.42); }
+.aq-welcome{
+  width:34px; height:34px; margin:-17px 0 0 -17px;
+  animation:aqWelcome 1.35s cubic-bezier(.2,.72,.3,1) forwards;
+}
+@keyframes aqWelcome{
+  0%  { transform:scale(.25); opacity:0; }
+  18% { opacity:.6; }
+  100%{ transform:scale(var(--aqw,7)); opacity:0; }
+}
+.aq-implode{
+  width:86px; height:86px; margin:-43px 0 0 -43px;
+  animation:aqImplode .6s cubic-bezier(.4,.1,.6,1) forwards;
+}
+@keyframes aqImplode{
+  0%  { transform:scale(1.45); opacity:.8; }
+  100%{ transform:scale(.28); opacity:0; }
+}
+
+/* ============ 以下两项只在真有鼠标 hover 的设备（PC）生效 ============
+   手机/平板拿不到这些规则，等于完全不运行 */
+@media (hover:hover) and (pointer:fine){
+  /* 6. 作品卡：一道柔和水光自左向右扫过（约 500ms），移出不回放 */
+  .work-card{ position:relative; }
+  .work-card::after{
+    content:''; position:absolute; inset:0; pointer-events:none; z-index:3;
+    border-radius:inherit;
+    background:linear-gradient(102deg,transparent 26%,rgba(214,242,194,.40) 50%,transparent 74%);
+    transform:translateX(-118%); opacity:0;
+  }
+  .work-card:hover::after{ animation:aqShine .5s ease-out forwards; }
+  @keyframes aqShine{
+    0%  { transform:translateX(-118%); opacity:0; }
+    22% { opacity:1; }
+    100%{ transform:translateX(118%); opacity:0; }
+  }
+  /* 7. 证书相框：hover 时内边缘一层缓慢流动的微弱水光 */
+  .arc-frame{ position:relative; }
+  .arc-frame::after{
+    content:''; position:absolute; inset:5px; pointer-events:none; z-index:3;
+    border-radius:inherit;
+    box-shadow:inset 0 0 0 1px rgba(167,208,146,.34), inset 0 0 14px rgba(167,208,146,.16);
+    background:linear-gradient(118deg,transparent 32%,rgba(198,234,176,.20) 50%,transparent 68%);
+    background-size:230% 230%; opacity:0; transition:opacity .45s ease;
+  }
+  .arc-frame:hover::after{ opacity:1; animation:aqFlow 4.6s linear infinite; }
+  @keyframes aqFlow{ 0%{ background-position:0% 0%; } 100%{ background-position:210% 210%; } }
+}
+
+/* 「减少动态效果」：新增互动一律关闭，静态观感与现在一致 */
+@media (prefers-reduced-motion: reduce){
+  #aqLayer{ display:none !important; }
+  .aq-sweep::after{ display:none !important; }
+  .work-card::after, .arc-frame::after{ display:none !important; }
+}
+/* 勿扰模式：跟现有 dnd 约定保持一致，一起停掉 */
+html.dnd #aqLayer{ display:none !important; }
+html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !important; opacity:0 !important; }
+</style>
 </head>
 <body>
   <div id="bootLoading" role="status" aria-live="polite">
@@ -2812,6 +2969,8 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
           if(w.ripples.length>5) w.ripples.shift();
           w.ripples.push({x:x,y:y,t0:w.time,amp:amp});
         }
+        /* 水互动 v1 复用入口：外部只传坐标，内部仍走原来的 spawnAt（参数/效果未改动） */
+        try{ window.__aqSpawnRipple=function(x,y,amp){ spawnAt(active,x,y,amp); }; }catch(e){}
 
         /* ---------- 布局 ---------- */
         /* 迷你播放条真实高度 -> --m-mp（未被渲染时为 0） */
@@ -3065,7 +3224,9 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
         iA.src=IMG.A; iB.src=IMG.B;
       })();
 
-      updateEnvironment(); setInterval(updateEnvironment,60000);
+      /* 注：原先此处是 updateEnvironment(); setInterval(updateEnvironment,60000);
+         该函数用于旧的「湖景」元素 lakeWater 做昼夜换色，湖景已下线、函数已随之移除，
+         调用却留了下来 —— 每次加载都会抛 ReferenceError 并刷控制台。此处删除死调用。 */
     })();
   </script>
 <footer class="site-footer" style="text-align:center;padding:2.2rem 1rem 2.6rem;color:#8aa87d;font-size:0.82rem;line-height:1.8;border-top:1px solid rgba(140,168,125,0.25);margin-top:2rem;">
@@ -3118,7 +3279,7 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
 </div>
 
 <div class="m-player" id="mPlayer">
-  <div class="mp-disc"></div>
+  <div class="mp-disc"><img class="mp-cover" alt="" src="assets/in/city-诀别无尽夏.jpg"></div>
   <div class="mp-txt">
     <div class="mp-name">不只是场梦</div>
     <div class="mp-sub">第 2 / 4 首</div>
@@ -3130,7 +3291,7 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
 
 <div class="m-player-sheet" id="mPlayerSheet" role="dialog" aria-label="播放器">
   <button type="button" class="mp-close" aria-label="收起播放器">✕</button>
-  <div class="mp-big-disc"></div>
+  <div class="mp-big-disc"><img class="mp-cover" alt="" src="assets/in/city-诀别无尽夏.jpg"></div>
   <p class="mp-sheet-name">…</p>
   <p class="mp-sheet-sub">…</p>
   <div class="mp-bar"><i></i></div>
@@ -3306,6 +3467,27 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
   };
   window.__LXY_MUSIC__ = MUSIC;
   var SONGS = MUSIC.tracks.map(function(t, i){ return { t: t, src: (MUSIC.src[i] || '') }; });
+
+  /* 封面与电脑端同源：直接读页面上 4 张歌单卡片的图片（同一套路径），不另维护一份。 */
+  var COVERS = [];
+  Array.prototype.forEach.call(document.querySelectorAll('.vinyl[data-song] img'), function(im){
+    COVERS.push(im.getAttribute('src') || '');
+  });
+  function paintCover(){
+    var src = COVERS[mp.i] || '';
+    [mp.els.coverSmall, mp.els.coverBig].forEach(function(im){
+      if(!im) return;
+      if(!src){ im.removeAttribute('src'); im.classList.remove('is-loaded'); return; }
+      if(im.getAttribute('src') !== src){
+        im.classList.remove('is-loaded');       /* 换图先回落到底色，避免旧图闪烁 */
+        im.onload  = function(){ im.classList.add('is-loaded'); };
+        im.onerror = function(){ im.classList.remove('is-loaded'); };
+        im.src = src;
+      } else if(im.complete && im.naturalWidth > 0){
+        im.classList.add('is-loaded');           /* 已在缓存里，直接显示 */
+      }
+    });
+  }
   var mp = { i: 0, playing: false, els: {}, audio: null, loaded: -1 };
 
   function hasSrc(i){ return !!(SONGS[i] && SONGS[i].src); }
@@ -3354,6 +3536,8 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
       prev: p.querySelector('.mp-prev'),
       next: p.querySelector('.mp-next'),
       sd: sheet.querySelector('.mp-big-disc'),
+      coverSmall: p.querySelector('.mp-cover'),
+      coverBig:   sheet.querySelector('.mp-cover'),
       sname: sheet.querySelector('.mp-sheet-name'),
       ssub: sheet.querySelector('.mp-sheet-sub'),
       bar: sheet.querySelector('.mp-bar > i'),
@@ -3404,6 +3588,7 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
     mp.els.tDur.textContent = live ? fmt(a.duration) : '--:--';
     mp.els.tCur.textContent = live ? fmt(a.currentTime) : '0:00';
     mp.els.bar.style.width  = live ? ((a.currentTime / a.duration * 100) + '%') : '0%';
+    paintCover();
   }
   function play(){
     if(!hasSrc(mp.i)){ sub('这一首还没准备好 🎧'); return; }
@@ -3853,6 +4038,249 @@ body.dark .lb img{ border-color:#232C25; }
       else { line.hidden=false; line.innerHTML = "🐾 欢迎来到我的小森林，记得留下脚印哦"; }
     }, 3200);
   }
+})();
+</script>
+<div id="aqLayer" aria-hidden="true"></div>
+<script id="aq-js">
+/* ================= 水互动 v1 =================
+   原则：只「新增监听」，不改动任何现有处理器；所有监听都是 passive 且不阻止默认行为，
+   因此按钮 / 卡片 / 链接的点击与跳转完全不受影响。
+   性能：全部节点挂在唯一的 #aqLayer 上；有数量上限；600ms 内回收；超限丢弃不排队。 */
+(function(){
+  'use strict';
+  var html = document.documentElement;
+  var MQreduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)');
+  var MQhover  = window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)');
+  var reduceMotion = !!(MQreduce && MQreduce.matches);
+  var hoverOK  = !!(MQhover && MQhover.matches);
+
+  var layer = null;
+  var LIVE = 0, MAX_LIVE = 34;      /* 全站同时存活节点上限，防止长时间连点堆积 */
+  var BURST = 6;                    /* 单次点击水滴上限 */
+  var lastKey = '', lastAt = 0;
+
+  function enabled(){
+    if(reduceMotion) return false;
+    if(html.classList.contains('dnd')) return false;
+    if(document.hidden) return false;
+    return true;
+  }
+  function box(){
+    if(layer && layer.parentNode) return layer;
+    layer = document.getElementById('aqLayer');
+    return layer;
+  }
+  function spawn(el, x, y, ttl){
+    var L = box(); if(!L) return false;
+    if(LIVE >= MAX_LIVE) return false;          /* 超上限直接丢弃，不排队、不累积 */
+    LIVE++;
+    el.style.left = x + 'px';
+    el.style.top  = y + 'px';
+    L.appendChild(el);
+    setTimeout(function(){
+      if(el.parentNode) el.parentNode.removeChild(el);
+      LIVE = Math.max(0, LIVE - 1);
+    }, ttl);
+    return true;
+  }
+  function gate(key, ms){                        /* 快速连点同一处 → 合并成一次 */
+    var t = Date.now();
+    if(key === lastKey && t - lastAt < (ms || 320)) return false;
+    lastKey = key; lastAt = t;
+    return true;
+  }
+
+  /* ---------- 通用：点击水花（一圈水光 + ≤6 颗水滴） ---------- */
+  function splash(x, y, scale){
+    var s = document.createElement('i');
+    s.className = 'aq-splash';
+    s.style.setProperty('--aqs', String(scale || 3.2));
+    spawn(s, x, y, 640);
+    for(var i = 0; i < BURST; i++){
+      var dot = document.createElement('i');
+      dot.className = 'aq-drop';
+      var a = (Math.PI * 2 / BURST) * i + Math.random() * 0.55;
+      var r = 11 + Math.random() * 19;
+      dot.style.setProperty('--dx', (Math.cos(a) * r).toFixed(1) + 'px');
+      dot.style.setProperty('--dy', (Math.sin(a) * r - 7).toFixed(1) + 'px');
+      spawn(dot, x, y, 640);
+    }
+  }
+
+  /* ============ 触发点 1：封面动物 ============
+     先溅一小簇水滴，再让现有那层 WebGL 水波扩散（复用 __aqSpawnRipple），
+     原来的平滑滚动跳转由现有处理器照常执行 —— 这里不拦截、不阻止。 */
+  function bindHotspots(){
+    /* 注意：.hotspot 被封面插画盖住，点击的 target 是 .cover-photo，
+       closest('.hotspot') 永远匹配不到 —— 必须跟封面脚本一样，
+       用「离点击点最近、且落在半径内」的那只来判定。 */
+    document.addEventListener('click', function(e){
+      if(!enabled()) return;
+      var stage = document.querySelector('.cover-stage');
+      if(!stage) return;
+      if(/to-forest|to-window/.test(stage.className)) return;   /* 转场中不打扰 */
+      var hits = document.querySelectorAll('.hotspot');
+      if(!hits.length) return;
+      var best = null, bd = 1e9, bx = 0, by = 0;
+      Array.prototype.forEach.call(hits, function(el){
+        if(!el.offsetWidth) return;
+        var r = el.getBoundingClientRect();
+        var ex = r.left + r.width / 2, ey = r.top + r.height / 2;
+        var dx = e.clientX - ex, dy = e.clientY - ey;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        var rad = Math.max(26, r.width * 0.62);
+        if(d <= rad && d < bd){ bd = d; best = el; bx = ex; by = ey; }
+      });
+      if(!best) return;
+      if(!gate('hs' + Math.round(bx) + ',' + Math.round(by), 340)) return;
+      splash(bx, by, 2.5);                                   /* 先溅一小簇水滴 */
+      var fire = window.__aqSpawnRipple;
+      if(typeof fire !== 'function') return;
+      var st = stage.getBoundingClientRect();
+      var lx = bx - st.left, ly = by - st.top;
+      try{ fire(lx, ly, 0.9); }catch(err){}                  /* 复用现有 WebGL 水面 */
+      setTimeout(function(){                                 /* 再扩散开 */
+        try{ fire(lx, ly, 1.7); }catch(err){}
+      }, 130);
+    }, { passive:true, capture:true });
+  }
+  /* ============ 触发点 2：全站可点卡片 ============
+     作品卡 / 证书相框 / 城市图钉 / 技能植物 / 黑胶歌单 */
+  var CARD_SEL = '.work-card,.arc-frame,.fp-pin,.plant,.vinyl';
+  function bindCards(){
+    document.addEventListener('click', function(e){
+      if(!enabled()) return;
+      var el = e.target && e.target.closest && e.target.closest(CARD_SEL);
+      if(!el) return;
+      var r = el.getBoundingClientRect();
+      var x = e.clientX, y = e.clientY;
+      if(!x && !y){ x = r.left + r.width / 2; y = r.top + r.height / 2; }   /* 键盘触发兜底 */
+      if(x < r.left - 40 || x > r.right + 40 || y < r.top - 40 || y > r.bottom + 40){
+        x = r.left + r.width / 2; y = r.top + r.height / 2;
+      }
+      if(!gate('cd' + Math.round(x) + ',' + Math.round(y), 320)) return;
+      var diag = Math.sqrt(r.width * r.width + r.height * r.height);
+      /* 环扩散到卡片边缘即止：比背景主波纹更轻、更短 */
+      splash(x, y, Math.max(2.0, Math.min(6.4, diag / 46)));
+    }, { passive:true, capture:true });
+  }
+
+  /* ============ 触发点 3：留言提交成功 ============
+     判定方式：留言列表真的多了一条（提交失败/空内容不会新增）—— 零侵入，不改原提交逻辑 */
+  function bindGuestbook(){
+    var list = document.getElementById('messageList');
+    if(!list || !window.MutationObserver) return;
+    /* 只有「用户刚点过发布」之后发生的列表变化才算提交成功 ——
+       否则页面首次加载时 render() 重建列表，也会平白飘一片叶子。 */
+    var armedAt = 0;
+    var send = document.getElementById('submitMsgBtn');
+    if(send){
+      send.addEventListener('click', function(){ armedAt = Date.now(); },
+        { passive:true, capture:true });
+    }
+    var mo = new MutationObserver(function(){
+      if(!enabled()) return;
+      if(!armedAt || Date.now() - armedAt > 8000) return;
+      /* merge() 按时间倒序，最新一条在最前；列表为空说明提交没成功，不打扰 */
+      var newest = list.querySelector('.msg-item');
+      if(!newest) return;
+      armedAt = 0;                        /* 一次提交只飘一片叶子 */
+      dropLeaf(newest);
+    });
+    mo.observe(list, { childList:true, subtree:true });
+  }
+  function dropLeaf(host){
+    if(!gate('gb', 200)) return;
+    var r = host.getBoundingClientRect();
+    if(!r.width) return;
+    var lx = r.left + Math.min(48, r.width * 0.16);
+    var ly = r.top + Math.min(30, Math.max(14, r.height * 0.45));
+    var top = 10;
+    var leaf = document.createElement('i');
+    leaf.className = 'aq-leaf';
+    leaf.textContent = '🍃';
+    leaf.style.setProperty('--lx', '0px');
+    leaf.style.setProperty('--ly', (ly - top) + 'px');
+    leaf.style.setProperty('--lr', '196deg');
+    spawn(leaf, lx, top, 3000);                 /* 从屏幕上方落到该条留言上，定格片刻 */
+    setTimeout(function(){                      /* 叶子落到留言上的那一瞬，荡开一圈涟漪 */
+      splash(lx, ly, 2.6);
+    }, 1000);
+  }
+
+  /* ============ 触发点 4：回到目录按钮 ============ */
+  function bindBackTop(){
+    var bt = document.getElementById('backTop');
+    if(!bt) return;
+    bt.addEventListener('click', function(){
+      if(!enabled()) return;
+      var r = bt.getBoundingClientRect();
+      var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      if(!gate('bt', 340)) return;
+      var leaf = document.createElement('i');
+      leaf.className = 'aq-leaf aq-leaf-fly';
+      leaf.textContent = '🍂';
+      leaf.style.setProperty('--fx', '28px');
+      leaf.style.setProperty('--fy', '-86px');
+      spawn(leaf, cx, cy, 900);                 /* 叶子飘走 */
+      var rip = document.createElement('i');
+      rip.className = 'aq-implode';             /* 原位留一圈向内收的小波纹 */
+      spawn(rip, cx, cy, 720);
+    }, { passive:true });
+  }
+
+  /* ============ 触发点 5：顶部导航 / 手机底部 Tab ============ */
+  var SWEEP_SEL = '.nav-links a,.m-tab,.m-drawer-item,.m-dir-card';
+  function bindSweep(){
+    document.addEventListener('click', function(e){
+      if(!enabled()) return;
+      var el = e.target && e.target.closest && e.target.closest(SWEEP_SEL);
+      if(!el || !el.classList) return;
+      if(!gate('sw' + (el.className || '') + (el.textContent || '').slice(0, 8), 200)) return;
+      el.classList.remove('aq-sweep');
+      void el.offsetWidth;                      /* 强制重排，让动画能重播 */
+      el.classList.add('aq-sweep');
+      setTimeout(function(){ el.classList.remove('aq-sweep'); }, 240);
+    }, { passive:true, capture:true });
+  }
+
+  /* ============ 触发点 8：仅 PC —— 板块首次进入视口，中部漾开迎宾涟漪 ============ */
+  function bindWelcome(){
+    if(!hoverOK) return;                        /* 手机 / 平板直接不绑定（省电，也不打扰） */
+    if(!window.IntersectionObserver) return;
+    var secs = document.querySelectorAll('#detailSection .card');
+    var io = new IntersectionObserver(function(ens){
+      for(var i = 0; i < ens.length; i++){
+        var en = ens[i];
+        if(!en.isIntersecting) continue;
+        io.unobserve(en.target);                /* 每个板块整个访问周期只触发一次 */
+        if(!enabled()) continue;
+        var el = en.target;
+        var r = el.getBoundingClientRect();
+        var x = r.left + r.width * (0.28 + Math.random() * 0.44);
+        var y = r.top + r.height * 0.5;
+        y = Math.max(70, Math.min((window.innerHeight || 800) - 70, y));
+        var w = document.createElement('i');
+        w.className = 'aq-welcome';
+        w.style.setProperty('--aqw', String(3.4 + Math.random() * 2.6));
+        spawn(w, x, y, 1450);
+      }
+    }, { threshold: 0.22 });
+    Array.prototype.forEach.call(secs, function(s){ io.observe(s); });
+  }
+
+  function init(){
+    if(reduceMotion) return;                    /* 系统「减少动态效果」：全部不启用 */
+    if(!document.getElementById('aqLayer')) return;
+    bindHotspots();
+    bindCards();
+    bindGuestbook();
+    bindBackTop();
+    bindSweep();
+    bindWelcome();
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 })();
 </script>
 </body>
