@@ -3,8 +3,10 @@
    策略：导航请求 network-first（保证更新），静态资源 cache-first
    ============================================================ */
 /* v9：6.6MB 的 base64 内联图已抽成 assets/in/*.jpg 外部文件（HTML 7.19MB -> 0.28MB）。
-   旧缓存里存的是 7MB 的胖版本，升版本号会在 activate 时整包删掉，强制拉轻量新版。 */
-var CACHE = 'lxy-site-v10';
+   旧缓存里存的是 7MB 的胖版本，升版本号会在 activate 时整包删掉，强制拉轻量新版。
+   v11：留言板接入 Supabase 云端同步（index.html 里的 SUPA_URL / SUPA_KEY 已填），
+        升版本号是为了防止访客拿到 CDN / SW 缓存里的旧 HTML（那时留言还只存本地）。 */
+var CACHE = 'lxy-site-v11';
 var SHELL = [
   './',
   './index.html',
