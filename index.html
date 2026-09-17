@@ -2452,8 +2452,8 @@ html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !importan
 
       // 留言区：Supabase 云端同步 + 本地兜底
       (function(){
-        var SUPA_URL = '';   /* ← 填：https://xxxx.supabase.co */
-        var SUPA_KEY = '';   /* ← 填：anon public key */
+        var SUPA_URL = 'https://obgpcscmgxojyyjtskpc.supabase.co';   /* Supabase 项目地址 */
+        var SUPA_KEY = 'sb_publishable_MPcaAp_W9FPLDtog1OOYfQ_7930fWOX';   /* publishable key（设计上可公开） */
         var TABLE    = 'messages';
         var READY = SUPA_URL.indexOf('http') === 0 && SUPA_KEY.length > 20;
         var LS = 'nature_msgs_v14', LS_NICK = 'userNickname';
