@@ -4,11 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes, maximum-scale=1.5">
   <title>龙欣悦 · 自然生长面试简历</title>
+  <!-- 首屏关键图预加载：进站第一眼要看的「启动页配图」与「封面A背景图」 -->
+  <link rel="preload" as="image" href="assets/up/boot-girl.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/in/boot-21.jpg" fetchpriority="high">
   <!-- 字体已全部本地化：原来这里加载 Google Fonts（含中文 Noto Serif SC），
-       国内手机会阻塞渲染导致首屏白屏，现改为 assets/fonts/fonts-local.css -->
-  <link rel="stylesheet" href="assets/fonts/fonts-local.css">
-  <!-- Font Awesome 精简本地版：只保留全站用到的 4 个 solid 图标，离线也能显示 -->
-  <link rel="stylesheet" href="assets/fonts/fa-local.css">
+       国内手机会阻塞渲染导致首屏白屏，现改为 assets/fonts/fonts-local.css
+       ---------------------------------------------------------------
+       加载策略（2026-09-17）：由「阻塞渲染」改为「非阻塞」——
+       media="print" 让它们以低优先级并行下载，onload 再切回 all 应用。
+       这么做不会产生任何视觉跳变，原因：
+         · 首屏文字（龙欣悦 / 座右铭 / 欢迎语）全是中文，走系统字体栈
+           （PingFang SC / 微软雅黑），latin webfont 到不到都不影响首帧；
+         · 3 个 Font Awesome 图标（fa-arrow-right / fa-leaf /
+           fa-envelope-open-text）全在进站后才会看到的正文详情区里。
+       font-display:swap 保持原样，未做任何改动。
+       无 JS 环境由下面的 <noscript> 兜底，照旧阻塞加载。 -->
+  <link rel="stylesheet" href="assets/fonts/fonts-local.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="assets/fonts/fa-local.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="assets/fonts/fonts-local.css">
+    <link rel="stylesheet" href="assets/fonts/fa-local.css">
+  </noscript>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌿%3C/text%3E%3C/svg%3E">
   <meta name="description" content="龙欣悦 · 自然生长的个人面试简历。08女大，热爱 AI 与创作，记录足迹、作品与成长。">
   <meta name="keywords" content="龙欣悦,个人简历,面试,作品集,AI,学生">
@@ -255,7 +271,13 @@
     .cover-fill{ position:absolute; inset:-8%; background-repeat:no-repeat; background-size:cover; background-position:center;
       filter:blur(44px) saturate(1.18) brightness(1.03); transform:scale(1.14); }
     .cover-photo{ position:absolute; background-repeat:no-repeat; background-size:100% 100%; }
-    .ripple-canvas{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+    .ripple-canvas{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none;
+      /* 水波纹改为延迟启动（window.load 之后空闲时才建 WebGL）：
+         启动前 canvas 完全透明，露出下面同一张图的 .cover-photo —— 那就是
+         水面的静止帧，颜色/构图与 WebGL 首帧一致；首帧画好后 JS 加
+         .water-ready，0.28s 淡入接管，用户看到的画面不会跳变。 */
+      opacity:0; transition:opacity .28s ease-out; }
+    .cover-stage.water-ready .ripple-canvas{ opacity:1; }
     .cover-stage.no-webgl .ripple-canvas{ display:none; }
 
     /* ---------- 封面A 文字 ---------- */
@@ -1826,7 +1848,11 @@ html.sp-loading, html.sp-loading body { overflow: hidden; }
   100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
 }
 #bootLoading .bl-tip {
-  margin-top: 1.1rem; min-height: 1.3em; font-size: .86rem; color: #78906C;
+  /* 高度锁成稳定的两行：JS 会在加载过程中把文案换成「都长好啦，等你推门 🌿」，
+     若正好折成两行会把下面的按钮顶动一下（CLS 0.116 的来源）。
+     锁高后文字仍垂直居中，观感不变，只是不再挤动下面。 */
+  margin-top: 1.1rem; min-height: 2.6em; line-height: 1.3;
+  font-size: .86rem; color: #78906C;
   letter-spacing: .06em; transition: opacity .3s ease;
 }
 #bootLoading .bl-tip.fade { opacity: 0; }
@@ -1912,12 +1938,13 @@ body, .card, .navbar, .mp-body, .tl-card, .arc-frame, .plant, .work-card, .vinyl
 /* 图C 低透明度水印（只在深色下浮现） */
 .quiet-wm {
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background-image: url('assets/up/quiet-cat.jpg');
+  /* 背景图挪到 body.dark 规则里：浅色模式下 opacity:0 根本看不见，
+     没必要在首屏下载这 20.3KB */
   background-size: cover; background-position: center;
   filter: grayscale(1) contrast(.94) brightness(.72);
   opacity: 0; transition: opacity .5s var(--ease);
 }
-body.dark .quiet-wm { opacity: .16; }
+body.dark .quiet-wm { opacity: .16; background-image: url('assets/up/quiet-cat.jpg'); }
 .quiet-wm .qw-cat {
   position: absolute; right: clamp(14px, 3vw, 30px); bottom: clamp(14px, 3vw, 30px);
   display: flex; align-items: center; gap: .42rem;
@@ -1967,7 +1994,8 @@ body.dark .visit-line b { color: #D7D98A; }
 .gb-card { position: relative; overflow: hidden; }
 .gb-card .gb-bg {
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background-image: url('assets/up/guest-bears.jpg');
+  /* 原为 background-image:url('assets/up/guest-bears.jpg')；
+     图 105.7KB 但只作 opacity:.12 的底纹，改为元素 data-lazybg 懒加载 */
   background-size: cover; background-position: center 42%;
   opacity: .12;
 }
@@ -2107,6 +2135,25 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
   100%{ transform:scale(var(--aqs,3.4)); opacity:0; }
 }
 
+/* --- 卡片边缘溢出水花：比背景主波纹更轻、更短 --- */
+.aq-edge{
+  border-radius:14px; pointer-events:none;
+  border:1px solid rgba(140,186,120,.42);
+  box-shadow:0 0 8px rgba(140,186,120,.18), inset 0 0 8px rgba(206,234,186,.22);
+  animation:aqEdge .46s cubic-bezier(.22,.74,.32,1) forwards;
+}
+@keyframes aqEdge{
+  0%  { transform:scale(.86); opacity:0; }
+  30% { opacity:.72; }
+  100%{ transform:scale(1.035); opacity:0; }
+}
+
+/* --- 迎宾涟漪：板块首次进入视口，中部漾开一圈（比点击水花更淡更慢） --- */
+.aq-welcome--soft{
+  border:1px solid rgba(150,196,130,.30);
+  box-shadow:0 0 12px rgba(150,196,130,.10);
+}
+
 /* --- 水滴粒子：单次最多 6 颗 --- */
 .aq-drop{
   width:5px; height:5px; margin:-2.5px 0 0 -2.5px; border-radius:50%;
@@ -2118,12 +2165,14 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
   100%{ transform:translate(var(--dx,0),var(--dy,-14px)) scale(.28); opacity:0; }
 }
 
-/* --- 导航 / Tab：被点项下方一道细窄水波横向扫过（200ms 内完成） --- */
-.aq-sweep{ position:relative; }
-.aq-sweep::after{
-  content:''; position:absolute; left:10%; right:10%; bottom:1px; height:2px; border-radius:2px;
-  background:linear-gradient(90deg,transparent,rgba(132,178,112,.9),transparent);
-  transform-origin:50% 50%; pointer-events:none;
+/* --- 导航 / Tab：被点项下方一道细窄水波横向扫过（200ms 内完成） ---
+   为什么不给被点元素加 ::after：.nav-links a::after 已被"下划线"占用、
+   .m-tab.on::after 已被"顶部指示条"占用 —— 加进去会互相覆盖（电脑端几乎看不见）。
+   改成往 #aqLayer 里放一个绝对定位的细条，与其他水效同一层，零冲突。 */
+.aq-sweep-bar{
+  height:2px; margin-top:-1px; border-radius:2px; pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(132,178,112,.92),transparent);
+  transform-origin:50% 50%;
   animation:aqSweep .2s ease-out forwards;
 }
 @keyframes aqSweep{
@@ -2172,18 +2221,79 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
   100%{ transform:scale(.28); opacity:0; }
 }
 
+/* ================= 全屏飘花背景 =================
+   樱花瓣 / 落叶从屏幕上方持续飘落，铺在正文之上、导航之下。
+
+   为什么这样写（性能账）：
+   · 每个花瓣只写一次 animation，用负的 animation-delay（--pd）把 24 瓣的相位错开，
+     一开场就是"已经飘了很久"的均匀状态 —— 之后浏览器只用合成器跑动画，
+     JS 一次都不用再介入（不像定时生成节点那样每秒都在建/回收 DOM）。
+   · 全程只动 transform 与 opacity → 走合成层，不触发重排/重绘。
+   · 花瓣不接收指针事件，也不改任何布局盒，绝不挡住按钮和链接。
+   · .aq-petal-layer 自带 will-change 仅限 transform（合成层，代价可控）。 */
+.aq-petal-layer{
+  position:fixed; inset:0; z-index:108; overflow:hidden;
+  pointer-events:none; contain:strict;
+}
+.aq-petal{
+  position:absolute; top:-9vh; left:0;
+  display:block; pointer-events:none;
+  border-radius:62% 38% 58% 42% / 58% 66% 34% 42%;
+  transform-origin:50% 50%;
+  will-change:transform,opacity;
+  animation-name:aqPetalFall;
+  animation-timing-function:linear;
+  animation-iteration-count:infinite;
+  animation-duration:var(--pdur,16s);
+  animation-delay:var(--pdelay,0s);
+}
+/* 飘落：一边落下一边左右轻摆 + 自旋 + 淡入淡出。
+   6 个关键帧做出一左一右两个来回，看起来像被风推着打转。 */
+@keyframes aqPetalFall{
+  0%   { transform:translate3d(0,0,0) rotate(0deg) scale(1);        opacity:0; }
+  8%   { opacity:var(--pop,.78); }
+  25%  { transform:translate3d(var(--px),26vh,0) rotate(120deg) scale(1); }
+  50%  { transform:translate3d(0,52vh,0) rotate(250deg) scale(.96); }
+  75%  { transform:translate3d(calc(var(--px) * -1),78vh,0) rotate(370deg) scale(1); }
+  92%  { opacity:var(--pop,.78); }
+  100% { transform:translate3d(0,118vh,0) rotate(500deg) scale(.94); opacity:0; }
+}
+/* 两种色系：粉樱 + 暖叶，交错排布，远看有层次 */
+.aq-petal{ background:radial-gradient(circle at 32% 28%, #fff6fa, #f7c9dc 54%, #eaa8c4 100%); }
+.aq-petal--leaf{ background:radial-gradient(circle at 34% 30%, #f2fbe9, #b7dc9d 58%, #8fbe7a 100%); }
+.aq-petal--deep{ background:radial-gradient(circle at 32% 26%, #ffeef6, #f0b3cf 52%, #d98cb2 100%); }
+
+/* 页面切后台 / 勿扰模式 / 减少动态效果 → 飘花整层消失，不留合成层 */
+.aq-idle .aq-petal-layer{ display:none !important; }
+html.dnd .aq-petal-layer{ display:none !important; }
+
+@media (prefers-reduced-motion: reduce){
+  .aq-petal-layer{ display:none !important; }
+}
+
+/* 手机（≤768px）：瓣数减半、尺寸更小、周期更长 —— 帧率与耗电更友好 */
+@media (max-width: 768px){
+  .aq-petal{ animation-duration:var(--pdur-m,26s); }
+}
+/* 深色模式：降低亮度，避免夜里刺眼 */
+body.dark .aq-petal,
+body.dark .aq-petal--leaf,
+body.dark .aq-petal--deep{ opacity:.62; }
+
 /* ============ 以下两项只在真有鼠标 hover 的设备（PC）生效 ============
    手机/平板拿不到这些规则，等于完全不运行 */
 @media (hover:hover) and (pointer:fine){
-  /* 6. 作品卡：一道柔和水光自左向右扫过（约 500ms），移出不回放 */
+  /* 6. 作品卡：一道柔和水光自左向右扫过（约 500ms），移出不回放。
+     will-change 只在真有鼠标的设备声明，避免手机白白提升合成层占内存。 */
   .work-card{ position:relative; }
   .work-card::after{
     content:''; position:absolute; inset:0; pointer-events:none; z-index:3;
     border-radius:inherit;
     background:linear-gradient(102deg,transparent 26%,rgba(214,242,194,.40) 50%,transparent 74%);
     transform:translateX(-118%); opacity:0;
+    will-change:transform,opacity;
   }
-  .work-card:hover::after{ animation:aqShine .5s ease-out forwards; }
+  .work-card:hover::after, .work-card.aq-shine::after{ animation:aqShine .5s ease-out forwards; }
   @keyframes aqShine{
     0%  { transform:translateX(-118%); opacity:0; }
     22% { opacity:1; }
@@ -2198,26 +2308,26 @@ html.reduce-motion .bl-leaf.on { animation: none !important; opacity: 1; }
     background:linear-gradient(118deg,transparent 32%,rgba(198,234,176,.20) 50%,transparent 68%);
     background-size:230% 230%; opacity:0; transition:opacity .45s ease;
   }
-  .arc-frame:hover::after{ opacity:1; animation:aqFlow 4.6s linear infinite; }
+  .arc-frame:hover::after, .arc-frame.aq-frame-on::after{ opacity:1; animation:aqFlow 4.6s linear infinite; }
   @keyframes aqFlow{ 0%{ background-position:0% 0%; } 100%{ background-position:210% 210%; } }
 }
 
-/* 「减少动态效果」：新增互动一律关闭，静态观感与现在一致 */
+/* 「减少动态效果」：新增互动一律关闭，静态观感与现在一致（静态水面照旧） */
 @media (prefers-reduced-motion: reduce){
   #aqLayer{ display:none !important; }
-  .aq-sweep::after{ display:none !important; }
   .work-card::after, .arc-frame::after{ display:none !important; }
 }
 /* 勿扰模式：跟现有 dnd 约定保持一致，一起停掉 */
 html.dnd #aqLayer{ display:none !important; }
 html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !important; opacity:0 !important; }
+html.dnd .work-card.aq-shine::after{ animation:none !important; opacity:0 !important; }
 </style>
 </head>
 <body>
   <div id="bootLoading" role="status" aria-live="polite">
   <div class="bl-ink" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="bl-inner">
-    <div class="bl-fig"><img src="assets/up/boot-girl.jpg" alt="森林里的女孩和黑猫"></div>
+    <div class="bl-fig"><img src="assets/up/boot-girl.jpg" alt="森林里的女孩和黑猫" fetchpriority="high"></div>
     <div class="bl-name">龙欣悦</div>
     <div class="bl-slogan">自然生长</div>
     <div class="bl-bar"><div class="bl-fill" id="blFill"></div><div class="bl-leaves" id="blLeaves"></div></div>
@@ -2254,35 +2364,60 @@ html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !importan
     if(fill) fill.style.width=p.toFixed(1)+"%";
     for(var i=0;i<leaves.length;i++){ if(p>=leaves[i].at) leaves[i].el.classList.add("on"); }
   }
-  var p=4, loaded=false, done=false, t0=Date.now();
+  /* ---------- 进度条与放行时机（2026-09-17 加载优化） ----------
+     原来：`loaded` 只由 window.load 置位（那是「全部资源含所有图片/音频」），
+           等不到就死等到 9 秒，再叠加 ready() 里的 2600ms 自动推门
+           —— 弱网下加载页会盖住 11 秒以上。
+     现在：只认「首屏关键内容」—— boot 配图解码完成 + DOM 解析完成。
+           （封面图在下面封面脚本里用 background-image 赋值，解析到即已发起请求。）
+           就绪就开始冲 100%；并且 BOOT_MAX 到点无条件推门，
+           加载页绝不会长时间盖住页面。 */
+  var BOOT_MAX = 1500;   /* ⏱ 加载页最长停留（毫秒）。想多看一眼推门动画就调大这个数 */
+  var p=4, done=false, t0=Date.now();
+  var critImg=false, critDom=(document.readyState!=="loading");
+  var fig=box.querySelector(".bl-fig img");
+  if(fig){
+    if(fig.complete && fig.naturalWidth){ critImg=true; }
+    else{
+      fig.addEventListener("load", function(){ critImg=true; }, {once:true});
+      fig.addEventListener("error", function(){ critImg=true; }, {once:true}); /* 图挂了也不能卡住 */
+    }
+  } else { critImg=true; }
+  if(!critDom){ document.addEventListener("DOMContentLoaded", function(){ critDom=true; }); }
+  function critReady(){ return critImg && critDom; }
   paint(p);
-  window.addEventListener("load", function(){ loaded=true; });
   /* 同一会话内再次进入（有缓存）走极速模式，0.8s 内自动放行 */
   var quick=false;
   try{ quick = sessionStorage.getItem("lxy_booted")==="1"; }catch(e){}
   var timer=setInterval(function(){
-    var el=(Date.now()-t0)/1000;
+    var el=Date.now()-t0;
     if(quick){ p=Math.min(100,p+34); }
-    else if(loaded || el>9){ p=Math.min(100, p+Math.max(7,(100-p)*0.34)); }
+    else if(critReady() || el>BOOT_MAX){ p=Math.min(100, p+Math.max(9,(100-p)*0.42)); }
     else { p=Math.min(92, p+Math.random()*4.2); }
     paint(p);
     if(p>=100){ clearInterval(timer); ready(); if(quick) setTimeout(enter,120); }
-  }, quick?60:110);
+  }, quick?60:90);
+  /* 兜底闹钟：进度条走到哪都不管，BOOT_MAX 到点直接推门 */
+  var capTimer=setTimeout(function(){
+    if(done) return;
+    clearInterval(timer); paint(100); ready(); enter();
+  }, BOOT_MAX);
   function ready(){
     if(tip){ tip.textContent="都长好啦，等你推门 🌿"; tip.classList.remove("fade"); }
     if(btn){ btn.classList.add("ready"); btn.setAttribute("aria-label","进入网站"); }
     clearInterval(tipTimer);
-    /* 兜底：就算访客没点按钮，也不会被卡在加载页（2.6s 后自动推门） */
-    setTimeout(enter, 2600);
+    /* 首屏已就绪，只留一小段收尾时间就自动推门（原来是 2600ms） */
+    setTimeout(enter, 280);
   }
   function enter(){
     if(done) return; done=true;
-    clearInterval(timer); clearInterval(tipTimer); paint(100);
+    clearInterval(timer); clearInterval(tipTimer); clearTimeout(capTimer); paint(100);
     try{ sessionStorage.setItem("lxy_booted","1"); }catch(e){}
     box.classList.add("bl-done");
     html.classList.remove("sp-loading");
     setTimeout(function(){ if(box) box.style.display="none"; },700);
   }
+
   if(btn) btn.addEventListener("click", enter);
   document.addEventListener("keydown", function(e){
     if((e.key==="Enter"||e.key===" ") && !done){ e.preventDefault(); enter(); }
@@ -2336,14 +2471,14 @@ html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !importan
           </div>
         </div>
     <div class="detail-section" id="detailSection">
-      <div class="card" id="experience"><div class="sec-h2 line"><span class="sh-cn">过往经历</span><span class="sh-en">JOURNEY</span></div><p class="sec-lead">📘 大一在读，自学AI与计算机，像海绵一样吸收新知识。</p><p class="sec-quote">"还在完善ing，每一段空白都是未来的序章。"</p><div class="tl"><div class="tl-item tl-item--star rv"><span class="tl-node">🌿</span><div class="tl-card"><span class="tl-en">Guide</span><span class="tl-badge">Main Project</span><h3>🏫 湖财新生指南 · 2026 迎新季</h3><div class="tl-body"><img class="tl-shot" src="assets/in/tl-en-01.jpg" alt="湖财新生指南截图" loading="lazy"><div class="tl-txt"><p>独立策划并搭建湖南财政经济学院 2026 级新生入学指南网站，聚合专业培养、校园地图、入学清单、军训指南、电脑选购、政策文件与学习资源等 <span class="num" data-to="10">0</span>+ 核心模块；通过清晰的交互与信息分层，帮助新生一站式获取入学所需信息，并内置 AI 学长问答入口，显著降低信息检索成本。</p><p class="tl-link">🔗 网站：<a href="https://lo894.github.io/hucai-guide/" target="_blank" rel="noopener">lo894.github.io/hucai-guide</a> ｜ 访问口令：<code>hucai2026</code></p><a class="btn-cap" href="https://lo894.github.io/hucai-guide/" target="_blank" rel="noopener">查看网站 →</a></div></div></div></div><div class="tl-item rv"><span class="tl-node">🍃</span><div class="tl-card"><span class="tl-en">E-commerce</span><h3>🛒 个人二手电商项目主理人（独立操盘）</h3><p>以单人模式全流程运营闲鱼店铺，实现"选品—上架—获客—转化—履约—售后"端到端闭环，<span class="num" data-to="2">0</span> 天内完成 <span class="num" data-to="12">0</span> 单高时效转化。独立承担流量承接、销售谈判、供应链履约与客户生命周期管理，在零资源协同下以结果导向驱动增长，沉淀了对"小生意增长飞轮"的实战体感与成本-效率平衡意识。</p></div></div><div class="tl-item rv"><span class="tl-node">🍃</span><div class="tl-card"><span class="tl-en">Business</span><h3>⭐ 四川华予星辰科技有限公司 · P2 高级合伙人</h3><p>在星辰科技担任 P2 高级合伙人，主营数码产品赛道：覆盖全新 DIY 主机定制、二手笔记本与台式机回收及零售，从选品报价、成交谈判到履约售后全流程操盘。同时运营自媒体账号，将数码测评、装机实测与购机避坑做成短视频与图文内容，以内容种草反哺获客，逐步跑通"内容—私域—转化"的增长链路。</p></div></div><div class="tl-item rv"><span class="tl-node">🍃</span><div class="tl-card"><span class="tl-en">Design</span><h3>📊 PPT 定制接单 · AI 辅助设计</h3><p>以「AI 辅助 + 人工精修」的模式承接 PPT 定制需求，覆盖竞聘答辩、社团宣讲、课程汇报、个人简介等多种场景。先用 AI 快速拆解需求、产出大纲与文案框架，再亲手把控版式、配色与视觉节奏，把"说人话的需求"转成结构清晰、观感在线的成品。已沉淀一套"先确认结构再出片"的交付流程，在控制返工的同时保证每页的信息密度与美观度，逐步积累起从接单沟通到成品交付的完整闭环。</p></div></div></div><button class="btn-soft" style="margin-top:.6rem;" onclick="document.getElementById('awards').scrollIntoView({behavior:'smooth'})">下一章 <i class="fas fa-arrow-right"></i></button></div>
-      <div class="card" id="awards"><div class="sec-h2 line"><span class="sh-cn">获得的奖项</span><span class="sh-en">AWARDS</span></div><p class="sec-lead">AI 相关的四张证书排在最前面 —— 这是我目前在认真走的方向 🤖</p><div class="arc-wall"><figure class="arc-frame rv" tabindex="0" data-cert="damo" role="button" aria-label="查看证书大图"><div class="af-mat"><img class="gallery-img" src="assets/in/arc-wall-02.jpg" alt="阿里云达摩院 人工智能训练师" loading="lazy"></div><figcaption>🏆 阿里云达摩院<br>人工智能训练师</figcaption></figure><figure class="arc-frame rv" tabindex="0" data-cert="adv" role="button" aria-label="查看证书大图"><div class="af-mat"><img class="gallery-img" src="assets/in/arc-frame-03.jpg" alt="橙点同学 · AI 训练师 （高级）" loading="lazy"></div><figcaption>🏆 橙点同学 · AI 训练师<br>（高级）</figcaption></figure><figure class="arc-frame rv" tabindex="0" data-cert="agent" role="button" aria-label="查看证书大图"><div class="af-mat"><img class="gallery-img" src="assets/in/arc-frame-04.jpg" alt="Clouder 大模型 智能体应用" loading="lazy"></div><figcaption>🏆 Clouder 大模型<br>智能体应用</figcaption></figure><figure class="arc-frame rv" tabindex="0" data-cert="code" role="button" aria-label="查看证书大图"><div class="af-mat"><img class="gallery-img" src="assets/in/arc-frame-05.jpg" alt="Clouder 大模型 AI 编码实践" loading="lazy"></div><figcaption>🏆 Clouder 大模型<br>AI 编码实践</figcaption></figure><figure class="arc-frame rv" tabindex="0" data-cert="cyl" role="button" aria-label="优秀共青团员"><div class="af-mat"><div class="af-text"><span class="af-medal">🌟</span><b>优秀共青团员</b><i>COMMENDED</i></div></div><figcaption>🌟 优秀共青团员</figcaption></figure></div><div class="aw-detail"><div class="aw-item"><span class="awi-ic">🏆</span><div><strong>阿里云达摩院 · 人工智能训练师认证</strong><p>通过达摩院-机器智能技术事业部官方认证，系统完成智能客服场景下人工智能训练师初级培训，掌握数据标注、模型训练、Prompt 调优与 AI 服务工程化落地的核心方法，具备将 AI 能力转化为真实业务价值的实战基础。</p><p class="aw-meta">机器智能技术事业部官方认证 ｜ 证书编号 AIT260727122350000133 ｜ 有效期至 2027.07</p></div></div><div class="aw-item"><span class="awi-ic">🏆</span><div><strong>阿里巴巴橙点同学 · 人工智能训练师（高级）</strong><p>以优异成绩通过阿里巴巴橙点同学官方高级认证，系统掌握大模型训练、数据标注、Prompt 工程与 AI 应用落地能力，标志着已具备将人工智能转化为生产力的专业级实力，是从 AI 学习者向 AI 实践者跨越的重要里程碑。</p><p class="aw-meta">橙点同学官方高级认证</p></div></div><div class="aw-item"><span class="awi-ic">🏆</span><div><strong>阿里云 Apsara Clouder · 大模型智能体应用认证</strong><p>通过阿里云官方大模型 Clouder 认证，系统掌握基于百炼平台构建、部署与优化 AI 智能体的全链路能力，具备将大模型能力封装为可交互 Agent 的工程化实践经验，向「AI 原生应用开发者」进阶。</p><p class="aw-meta">基于百炼平台构建智能体应用 ｜ 证书编号 CLDM02260802755068 ｜ 有效期至 2028.08</p></div></div><div class="aw-item"><span class="awi-ic">🏆</span><div><strong>阿里云 Apsara Clouder · 大模型 AI 编码实践认证</strong><p>通过阿里云官方大模型 Clouder 认证，以工程化视角掌握 AI 辅助编码方法论，熟练运用通义灵码等智能编码助手完成需求理解、代码生成、调试优化与最佳实践沉淀，显著提升研发效率与代码质量，正式迈入 AI 驱动的专业化开发阶段。</p><p class="aw-meta">基于通义灵码实现高效 AI 编码实践 ｜ 证书编号 CLDM07260802755065 ｜ 有效期至 2028.08</p></div></div><div class="aw-item"><span class="awi-ic">🌟</span><div><strong>优秀共青团员</strong><p>在校期间积极投身志愿服务与团组织工作，以责任与热忱获评优秀共青团员，是信念与行动力的双重肯定。</p><p class="aw-meta">不忘初心，砥砺前行</p></div></div></div><button class="btn-soft" style="margin-top:1.6rem;" onclick="document.getElementById('learning').scrollIntoView({behavior:'smooth'})">继续探索 <i class="fas fa-arrow-right"></i></button></div>
-      <div class="card" id="learning"><div class="sec-h2 line"><span class="sh-cn">我关注与学习</span><span class="sh-en">FOCUS</span></div><div class="tag-row"><span class="tag">🤖 AI</span><span class="tag">✂️ 剪辑</span><span class="tag">🎸 音乐</span></div><p class="sec-lead">正在学习AI软件、AI短视频、PPT与剪辑。</p><p class="sec-lead" style="margin-top:1.6rem;"><strong>🎵 我的歌单</strong></p><div class="vinyl-row"><a class="vinyl rv" href="https://163cn.tv/bcuT2urm" target="_blank" rel="noopener" data-song="0" title="诀别无尽夏"><span class="v-play" data-play="0" role="button" aria-label="播放 诀别无尽夏">▶</span><span class="vd"><img class="song-cover-img" src="assets/in/city-诀别无尽夏.jpg" alt="诀别无尽夏" loading="lazy"></span><span class="vn">诀别无尽夏</span></a><a class="vinyl rv" href="https://163cn.tv/bcuTObDX" target="_blank" rel="noopener" data-song="1" title="不只是场梦"><span class="v-play" data-play="1" role="button" aria-label="播放 不只是场梦">▶</span><span class="vd"><img class="song-cover-img" src="assets/in/city-不只是场梦.jpg" alt="不只是场梦" loading="lazy"></span><span class="vn">不只是场梦</span></a><a class="vinyl rv" href="https://163cn.tv/bcuTWiDf" target="_blank" rel="noopener" data-song="2" title="小镇姑娘"><span class="v-play" data-play="2" role="button" aria-label="播放 小镇姑娘">▶</span><span class="vd"><img class="song-cover-img" src="assets/in/city-小镇姑娘.jpg" alt="小镇姑娘" loading="lazy"></span><span class="vn">小镇姑娘</span></a><a class="vinyl rv" href="https://163cn.tv/bcuTLGFg" target="_blank" rel="noopener" data-song="3" title="是是非非"><span class="v-play" data-play="3" role="button" aria-label="播放 是是非非">▶</span><span class="vd"><img class="song-cover-img" src="assets/in/city-是是非非.jpg" alt="是是非非" loading="lazy"></span><span class="vn">是是非非</span></a></div><button class="btn-soft" style="margin-top:.6rem;" onclick="document.getElementById('skillsSection').scrollIntoView({behavior:'smooth'})">下一章 <i class="fas fa-arrow-right"></i></button></div><!-- 图F 通宽分割横幅：手写字占位，想改就改下面这句 --><div class="full-bleed" style="background-image:url('assets/up/divider-lemon.jpg')"><div class="fb-mask"></div><p class="fb-say">夏天、音乐和不停学新东西的我</p></div>
-      <div class="card" id="skillsSection"><div class="sec-banner" style="background-image:url('assets/up/vibes-banner.jpg')"><div class="sb-mask"></div><div class="sb-title"><span class="sb-cn">技能与爱好</span><span class="sb-en">VIBES</span><span class="sb-sub">嫩芽 → 小苗 → 花苞 → 开花，每一株都在慢慢长</span></div></div><div class="garden"><div class="plant plant--lead rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C34 68 39 54 37 34" stroke="#5E8C5D" stroke-width="3.2" fill="none" stroke-linecap="round"/><ellipse cx="26.5" cy="68" rx="10.4" ry="4.8" fill="#6B9B6A" opacity="1" transform="rotate(-22 26.5 68)"/><ellipse cx="47.5" cy="62" rx="10.0" ry="4.6" fill="#8FBA88" opacity="1" transform="rotate(20 47.5 62)"/><ellipse cx="27.5" cy="52" rx="8.4" ry="3.9" fill="#7FA97C" opacity="1" transform="rotate(-30 27.5 52)"/><ellipse cx="46.5" cy="47" rx="8.0" ry="3.7" fill="#8FBA88" opacity="1" transform="rotate(27 46.5 47)"/><ellipse cx="37" cy="16" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="46.5" cy="22.8" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="42.9" cy="34.2" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="31.1" cy="34.2" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="27.5" cy="22.8" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><circle cx="37" cy="26" r="4.4" fill="#F7E29B"/><circle cx="37" cy="26" r="2.1" fill="#D9A821" opacity=".8"/><ellipse cx="20" cy="30" rx="5.0" ry="2.4" fill="#BFD9A8" opacity=".75" transform="rotate(-20 20 30)"/><ellipse cx="54" cy="34" rx="4.6" ry="2.2" fill="#BFD9A8" opacity=".75" transform="rotate(18 54 34)"/></svg><span class="pl-stage">开花</span><h4><span class="pl-emoji">💻</span> AI 编程 · Vibe Coding</h4><p>独立用 AI 编程做出湖财新生指南、飞机大战、坦克大战、粒子星球气象台等可访问作品</p></div><div class="plant rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C34 68 39 54 37 34" stroke="#5E8C5D" stroke-width="3.2" fill="none" stroke-linecap="round"/><ellipse cx="26.5" cy="68" rx="10.4" ry="4.8" fill="#6B9B6A" opacity="1" transform="rotate(-22 26.5 68)"/><ellipse cx="47.5" cy="62" rx="10.0" ry="4.6" fill="#8FBA88" opacity="1" transform="rotate(20 47.5 62)"/><ellipse cx="27.5" cy="52" rx="8.4" ry="3.9" fill="#7FA97C" opacity="1" transform="rotate(-30 27.5 52)"/><ellipse cx="46.5" cy="47" rx="8.0" ry="3.7" fill="#8FBA88" opacity="1" transform="rotate(27 46.5 47)"/><ellipse cx="37" cy="16" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="46.5" cy="22.8" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="42.9" cy="34.2" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="31.1" cy="34.2" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="27.5" cy="22.8" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><circle cx="37" cy="26" r="4.4" fill="#F7E29B"/><circle cx="37" cy="26" r="2.1" fill="#D9A821" opacity=".8"/><ellipse cx="20" cy="30" rx="5.0" ry="2.4" fill="#BFD9A8" opacity=".75" transform="rotate(-20 20 30)"/><ellipse cx="54" cy="34" rx="4.6" ry="2.2" fill="#BFD9A8" opacity=".75" transform="rotate(18 54 34)"/></svg><span class="pl-stage">开花</span><h4><span class="pl-emoji">🤖</span> Prompt 工程 / AI 工具</h4><p>持阿里达摩院 AI 训练师等 4 项官方认证，擅长把自然语言需求拆成可执行指令</p></div><div class="plant rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C35 70 38 56 37 40" stroke="#6B9B6A" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="27.5" cy="66" rx="9.4" ry="4.4" fill="#6B9B6A" opacity="1" transform="rotate(-24 27.5 66)"/><ellipse cx="46.5" cy="60" rx="9.0" ry="4.2" fill="#8FBA88" opacity="1" transform="rotate(22 46.5 60)"/><ellipse cx="28.5" cy="51" rx="7.6" ry="3.6" fill="#7FA97C" opacity="1" transform="rotate(-32 28.5 51)"/><ellipse cx="37" cy="33" rx="7.4" ry="10.5" fill="#F2C94C" opacity=".92"/><path d="M30 36 Q37 26 44 36" stroke="#D9A821" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M37 42 L37 23" stroke="#D9A821" stroke-width="1.3" opacity=".7"/><ellipse cx="30" cy="41" rx="6.6" ry="3.0" fill="#BFD9A8" opacity=".9" transform="rotate(20 30 41)"/></svg><span class="pl-stage">花苞</span><h4><span class="pl-emoji">✂️</span> 视频剪辑</h4><p>剪自己的 vlog 与作品预告片</p></div><div class="plant rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C35 70 38 56 37 40" stroke="#6B9B6A" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="27.5" cy="66" rx="9.4" ry="4.4" fill="#6B9B6A" opacity="1" transform="rotate(-24 27.5 66)"/><ellipse cx="46.5" cy="60" rx="9.0" ry="4.2" fill="#8FBA88" opacity="1" transform="rotate(22 46.5 60)"/><ellipse cx="28.5" cy="51" rx="7.6" ry="3.6" fill="#7FA97C" opacity="1" transform="rotate(-32 28.5 51)"/><ellipse cx="37" cy="33" rx="7.4" ry="10.5" fill="#F2C94C" opacity=".92"/><path d="M30 36 Q37 26 44 36" stroke="#D9A821" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M37 42 L37 23" stroke="#D9A821" stroke-width="1.3" opacity=".7"/><ellipse cx="30" cy="41" rx="6.6" ry="3.0" fill="#BFD9A8" opacity=".9" transform="rotate(20 30 41)"/></svg><span class="pl-stage">花苞</span><h4><span class="pl-emoji">📊</span> PPT 制作</h4><p>接单做过竞聘答辩、课程汇报、个人简介</p></div><div class="plant rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C36 72 37 62 37 50" stroke="#6B9B6A" stroke-width="2.8" fill="none" stroke-linecap="round"/><ellipse cx="29" cy="68" rx="8.2" ry="4.0" fill="#6B9B6A" opacity="1" transform="rotate(-26 29 68)"/><ellipse cx="45" cy="63" rx="7.8" ry="3.8" fill="#8FBA88" opacity="1" transform="rotate(24 45 63)"/><ellipse cx="30" cy="56" rx="6.6" ry="3.2" fill="#7FA97C" opacity="1" transform="rotate(-34 30 56)"/><ellipse cx="44" cy="52" rx="6.2" ry="3.0" fill="#8FBA88" opacity="1" transform="rotate(30 44 52)"/></svg><span class="pl-stage">小苗</span><h4><span class="pl-emoji">📷</span> 摄影</h4><p>记录生活与城市足迹</p></div><div class="plant rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C36 72 37 62 37 50" stroke="#6B9B6A" stroke-width="2.8" fill="none" stroke-linecap="round"/><ellipse cx="29" cy="68" rx="8.2" ry="4.0" fill="#6B9B6A" opacity="1" transform="rotate(-26 29 68)"/><ellipse cx="45" cy="63" rx="7.8" ry="3.8" fill="#8FBA88" opacity="1" transform="rotate(24 45 63)"/><ellipse cx="30" cy="56" rx="6.6" ry="3.2" fill="#7FA97C" opacity="1" transform="rotate(-34 30 56)"/><ellipse cx="44" cy="52" rx="6.2" ry="3.0" fill="#8FBA88" opacity="1" transform="rotate(30 44 52)"/></svg><span class="pl-stage">小苗</span><h4><span class="pl-emoji">📣</span> 新媒体运营</h4><p>把内容种草反哺获客，跑通"内容—私域—转化"</p></div><div class="plant rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C36 72 37 62 37 50" stroke="#6B9B6A" stroke-width="2.8" fill="none" stroke-linecap="round"/><ellipse cx="29" cy="68" rx="8.2" ry="4.0" fill="#6B9B6A" opacity="1" transform="rotate(-26 29 68)"/><ellipse cx="45" cy="63" rx="7.8" ry="3.8" fill="#8FBA88" opacity="1" transform="rotate(24 45 63)"/><ellipse cx="30" cy="56" rx="6.6" ry="3.2" fill="#7FA97C" opacity="1" transform="rotate(-34 30 56)"/><ellipse cx="44" cy="52" rx="6.2" ry="3.0" fill="#8FBA88" opacity="1" transform="rotate(30 44 52)"/></svg><span class="pl-stage">小苗</span><h4><span class="pl-emoji">🗣️</span> 英语口语</h4><p>日常交流与英文材料阅读</p></div><div class="plant rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C37 74 37 70 37 64" stroke="#7FA97C" stroke-width="2.6" fill="none" stroke-linecap="round"/><ellipse cx="30.5" cy="66" rx="6.4" ry="3.4" fill="#6B9B6A" opacity="1" transform="rotate(-28 30.5 66)"/><ellipse cx="43.5" cy="68" rx="6.0" ry="3.2" fill="#8FBA88" opacity="1" transform="rotate(26 43.5 68)"/></svg><span class="pl-stage">嫩芽</span><h4><span class="pl-emoji">🎨</span> Blender 3D 建模</h4><p>兴趣探索中，正在慢慢摸索</p></div></div><div class="works-wrap" id="worksAnchor"><p class="works-lead">这些都是我用 AI 编程从零做出来的 ↓</p><div class="works-grid"><div class="work-card rv"><img class="wk-shot" src="assets/in/works-wrap-10.jpg" alt="📊 个人简介PPT · 视觉叙事" loading="lazy"><h3>📊 个人简介PPT · 视觉叙事</h3><p>仅用一个暑假，从零独立完成这份演示文稿，每一页皆为精心雕琢的视觉诗篇，彰显出超越年龄的审美敏感与高效执行力。</p><div class="wk-foot"><span class="btn-cap" style="opacity:.7;cursor:default;">作品集展示</span></div></div><div class="work-card rv"><img class="wk-shot" src="assets/in/wk-foot-11.jpg" alt="🚀 飞机大战 · AI 匠心之作" loading="lazy"><h3>🚀 飞机大战 · AI 匠心之作</h3><p>独立运用人工智能辅助开发，从零构建的飞行射击游戏网站，绚丽特效与智能算法彰显前端实力。</p><div class="wk-foot"><a class="btn-cap" href="https://adb2e0f7759c475ebe593a45f1aa9b4a.bj5.agentos-app.net" target="_blank" rel="noopener">🚀 体验游戏</a></div></div><div class="work-card rv"><img class="wk-shot" src="assets/in/work-card-12.jpg" alt="🪐 粒子星球 · 气象台" loading="lazy"><h3>🪐 粒子星球 · 气象台</h3><p>独立打造的沉浸式粒子星球气象交互站，融合实时气象意象与手势识别交互：以双手隔空操控橙色粒子星球——左手旋转星体、右手召唤雨幕与花叶，双手开合触发缩放与闪电风暴。将计算机视觉、粒子动画与前端工程化实践融为一体，展现出对新一代自然人机交互的探索力与视觉表达力。</p><div class="wk-foot"><a class="btn-cap" href="https://31c606ea346745ecaf9311e750720f9b.app.workbuddy.link" target="_blank" rel="noopener">🪐 体验气象台</a></div></div><div class="work-card rv"><img class="wk-shot" src="assets/in/work-card-13.jpg" alt="🎮 坦克大战 · 钢铁战场" loading="lazy"><h3>🎮 坦克大战 · 钢铁战场</h3><p>独立开发的坦克射击对战游戏，霓虹小镇背景、多模式关卡与即时战斗系统，展现游戏逻辑与前端交互能力。</p><div class="wk-foot"><a class="btn-cap" href="https://17f59724c3064c10896bdaea1c534440.app.workbuddy.link" target="_blank" rel="noopener">🎮 体验坦克大战</a></div></div></div><p class="works-slogan">TALK TO AI, BUILD ANYTHING.</p></div><button class="btn-soft" style="margin-top:1.6rem;" onclick="document.getElementById('plantSection').scrollIntoView({behavior:'smooth'})">下一章 <i class="fas fa-leaf"></i></button></div>
-      <div class="card" id="aboutFootprint"><div class="sec-banner" style="background-image:url('assets/up/about-banner.jpg')"><div class="sb-mask"></div><div class="sb-title"><span class="sb-cn">关于我</span><span class="sb-en">ABOUT</span></div></div><div class="about-grid"><div class="rv"><div class="note-sticky"><span class="ns-tape"></span><p class="ns-hi">今天的我</p><!-- ✏️ 想改「今天的我」便签文案？只改下面这一行 --><p class="ns-body">正在认真学 AI 编程，目标是把脑子里的想法都变成能跑的作品 🤖</p></div><p style="margin-top:1.5rem;">生活城市：<strong>长沙</strong> 🍊</p><p>✨ 探索ing · 在留言区留下你的印象吧</p></div><div class="rv"><p class="sec-lead" style="margin:0 0 .3rem;"><strong>🌍 走过的城市</strong></p><div class="fp-wrap"><div class="fp-map"><svg class="fp-path" viewBox="0 0 1000 420" preserveAspectRatio="none" aria-hidden="true"><path d="M60,300 C180,150 300,340 430,210 S640,90 760,230 S900,320 950,170" fill="none" stroke="rgba(107,155,106,.42)" stroke-width="2" stroke-dasharray="9 11" stroke-linecap="round"/></svg><div class="fp-pin" style="left:7.5%;top:69.0%" title="武汉"><img class="fpp-photo" src="assets/in/city-武汉.jpg" alt="武汉" loading="lazy"><span class="fpp-dot">🏙️</span><span class="fpp-name">武汉</span></div><div class="fp-pin" style="left:23.0%;top:59.5%" title="南昌"><img class="fpp-photo" src="assets/in/city-南昌.jpg" alt="南昌" loading="lazy"><span class="fpp-dot">🍜</span><span class="fpp-name">南昌</span></div><div class="fp-pin" style="left:43.0%;top:50.0%" title="南京"><img class="fpp-photo" src="assets/in/city-南京.jpg" alt="南京" loading="lazy"><span class="fpp-dot">🌸</span><span class="fpp-name">南京</span></div><div class="fp-pin" style="left:61.5%;top:36.2%" title="杭州"><img class="fpp-photo" src="assets/in/city-杭州.jpg" alt="杭州" loading="lazy"><span class="fpp-dot">🍵</span><span class="fpp-name">杭州</span></div><div class="fp-pin" style="left:76.0%;top:54.8%" title="厦门"><img class="fpp-photo" src="assets/in/city-厦门.jpg" alt="厦门" loading="lazy"><span class="fpp-dot">🌊</span><span class="fpp-name">厦门</span></div><div class="fp-pin" style="left:88.0%;top:62.4%" title="湄江"><img class="fpp-photo" src="assets/in/city-湄江.jpg" alt="湄江" loading="lazy"><span class="fpp-dot">⛰️</span><span class="fpp-name">湄江</span></div></div><p class="fp-note">把鼠标放到图钉上，看看当时拍的照片 🍃</p></div><p class="sec-lead" style="margin:1.4rem 0 .1rem;"><strong>🎯 大学目标</strong></p><div class="goal-row"><div class="goal-note"><span class="gn-ico">💰</span><span class="gn-txt">实现经济独立</span></div><div class="goal-note"><span class="gn-ico">🎤</span><span class="gn-txt">看一次演唱会</span><span class="gn-stamp" title="已实现">🍋</span></div><div class="goal-note"><span class="gn-ico">📁</span><span class="gn-txt">拥有自己的作品集</span></div></div></div></div><button class="btn-soft" style="margin-top:1.6rem;" onclick="document.getElementById('experience').scrollIntoView({behavior:'smooth'})">进入下一章 <i class="fas fa-arrow-right"></i></button></div>
+      <div class="card" id="experience"><div class="sec-h2 line"><span class="sh-cn">过往经历</span><span class="sh-en">JOURNEY</span></div><p class="sec-lead">📘 大一在读，自学AI与计算机，像海绵一样吸收新知识。</p><p class="sec-quote">"还在完善ing，每一段空白都是未来的序章。"</p><div class="tl"><div class="tl-item tl-item--star rv"><span class="tl-node">🌿</span><div class="tl-card"><span class="tl-en">Guide</span><span class="tl-badge">Main Project</span><h3>🏫 湖财新生指南 · 2026 迎新季</h3><div class="tl-body"><img class="tl-shot" src="assets/in/tl-en-01.jpg" alt="湖财新生指南截图" loading="lazy" decoding="async"><div class="tl-txt"><p>独立策划并搭建湖南财政经济学院 2026 级新生入学指南网站，聚合专业培养、校园地图、入学清单、军训指南、电脑选购、政策文件与学习资源等 <span class="num" data-to="10">0</span>+ 核心模块；通过清晰的交互与信息分层，帮助新生一站式获取入学所需信息，并内置 AI 学长问答入口，显著降低信息检索成本。</p><p class="tl-link">🔗 网站：<a href="https://lo894.github.io/hucai-guide/" target="_blank" rel="noopener">lo894.github.io/hucai-guide</a> ｜ 访问口令：<code>hucai2026</code></p><a class="btn-cap" href="https://lo894.github.io/hucai-guide/" target="_blank" rel="noopener">查看网站 →</a></div></div></div></div><div class="tl-item rv"><span class="tl-node">🍃</span><div class="tl-card"><span class="tl-en">E-commerce</span><h3>🛒 个人二手电商项目主理人（独立操盘）</h3><p>以单人模式全流程运营闲鱼店铺，实现"选品—上架—获客—转化—履约—售后"端到端闭环，<span class="num" data-to="2">0</span> 天内完成 <span class="num" data-to="12">0</span> 单高时效转化。独立承担流量承接、销售谈判、供应链履约与客户生命周期管理，在零资源协同下以结果导向驱动增长，沉淀了对"小生意增长飞轮"的实战体感与成本-效率平衡意识。</p></div></div><div class="tl-item rv"><span class="tl-node">🍃</span><div class="tl-card"><span class="tl-en">Business</span><h3>⭐ 四川华予星辰科技有限公司 · P2 高级合伙人</h3><p>在星辰科技担任 P2 高级合伙人，主营数码产品赛道：覆盖全新 DIY 主机定制、二手笔记本与台式机回收及零售，从选品报价、成交谈判到履约售后全流程操盘。同时运营自媒体账号，将数码测评、装机实测与购机避坑做成短视频与图文内容，以内容种草反哺获客，逐步跑通"内容—私域—转化"的增长链路。</p></div></div><div class="tl-item rv"><span class="tl-node">🍃</span><div class="tl-card"><span class="tl-en">Design</span><h3>📊 PPT 定制接单 · AI 辅助设计</h3><p>以「AI 辅助 + 人工精修」的模式承接 PPT 定制需求，覆盖竞聘答辩、社团宣讲、课程汇报、个人简介等多种场景。先用 AI 快速拆解需求、产出大纲与文案框架，再亲手把控版式、配色与视觉节奏，把"说人话的需求"转成结构清晰、观感在线的成品。已沉淀一套"先确认结构再出片"的交付流程，在控制返工的同时保证每页的信息密度与美观度，逐步积累起从接单沟通到成品交付的完整闭环。</p></div></div></div><button class="btn-soft" style="margin-top:.6rem;" onclick="document.getElementById('awards').scrollIntoView({behavior:'smooth'})">下一章 <i class="fas fa-arrow-right"></i></button></div>
+      <div class="card" id="awards"><div class="sec-h2 line"><span class="sh-cn">获得的奖项</span><span class="sh-en">AWARDS</span></div><p class="sec-lead">AI 相关的四张证书排在最前面 —— 这是我目前在认真走的方向 🤖</p><div class="arc-wall"><figure class="arc-frame rv" tabindex="0" data-cert="damo" role="button" aria-label="查看证书大图"><div class="af-mat"><img class="gallery-img" src="assets/in/arc-wall-02.jpg" alt="阿里云达摩院 人工智能训练师" loading="lazy" decoding="async"></div><figcaption>🏆 阿里云达摩院<br>人工智能训练师</figcaption></figure><figure class="arc-frame rv" tabindex="0" data-cert="adv" role="button" aria-label="查看证书大图"><div class="af-mat"><img class="gallery-img" src="assets/in/arc-frame-03.jpg" alt="橙点同学 · AI 训练师 （高级）" loading="lazy" decoding="async"></div><figcaption>🏆 橙点同学 · AI 训练师<br>（高级）</figcaption></figure><figure class="arc-frame rv" tabindex="0" data-cert="agent" role="button" aria-label="查看证书大图"><div class="af-mat"><img class="gallery-img" src="assets/in/arc-frame-04.jpg" alt="Clouder 大模型 智能体应用" loading="lazy" decoding="async"></div><figcaption>🏆 Clouder 大模型<br>智能体应用</figcaption></figure><figure class="arc-frame rv" tabindex="0" data-cert="code" role="button" aria-label="查看证书大图"><div class="af-mat"><img class="gallery-img" src="assets/in/arc-frame-05.jpg" alt="Clouder 大模型 AI 编码实践" loading="lazy" decoding="async"></div><figcaption>🏆 Clouder 大模型<br>AI 编码实践</figcaption></figure><figure class="arc-frame rv" tabindex="0" data-cert="cyl" role="button" aria-label="优秀共青团员"><div class="af-mat"><div class="af-text"><span class="af-medal">🌟</span><b>优秀共青团员</b><i>COMMENDED</i></div></div><figcaption>🌟 优秀共青团员</figcaption></figure></div><div class="aw-detail"><div class="aw-item"><span class="awi-ic">🏆</span><div><strong>阿里云达摩院 · 人工智能训练师认证</strong><p>通过达摩院-机器智能技术事业部官方认证，系统完成智能客服场景下人工智能训练师初级培训，掌握数据标注、模型训练、Prompt 调优与 AI 服务工程化落地的核心方法，具备将 AI 能力转化为真实业务价值的实战基础。</p><p class="aw-meta">机器智能技术事业部官方认证 ｜ 证书编号 AIT260727122350000133 ｜ 有效期至 2027.07</p></div></div><div class="aw-item"><span class="awi-ic">🏆</span><div><strong>阿里巴巴橙点同学 · 人工智能训练师（高级）</strong><p>以优异成绩通过阿里巴巴橙点同学官方高级认证，系统掌握大模型训练、数据标注、Prompt 工程与 AI 应用落地能力，标志着已具备将人工智能转化为生产力的专业级实力，是从 AI 学习者向 AI 实践者跨越的重要里程碑。</p><p class="aw-meta">橙点同学官方高级认证</p></div></div><div class="aw-item"><span class="awi-ic">🏆</span><div><strong>阿里云 Apsara Clouder · 大模型智能体应用认证</strong><p>通过阿里云官方大模型 Clouder 认证，系统掌握基于百炼平台构建、部署与优化 AI 智能体的全链路能力，具备将大模型能力封装为可交互 Agent 的工程化实践经验，向「AI 原生应用开发者」进阶。</p><p class="aw-meta">基于百炼平台构建智能体应用 ｜ 证书编号 CLDM02260802755068 ｜ 有效期至 2028.08</p></div></div><div class="aw-item"><span class="awi-ic">🏆</span><div><strong>阿里云 Apsara Clouder · 大模型 AI 编码实践认证</strong><p>通过阿里云官方大模型 Clouder 认证，以工程化视角掌握 AI 辅助编码方法论，熟练运用通义灵码等智能编码助手完成需求理解、代码生成、调试优化与最佳实践沉淀，显著提升研发效率与代码质量，正式迈入 AI 驱动的专业化开发阶段。</p><p class="aw-meta">基于通义灵码实现高效 AI 编码实践 ｜ 证书编号 CLDM07260802755065 ｜ 有效期至 2028.08</p></div></div><div class="aw-item"><span class="awi-ic">🌟</span><div><strong>优秀共青团员</strong><p>在校期间积极投身志愿服务与团组织工作，以责任与热忱获评优秀共青团员，是信念与行动力的双重肯定。</p><p class="aw-meta">不忘初心，砥砺前行</p></div></div></div><button class="btn-soft" style="margin-top:1.6rem;" onclick="document.getElementById('learning').scrollIntoView({behavior:'smooth'})">继续探索 <i class="fas fa-arrow-right"></i></button></div>
+      <div class="card" id="learning"><div class="sec-h2 line"><span class="sh-cn">我关注与学习</span><span class="sh-en">FOCUS</span></div><div class="tag-row"><span class="tag">🤖 AI</span><span class="tag">✂️ 剪辑</span><span class="tag">🎸 音乐</span></div><p class="sec-lead">正在学习AI软件、AI短视频、PPT与剪辑。</p><p class="sec-lead" style="margin-top:1.6rem;"><strong>🎵 我的歌单</strong></p><div class="vinyl-row"><a class="vinyl rv" href="https://163cn.tv/bcuT2urm" target="_blank" rel="noopener" data-song="0" title="诀别无尽夏"><span class="v-play" data-play="0" role="button" aria-label="播放 诀别无尽夏">▶</span><span class="vd"><img class="song-cover-img" src="assets/in/city-诀别无尽夏.jpg" alt="诀别无尽夏" loading="lazy" decoding="async"></span><span class="vn">诀别无尽夏</span></a><a class="vinyl rv" href="https://163cn.tv/bcuTObDX" target="_blank" rel="noopener" data-song="1" title="不只是场梦"><span class="v-play" data-play="1" role="button" aria-label="播放 不只是场梦">▶</span><span class="vd"><img class="song-cover-img" src="assets/in/city-不只是场梦.jpg" alt="不只是场梦" loading="lazy" decoding="async"></span><span class="vn">不只是场梦</span></a><a class="vinyl rv" href="https://163cn.tv/bcuTWiDf" target="_blank" rel="noopener" data-song="2" title="小镇姑娘"><span class="v-play" data-play="2" role="button" aria-label="播放 小镇姑娘">▶</span><span class="vd"><img class="song-cover-img" src="assets/in/city-小镇姑娘.jpg" alt="小镇姑娘" loading="lazy" decoding="async"></span><span class="vn">小镇姑娘</span></a><a class="vinyl rv" href="https://163cn.tv/bcuTLGFg" target="_blank" rel="noopener" data-song="3" title="是是非非"><span class="v-play" data-play="3" role="button" aria-label="播放 是是非非">▶</span><span class="vd"><img class="song-cover-img" src="assets/in/city-是是非非.jpg" alt="是是非非" loading="lazy" decoding="async"></span><span class="vn">是是非非</span></a></div><button class="btn-soft" style="margin-top:.6rem;" onclick="document.getElementById('skillsSection').scrollIntoView({behavior:'smooth'})">下一章 <i class="fas fa-arrow-right"></i></button></div><!-- 图F 通宽分割横幅：手写字占位，想改就改下面这句 --><div class="full-bleed" data-lazybg="assets/up/divider-lemon.jpg"><div class="fb-mask"></div><p class="fb-say">夏天、音乐和不停学新东西的我</p></div>
+      <div class="card" id="skillsSection"><div class="sec-banner" data-lazybg="assets/up/vibes-banner.jpg"><div class="sb-mask"></div><div class="sb-title"><span class="sb-cn">技能与爱好</span><span class="sb-en">VIBES</span><span class="sb-sub">嫩芽 → 小苗 → 花苞 → 开花，每一株都在慢慢长</span></div></div><div class="garden"><div class="plant plant--lead rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C34 68 39 54 37 34" stroke="#5E8C5D" stroke-width="3.2" fill="none" stroke-linecap="round"/><ellipse cx="26.5" cy="68" rx="10.4" ry="4.8" fill="#6B9B6A" opacity="1" transform="rotate(-22 26.5 68)"/><ellipse cx="47.5" cy="62" rx="10.0" ry="4.6" fill="#8FBA88" opacity="1" transform="rotate(20 47.5 62)"/><ellipse cx="27.5" cy="52" rx="8.4" ry="3.9" fill="#7FA97C" opacity="1" transform="rotate(-30 27.5 52)"/><ellipse cx="46.5" cy="47" rx="8.0" ry="3.7" fill="#8FBA88" opacity="1" transform="rotate(27 46.5 47)"/><ellipse cx="37" cy="16" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="46.5" cy="22.8" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="42.9" cy="34.2" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="31.1" cy="34.2" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="27.5" cy="22.8" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><circle cx="37" cy="26" r="4.4" fill="#F7E29B"/><circle cx="37" cy="26" r="2.1" fill="#D9A821" opacity=".8"/><ellipse cx="20" cy="30" rx="5.0" ry="2.4" fill="#BFD9A8" opacity=".75" transform="rotate(-20 20 30)"/><ellipse cx="54" cy="34" rx="4.6" ry="2.2" fill="#BFD9A8" opacity=".75" transform="rotate(18 54 34)"/></svg><span class="pl-stage">开花</span><h4><span class="pl-emoji">💻</span> AI 编程 · Vibe Coding</h4><p>独立用 AI 编程做出湖财新生指南、飞机大战、坦克大战、粒子星球气象台等可访问作品</p></div><div class="plant rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C34 68 39 54 37 34" stroke="#5E8C5D" stroke-width="3.2" fill="none" stroke-linecap="round"/><ellipse cx="26.5" cy="68" rx="10.4" ry="4.8" fill="#6B9B6A" opacity="1" transform="rotate(-22 26.5 68)"/><ellipse cx="47.5" cy="62" rx="10.0" ry="4.6" fill="#8FBA88" opacity="1" transform="rotate(20 47.5 62)"/><ellipse cx="27.5" cy="52" rx="8.4" ry="3.9" fill="#7FA97C" opacity="1" transform="rotate(-30 27.5 52)"/><ellipse cx="46.5" cy="47" rx="8.0" ry="3.7" fill="#8FBA88" opacity="1" transform="rotate(27 46.5 47)"/><ellipse cx="37" cy="16" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="46.5" cy="22.8" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="42.9" cy="34.2" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="31.1" cy="34.2" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><ellipse cx="27.5" cy="22.8" rx="6.2" ry="6.2" fill="#F2C94C" opacity=".95"/><circle cx="37" cy="26" r="4.4" fill="#F7E29B"/><circle cx="37" cy="26" r="2.1" fill="#D9A821" opacity=".8"/><ellipse cx="20" cy="30" rx="5.0" ry="2.4" fill="#BFD9A8" opacity=".75" transform="rotate(-20 20 30)"/><ellipse cx="54" cy="34" rx="4.6" ry="2.2" fill="#BFD9A8" opacity=".75" transform="rotate(18 54 34)"/></svg><span class="pl-stage">开花</span><h4><span class="pl-emoji">🤖</span> Prompt 工程 / AI 工具</h4><p>持阿里达摩院 AI 训练师等 4 项官方认证，擅长把自然语言需求拆成可执行指令</p></div><div class="plant rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C35 70 38 56 37 40" stroke="#6B9B6A" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="27.5" cy="66" rx="9.4" ry="4.4" fill="#6B9B6A" opacity="1" transform="rotate(-24 27.5 66)"/><ellipse cx="46.5" cy="60" rx="9.0" ry="4.2" fill="#8FBA88" opacity="1" transform="rotate(22 46.5 60)"/><ellipse cx="28.5" cy="51" rx="7.6" ry="3.6" fill="#7FA97C" opacity="1" transform="rotate(-32 28.5 51)"/><ellipse cx="37" cy="33" rx="7.4" ry="10.5" fill="#F2C94C" opacity=".92"/><path d="M30 36 Q37 26 44 36" stroke="#D9A821" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M37 42 L37 23" stroke="#D9A821" stroke-width="1.3" opacity=".7"/><ellipse cx="30" cy="41" rx="6.6" ry="3.0" fill="#BFD9A8" opacity=".9" transform="rotate(20 30 41)"/></svg><span class="pl-stage">花苞</span><h4><span class="pl-emoji">✂️</span> 视频剪辑</h4><p>剪自己的 vlog 与作品预告片</p></div><div class="plant rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C35 70 38 56 37 40" stroke="#6B9B6A" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="27.5" cy="66" rx="9.4" ry="4.4" fill="#6B9B6A" opacity="1" transform="rotate(-24 27.5 66)"/><ellipse cx="46.5" cy="60" rx="9.0" ry="4.2" fill="#8FBA88" opacity="1" transform="rotate(22 46.5 60)"/><ellipse cx="28.5" cy="51" rx="7.6" ry="3.6" fill="#7FA97C" opacity="1" transform="rotate(-32 28.5 51)"/><ellipse cx="37" cy="33" rx="7.4" ry="10.5" fill="#F2C94C" opacity=".92"/><path d="M30 36 Q37 26 44 36" stroke="#D9A821" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M37 42 L37 23" stroke="#D9A821" stroke-width="1.3" opacity=".7"/><ellipse cx="30" cy="41" rx="6.6" ry="3.0" fill="#BFD9A8" opacity=".9" transform="rotate(20 30 41)"/></svg><span class="pl-stage">花苞</span><h4><span class="pl-emoji">📊</span> PPT 制作</h4><p>接单做过竞聘答辩、课程汇报、个人简介</p></div><div class="plant rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C36 72 37 62 37 50" stroke="#6B9B6A" stroke-width="2.8" fill="none" stroke-linecap="round"/><ellipse cx="29" cy="68" rx="8.2" ry="4.0" fill="#6B9B6A" opacity="1" transform="rotate(-26 29 68)"/><ellipse cx="45" cy="63" rx="7.8" ry="3.8" fill="#8FBA88" opacity="1" transform="rotate(24 45 63)"/><ellipse cx="30" cy="56" rx="6.6" ry="3.2" fill="#7FA97C" opacity="1" transform="rotate(-34 30 56)"/><ellipse cx="44" cy="52" rx="6.2" ry="3.0" fill="#8FBA88" opacity="1" transform="rotate(30 44 52)"/></svg><span class="pl-stage">小苗</span><h4><span class="pl-emoji">📷</span> 摄影</h4><p>记录生活与城市足迹</p></div><div class="plant rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C36 72 37 62 37 50" stroke="#6B9B6A" stroke-width="2.8" fill="none" stroke-linecap="round"/><ellipse cx="29" cy="68" rx="8.2" ry="4.0" fill="#6B9B6A" opacity="1" transform="rotate(-26 29 68)"/><ellipse cx="45" cy="63" rx="7.8" ry="3.8" fill="#8FBA88" opacity="1" transform="rotate(24 45 63)"/><ellipse cx="30" cy="56" rx="6.6" ry="3.2" fill="#7FA97C" opacity="1" transform="rotate(-34 30 56)"/><ellipse cx="44" cy="52" rx="6.2" ry="3.0" fill="#8FBA88" opacity="1" transform="rotate(30 44 52)"/></svg><span class="pl-stage">小苗</span><h4><span class="pl-emoji">📣</span> 新媒体运营</h4><p>把内容种草反哺获客，跑通"内容—私域—转化"</p></div><div class="plant rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C36 72 37 62 37 50" stroke="#6B9B6A" stroke-width="2.8" fill="none" stroke-linecap="round"/><ellipse cx="29" cy="68" rx="8.2" ry="4.0" fill="#6B9B6A" opacity="1" transform="rotate(-26 29 68)"/><ellipse cx="45" cy="63" rx="7.8" ry="3.8" fill="#8FBA88" opacity="1" transform="rotate(24 45 63)"/><ellipse cx="30" cy="56" rx="6.6" ry="3.2" fill="#7FA97C" opacity="1" transform="rotate(-34 30 56)"/><ellipse cx="44" cy="52" rx="6.2" ry="3.0" fill="#8FBA88" opacity="1" transform="rotate(30 44 52)"/></svg><span class="pl-stage">小苗</span><h4><span class="pl-emoji">🗣️</span> 英语口语</h4><p>日常交流与英文材料阅读</p></div><div class="plant rv"><svg class="pl-svg" viewBox="0 0 74 92" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="37" cy="83" rx="19" ry="4.6" fill="#C6B392" opacity=".55"/><path d="M18 83 Q37 78 56 83" stroke="#B09A74" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M37 82 C37 74 37 70 37 64" stroke="#7FA97C" stroke-width="2.6" fill="none" stroke-linecap="round"/><ellipse cx="30.5" cy="66" rx="6.4" ry="3.4" fill="#6B9B6A" opacity="1" transform="rotate(-28 30.5 66)"/><ellipse cx="43.5" cy="68" rx="6.0" ry="3.2" fill="#8FBA88" opacity="1" transform="rotate(26 43.5 68)"/></svg><span class="pl-stage">嫩芽</span><h4><span class="pl-emoji">🎨</span> Blender 3D 建模</h4><p>兴趣探索中，正在慢慢摸索</p></div></div><div class="works-wrap" id="worksAnchor"><p class="works-lead">这些都是我用 AI 编程从零做出来的 ↓</p><div class="works-grid"><div class="work-card rv"><img class="wk-shot" src="assets/in/works-wrap-10.jpg" alt="📊 个人简介PPT · 视觉叙事" loading="lazy" decoding="async"><h3>📊 个人简介PPT · 视觉叙事</h3><p>仅用一个暑假，从零独立完成这份演示文稿，每一页皆为精心雕琢的视觉诗篇，彰显出超越年龄的审美敏感与高效执行力。</p><div class="wk-foot"><span class="btn-cap" style="opacity:.7;cursor:default;">作品集展示</span></div></div><div class="work-card rv"><img class="wk-shot" src="assets/in/wk-foot-11.jpg" alt="🚀 飞机大战 · AI 匠心之作" loading="lazy" decoding="async"><h3>🚀 飞机大战 · AI 匠心之作</h3><p>独立运用人工智能辅助开发，从零构建的飞行射击游戏网站，绚丽特效与智能算法彰显前端实力。</p><div class="wk-foot"><a class="btn-cap" href="https://adb2e0f7759c475ebe593a45f1aa9b4a.bj5.agentos-app.net" target="_blank" rel="noopener">🚀 体验游戏</a></div></div><div class="work-card rv"><img class="wk-shot" src="assets/in/work-card-12.jpg" alt="🪐 粒子星球 · 气象台" loading="lazy" decoding="async"><h3>🪐 粒子星球 · 气象台</h3><p>独立打造的沉浸式粒子星球气象交互站，融合实时气象意象与手势识别交互：以双手隔空操控橙色粒子星球——左手旋转星体、右手召唤雨幕与花叶，双手开合触发缩放与闪电风暴。将计算机视觉、粒子动画与前端工程化实践融为一体，展现出对新一代自然人机交互的探索力与视觉表达力。</p><div class="wk-foot"><a class="btn-cap" href="https://31c606ea346745ecaf9311e750720f9b.app.workbuddy.link" target="_blank" rel="noopener">🪐 体验气象台</a></div></div><div class="work-card rv"><img class="wk-shot" src="assets/in/work-card-13.jpg" alt="🎮 坦克大战 · 钢铁战场" loading="lazy" decoding="async"><h3>🎮 坦克大战 · 钢铁战场</h3><p>独立开发的坦克射击对战游戏，霓虹小镇背景、多模式关卡与即时战斗系统，展现游戏逻辑与前端交互能力。</p><div class="wk-foot"><a class="btn-cap" href="https://17f59724c3064c10896bdaea1c534440.app.workbuddy.link" target="_blank" rel="noopener">🎮 体验坦克大战</a></div></div></div><p class="works-slogan">TALK TO AI, BUILD ANYTHING.</p></div><button class="btn-soft" style="margin-top:1.6rem;" onclick="document.getElementById('plantSection').scrollIntoView({behavior:'smooth'})">下一章 <i class="fas fa-leaf"></i></button></div>
+      <div class="card" id="aboutFootprint"><div class="sec-banner" data-lazybg="assets/up/about-banner.jpg"><div class="sb-mask"></div><div class="sb-title"><span class="sb-cn">关于我</span><span class="sb-en">ABOUT</span></div></div><div class="about-grid"><div class="rv"><div class="note-sticky"><span class="ns-tape"></span><p class="ns-hi">今天的我</p><!-- ✏️ 想改「今天的我」便签文案？只改下面这一行 --><p class="ns-body">正在认真学 AI 编程，目标是把脑子里的想法都变成能跑的作品 🤖</p></div><p style="margin-top:1.5rem;">生活城市：<strong>长沙</strong> 🍊</p><p>✨ 探索ing · 在留言区留下你的印象吧</p></div><div class="rv"><p class="sec-lead" style="margin:0 0 .3rem;"><strong>🌍 走过的城市</strong></p><div class="fp-wrap"><div class="fp-map"><svg class="fp-path" viewBox="0 0 1000 420" preserveAspectRatio="none" aria-hidden="true"><path d="M60,300 C180,150 300,340 430,210 S640,90 760,230 S900,320 950,170" fill="none" stroke="rgba(107,155,106,.42)" stroke-width="2" stroke-dasharray="9 11" stroke-linecap="round"/></svg><div class="fp-pin" style="left:7.5%;top:69.0%" title="武汉"><img class="fpp-photo" src="assets/in/city-武汉.jpg" alt="武汉" loading="lazy" decoding="async"><span class="fpp-dot">🏙️</span><span class="fpp-name">武汉</span></div><div class="fp-pin" style="left:23.0%;top:59.5%" title="南昌"><img class="fpp-photo" src="assets/in/city-南昌.jpg" alt="南昌" loading="lazy" decoding="async"><span class="fpp-dot">🍜</span><span class="fpp-name">南昌</span></div><div class="fp-pin" style="left:43.0%;top:50.0%" title="南京"><img class="fpp-photo" src="assets/in/city-南京.jpg" alt="南京" loading="lazy" decoding="async"><span class="fpp-dot">🌸</span><span class="fpp-name">南京</span></div><div class="fp-pin" style="left:61.5%;top:36.2%" title="杭州"><img class="fpp-photo" src="assets/in/city-杭州.jpg" alt="杭州" loading="lazy" decoding="async"><span class="fpp-dot">🍵</span><span class="fpp-name">杭州</span></div><div class="fp-pin" style="left:76.0%;top:54.8%" title="厦门"><img class="fpp-photo" src="assets/in/city-厦门.jpg" alt="厦门" loading="lazy" decoding="async"><span class="fpp-dot">🌊</span><span class="fpp-name">厦门</span></div><div class="fp-pin" style="left:88.0%;top:62.4%" title="湄江"><img class="fpp-photo" src="assets/in/city-湄江.jpg" alt="湄江" loading="lazy" decoding="async"><span class="fpp-dot">⛰️</span><span class="fpp-name">湄江</span></div></div><p class="fp-note">把鼠标放到图钉上，看看当时拍的照片 🍃</p></div><p class="sec-lead" style="margin:1.4rem 0 .1rem;"><strong>🎯 大学目标</strong></p><div class="goal-row"><div class="goal-note"><span class="gn-ico">💰</span><span class="gn-txt">实现经济独立</span></div><div class="goal-note"><span class="gn-ico">🎤</span><span class="gn-txt">看一次演唱会</span><span class="gn-stamp" title="已实现">🍋</span></div><div class="goal-note"><span class="gn-ico">📁</span><span class="gn-txt">拥有自己的作品集</span></div></div></div></div><button class="btn-soft" style="margin-top:1.6rem;" onclick="document.getElementById('experience').scrollIntoView({behavior:'smooth'})">进入下一章 <i class="fas fa-arrow-right"></i></button></div>
       <div class="card plant-card" id="plantSection"><div class="plant-icon" id="plantIcon">🌱</div><div class="plant-count" id="miniLeafCount">0</div><p>播种希望</p><p class="plant-tooltip">点击卡片，撒下叶子吧 🍃</p></div>
       <div class="card gb-card rv" id="guestbook">
-  <div class="gb-bg" aria-hidden="true"></div>
+  <div class="gb-bg" aria-hidden="true" data-lazybg="assets/up/guest-bears.jpg"></div>
   <div class="sec-h2"><span class="sh-cn">在留言区留下你的印象吧 🍃</span><span class="sh-en">LEAF NOTES</span></div>
   <p class="gb-lead">每一条留言都会变成森林里的一片小叶子，点一下叶子可以展开看全文。</p>
   <div class="gb-giscus" id="giscusWall"></div>
@@ -2357,7 +2492,7 @@ html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !importan
   </div>
   <div id="messages"><div class="msg-head"><p class="local-note" style="margin:0;">💬 留言会先存在这台设备上；云端同步接好后，换个设备也能看到大家的足迹～</p><span class="msg-stat off" id="msgStat">☁️ 连接中…</span></div><div id="nicknamePanel" style="margin-bottom:1rem;display:flex;align-items:center;gap:0.8rem;"><span id="nickDisplay"></span><input type="text" id="nicknameInput" class="msg-input" placeholder="设定昵称（仅一次）"><button id="setNickBtn" class="btn-soft">保存</button></div><div style="display:flex;gap:0.8rem;"><textarea id="msgContent" class="msg-input" rows="2" placeholder="对我说点什么吧..."></textarea><button id="submitMsgBtn" class="btn-soft">发布</button></div><div id="messageList" style="max-height:400px;overflow-y:auto;"></div></div>
 </div>
-<div class="card" id="contact"><h2><i class="fas fa-envelope-open-text"></i> 联系与合作</h2><p>📧 2909246447@qq.com</p><div style="display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;margin:1rem 0;"><div class="qr-box"><img src="assets/in/qr.jpg" alt="微信二维码" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentNode.textContent='二维码加载失败';" loading="lazy"></div><div><p style="font-weight:600;">微信：<span id="wechatId">Rat_millet5015</span></p><button id="copyWechatBtn" class="btn-soft">复制微信号</button></div></div><div style="display:flex;flex-wrap:wrap;gap:0.8rem;"><button id="copyEmailBtn" class="btn-soft">复制邮箱</button> <a href="mailto:2909246447@qq.com" class="btn-soft">发送邮件</a> <button id="downloadResumeBtn" class="btn-soft">⬇️ 下载简历PDF</button></div></div>
+<div class="card" id="contact"><h2><i class="fas fa-envelope-open-text"></i> 联系与合作</h2><p>📧 2909246447@qq.com</p><div style="display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;margin:1rem 0;"><div class="qr-box"><img src="assets/in/qr.jpg" alt="微信二维码" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.parentNode.textContent='二维码加载失败';" loading="lazy" decoding="async"></div><div><p style="font-weight:600;">微信：<span id="wechatId">Rat_millet5015</span></p><button id="copyWechatBtn" class="btn-soft">复制微信号</button></div></div><div style="display:flex;flex-wrap:wrap;gap:0.8rem;"><button id="copyEmailBtn" class="btn-soft">复制邮箱</button> <a href="mailto:2909246447@qq.com" class="btn-soft">发送邮件</a> <button id="downloadResumeBtn" class="btn-soft">⬇️ 下载简历PDF</button></div></div>
       
     </div>
   </div>
@@ -2430,7 +2565,7 @@ html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !importan
 
       // 城市弹窗（杭州已删除14号）
       const cityData={ '武汉':{tag:'🌉',desc:'长江穿城而过，黄鹤楼的檐角挑着千年的风。热干面的香气、江汉路的霓虹、珞珈山的樱花——这座火炉城市，藏着我最滚烫的青春记忆。',images:['./3.jpg','./4.jpg','./5.jpg']}, '南昌':{tag:'🏛️',desc:'赣江静静流淌，滕王阁的灯火映着「秋水共长天一色」。红色故都的厚重与赣味的鲜辣，让每一次到访都像翻开一页鲜活的历史。',images:['./6.jpg','./7.jpg','./8.jpg','./9.jpg','./10.jpg','./33.jpg']}, '南京':{tag:'🍂',desc:'梧桐叶落满街，民国建筑的轮廓里藏着六朝烟水。鸡鸣寺的钟声、先锋书店的墨香——这座城市的温柔，是要慢慢走的。',images:['./11.jpg','./12.jpg','./13.jpg','./14.jpg','./15.jpg']}, '杭州':{tag:'🌿',desc:'西湖烟雨朦胧，断桥边的柳絮年年如约。一口龙井、一段江南，诗意在不知不觉间，落进了我的镜头与笔尖。',images:['./16.jpg','./17.jpg','./18.jpg','./19.jpg','./20.jpg','./32.jpg']}, '厦门':{tag:'🌊',desc:'鼓浪屿的海风轻拂，三角梅爬满红砖墙。环岛路的风、沙坡尾的文艺、曾厝垵的烟火——在这里，时间都变得轻软。',images:['./21.jpg','./22.jpg','./23.jpg','./24.jpg','./25.jpg','./26.jpg','./27.jpg','./34.jpg','./36.jpg']}, '湄江':{tag:'⛰️',desc:'碧水丹崖，山水如画。湄江的奇石与溶洞藏着自然的鬼斧神工，一次行走，便是一场与山野的温柔对话。',images:['./28.jpg','./29.jpg','./30.jpg','./31.jpg','./35.jpg','./37.jpg']} };
-      window.openCityModal=function(city){ const d=cityData[city]; if(!d)return; document.getElementById('cityModalTitle').textContent=(d.tag?d.tag+' ':'')+city; document.getElementById('cityModalDesc').textContent=d.desc||''; document.getElementById('cityModalGallery').innerHTML=`<p style="grid-column:1/-1;color:#7a9a66;font-size:0.85rem;margin:0 0 0.3rem;">📸 共 ${d.images.length} 张 · 点图片可保存</p>`+d.images.map(u=>`<img src="${u}" onerror="this.style.display='none'">`).join(''); const box=document.querySelector('.city-modal-box'); box.classList.remove('modal-in'); void box.offsetWidth; box.classList.add('modal-in'); document.getElementById('cityModalOverlay').classList.add('active'); };
+      window.openCityModal=function(city){ const d=cityData[city]; if(!d)return; document.getElementById('cityModalTitle').textContent=(d.tag?d.tag+' ':'')+city; document.getElementById('cityModalDesc').textContent=d.desc||''; document.getElementById('cityModalGallery').innerHTML=`<p style="grid-column:1/-1;color:#7a9a66;font-size:0.85rem;margin:0 0 0.3rem;">📸 共 ${d.images.length} 张 · 点图片可保存</p>`+d.images.map(u=>`<img src="${u}" onerror="this.style.display='none'" loading="lazy" decoding="async">`).join(''); const box=document.querySelector('.city-modal-box'); box.classList.remove('modal-in'); void box.offsetWidth; box.classList.add('modal-in'); document.getElementById('cityModalOverlay').classList.add('active'); };
       window.closeCityModal=()=>document.getElementById('cityModalOverlay').classList.remove('active');
 
       // 播种+成长树
@@ -2523,6 +2658,21 @@ html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !importan
           rows = out;
         }
 
+        /* 以云端为唯一事实来源重建列表。
+           为什么不能只靠 merge()：merge 是「本机缓存 concat 云端 + 去重」，只增不减，
+           于是「云端已删除」的留言会永远躺在本机缓存里继续显示（曾经测试期的留言就是这样）。
+           这里改成拉取成功后按云端结果重建，只额外保留「本机还没成功上云」的待发行，
+           既不丢用户刚发出的留言，也不留任何幽灵行。 */
+        function reconcile(serverList){
+          var pending = [];
+          for(var i = 0; i < rows.length; i++){
+            if(rows[i] && rows[i].__pending) pending.push(rows[i]);
+          }
+          rows = [];
+          merge(serverList || []);
+          if(pending.length) rows = pending.concat(rows);
+        }
+
         function pull(){
           if(!READY) return Promise.reject('no-config');
           var ctrl = ('AbortController' in window) ? new AbortController() : null;
@@ -2531,7 +2681,7 @@ html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !importan
           var to = setTimeout(function(){ if(ctrl) ctrl.abort(); }, 7000);
           return fetch(SUPA_URL + '/rest/v1/' + TABLE + '?select=*&order=created_at.desc&limit=60', opt)
             .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-            .then(function(list){ clearTimeout(to); merge(list || []); return true; })
+            .then(function(list){ clearTimeout(to); reconcile(list || []); return true; })
             .catch(function(e){ clearTimeout(to); throw e; });
         }
 
@@ -2600,6 +2750,13 @@ html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !importan
           setStat('☁️ 正在同步…', true);
           pull().then(function(){ localSave(); render(); setStat('☁️ 云端留言已同步', true); })
                 .catch(function(){ localSave(); render(); setStat('📴 云端未连通，先显示本机留言', false); });
+          /* 兜底：即便这次没连上，也把本机缓存里明显是「测试残留」的清掉，
+             避免用户侧一直看到幽灵留言。只删昵称命中测试名单的行。 */
+          try{
+            var dirty = ['小Q测试', '落花诊断'];
+            var kept = rows.filter(function(r){ return dirty.indexOf(r && r.nickname) < 0; });
+            if(kept.length !== rows.length){ rows = kept; localSave(); render(); }
+          }catch(e){}
         }
       })();
 
@@ -3193,24 +3350,50 @@ html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !importan
         });
 
         /* ---------- 初始化 ---------- */
+        /* 首屏只管静态画面：layout() 先把 canvas 尺寸定好，封面图已在上面用
+           background-image 赋值（浏览器这时就已经开始下载），
+           文字 / 封面 / 导航不需要等任何 JS —— 也就不被 WebGL 阻塞。
+           WebGL 水面推迟到 window.load 之后的空闲时段再建；建好画出第一帧后
+           再加 .water-ready 让 canvas 淡入接管（静止帧 → 动态帧无跳变）。 */
         layout();
         updateRun();
-        var iA=new Image(), iB=new Image(), pend=2;
-        function afterImg(){
-          if(--pend>0) return;
-          if(degraded){
-            degraded=true; GL.A=null; GL.B=null;
-            stage.classList.add('degraded','no-webgl'); layout(); updateRun(); return;
+        var waterStarted=false;
+        function startWater(){
+          if(waterStarted) return; waterStarted=true;
+          try{
+            var iA=new Image(), iB=new Image(), pend=2;
+            function afterImg(){
+              if(--pend>0) return;
+              if(degraded){
+                degraded=true; GL.A=null; GL.B=null;
+                stage.classList.add('degraded','no-webgl'); layout(); updateRun(); return;
+              }
+              GL.A=makeWater(canvasA,IMG.A);
+              GL.B=makeWater(canvasB,IMG.B);
+              if(!GL.A || !GL.B){ GL.A=null; GL.B=null; degraded=true; stage.classList.add('degraded','no-webgl'); layout(); updateRun(); return; }
+              layout(); updateRun();
+              /* 等两帧，确保 drawWater 已经画出第一帧，再淡入 canvas */
+              requestAnimationFrame(function(){ requestAnimationFrame(function(){
+                stage.classList.add('water-ready');
+              }); });
+            }
+            iA.onload=function(){ if(iA.naturalWidth) AR=iA.naturalWidth/iA.naturalHeight; afterImg(); };
+            iB.onload=function(){ if(iB.naturalWidth) BR=iB.naturalWidth/iB.naturalHeight; afterImg(); };
+            iA.onerror=afterImg; iB.onerror=afterImg;
+            iA.src=IMG.A; iB.src=IMG.B;
+          }catch(err){
+            /* 任何异常都退回纯静态封面：水波不出现，但页面照常好看好用 */
+            try{ stage.classList.add('no-webgl'); }catch(e2){}
           }
-          GL.A=makeWater(canvasA,IMG.A);
-          GL.B=makeWater(canvasB,IMG.B);
-          if(!GL.A || !GL.B){ GL.A=null; GL.B=null; degraded=true; stage.classList.add('degraded','no-webgl'); }
-          layout(); updateRun();
         }
-        iA.onload=function(){ if(iA.naturalWidth) AR=iA.naturalWidth/iA.naturalHeight; afterImg(); };
-        iB.onload=function(){ if(iB.naturalWidth) BR=iB.naturalWidth/iB.naturalHeight; afterImg(); };
-        iA.onerror=afterImg; iB.onerror=afterImg;
-        iA.src=IMG.A; iB.src=IMG.B;
+        function scheduleWater(){
+          var idle = window.requestIdleCallback || function(cb){ return setTimeout(cb, 180); };
+          try{ idle(startWater, { timeout: 2500 }); }
+          catch(e){ setTimeout(startWater, 300); }
+        }
+        if(document.readyState === 'complete') scheduleWater();
+        else window.addEventListener('load', scheduleWater, { once:true });
+
       })();
 
       /* 注：原先此处是 updateEnvironment(); setInterval(updateEnvironment,60000);
@@ -3268,7 +3451,7 @@ html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !importan
 </div>
 
 <div class="m-player" id="mPlayer">
-  <div class="mp-disc"><img class="mp-cover" alt="" src="assets/in/city-诀别无尽夏.jpg"></div>
+  <div class="mp-disc"><img class="mp-cover" alt="" src="assets/in/city-诀别无尽夏.jpg" loading="lazy" decoding="async"></div>
   <div class="mp-txt">
     <div class="mp-name">不只是场梦</div>
     <div class="mp-sub">第 2 / 4 首</div>
@@ -3280,7 +3463,7 @@ html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !importan
 
 <div class="m-player-sheet" id="mPlayerSheet" role="dialog" aria-label="播放器">
   <button type="button" class="mp-close" aria-label="收起播放器">✕</button>
-  <div class="mp-big-disc"><img class="mp-cover" alt="" src="assets/in/city-诀别无尽夏.jpg"></div>
+  <div class="mp-big-disc"><img class="mp-cover" alt="" src="assets/in/city-诀别无尽夏.jpg" loading="lazy" decoding="async"></div>
   <p class="mp-sheet-name">…</p>
   <p class="mp-sheet-sub">…</p>
   <div class="mp-bar"><i></i></div>
@@ -3295,7 +3478,7 @@ html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !importan
 
 <div class="m-lightbox" id="mLightbox">
   <button type="button" class="ml-close" aria-label="关闭">✕</button>
-  <img src="" alt="">
+  <img src="" alt="" loading="lazy" decoding="async">
   <p class="ml-cap"></p>
 </div>
 
@@ -3330,7 +3513,7 @@ html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !importan
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'm-dir-card';
       b.style.animationDelay = (i * 0.06) + 's';
-      b.innerHTML = '<img src="' + (AV[d.av] || '') + '" alt="" draggable="false">'
+      b.innerHTML = '<img src="' + (AV[d.av] || '') + '" alt="" draggable="false" loading="lazy" decoding="async">'
         + '<span><span class="m-dc-t">' + d.t + '</span><br><span class="m-dc-s">' + d.s + '</span></span>';
       b.addEventListener('click', function(){ goSection(d.id); });
       box.appendChild(b);
@@ -3803,7 +3986,7 @@ html.dnd .work-card::after, html.dnd .arc-frame::after{ animation:none !importan
 body.dark .lb img{ border-color:#232C25; }
 </style>
 <div class="lb" id="awLb" role="dialog" aria-modal="true" aria-label="证书大图">
-  <button class="lb-x" id="awLbX" aria-label="关闭">✕</button><img id="awLbImg" src="" alt="证书大图">
+  <button class="lb-x" id="awLbX" aria-label="关闭">✕</button><img id="awLbImg" src="" alt="证书大图" loading="lazy" decoding="async">
 </div>
 <script id="aw-lb-js">
 (function(){
@@ -3829,7 +4012,7 @@ body.dark .lb img{ border-color:#232C25; }
 <div class="mp" id="miniPlayer" aria-label="迷你音乐播放器">
   <button class="mp-toggle" id="mpToggle" aria-label="展开音乐播放器" title="音乐">🎵</button>
   <div class="mp-body">
-    <div class="mp-disc" id="mpDisc"><img id="mpCover" src="" alt="" loading="lazy"></div>
+    <div class="mp-disc" id="mpDisc"><img id="mpCover" src="" alt="" loading="lazy" decoding="async"></div>
     <div class="mp-info">
       <p class="mp-name" id="mpName">音乐准备中</p>
       <p class="mp-sub" id="mpSub">…</p>
@@ -3976,7 +4159,13 @@ body.dark .lb img{ border-color:#232C25; }
   var fb=document.getElementById("gbFallback");
   var msgs=document.getElementById("messages");
   var OK = GI_REPO.length > 3 && GI_REPO.indexOf("/") > 0 && GI_REPO_ID.length > 5;
-  if(OK && wall){
+  /* 延迟注入：不再一打开页面就请求 giscus.app。
+     观察 #guestbook 留言区（它在 #detailSection 里，默认 display:none），
+     只有访客真的进了正文、并滚到留言区附近 400px 时才注入 client.js。
+     注：GI_REPO 为空时 OK=false，整段都不会执行 —— 保持现状不改变行为。 */
+  function mountGiscus(){
+    if(!OK || !wall || wall.getAttribute("data-mounted")==="1") return;
+    wall.setAttribute("data-mounted","1");
     var sc=document.createElement("script");
     sc.src="https://giscus.app/client.js";
     sc.async=true;
@@ -4003,6 +4192,20 @@ body.dark .lb img{ border-color:#232C25; }
       }, 600);
     });
   }
+  if(OK){
+    var gbSec = document.getElementById("guestbook") || wall;
+    if(gbSec && window.IntersectionObserver){
+      var gbIO = new IntersectionObserver(function(ens){
+        for(var i=0;i<ens.length;i++){
+          if(ens[i].isIntersecting){ gbIO.disconnect(); mountGiscus(); return; }
+        }
+      }, { rootMargin:"400px 0px" });
+      gbIO.observe(gbSec);
+    } else {
+      /* 极老浏览器没有 IO：退到页面空闲再注入，至少不占首屏 */
+      (window.requestIdleCallback || function(c){ return setTimeout(c, 1500); })(mountGiscus, { timeout: 3000 });
+    }
+  }
   /* 本地便签：点叶子展开 / 收起全文 */
   /* 列表是动态渲染的，用 document 级委托最稳 */
   document.addEventListener("click", function(e){
@@ -4010,26 +4213,50 @@ body.dark .lb img{ border-color:#232C25; }
     if(it) it.classList.toggle("open");
   }, true);
 
-  /* ================= 页脚访客计数（不蒜子） ================= */
+  /* ================= 页脚访客计数（不蒜子） =================
+     延迟注入：不再在解析 HTML 时就请求 busuanzi.ibruce.info。
+     触发时机取「谁先到」：
+       ① 页脚 .site-footer 进入视口前 400px（滚到页面底部附近才需要它）
+       ② 浏览器空闲满 5s 兜底（一直没滚到底也保证计数能出来）
+     注意：#visitLine 自带 hidden（display:none），拿它当观察目标永远不会相交，
+           所以这里观察的是它所属的 <footer>。 */
   var line=document.getElementById("visitLine");
-  var uv=document.getElementById("busuanzi_value_site_uv");
   if(line){
-    var bs=document.createElement("script");
-    bs.async=true;
-    bs.src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js";
-    document.body.appendChild(bs);
-    setTimeout(function(){
+    var bsLoaded=false;
+    function pollVisit(n){
+      var uv=document.getElementById("busuanzi_value_site_uv");
       var v = uv ? (uv.textContent||"").trim() : "";
-      var n = parseInt(v.replace(/[^0-9]/g, ""), 10);
-      /* 不蒜子在 localhost / 未识别域名上偶尔会返回一个巨大的脏数字，
-         这里做一次合理性判断，超过阈值就退回友好文案，不显示离谱的数字 */
-      if(!isNaN(n) && n > 0 && n < 100000){ line.hidden=false; }
-      else { line.hidden=false; line.innerHTML = "🐾 欢迎来到我的小森林，记得留下脚印哦"; }
-    }, 3200);
+      var num = parseInt(v.replace(/[^0-9]/g, ""), 10);
+      if(!isNaN(num) && num > 0 && num < 100000){ line.hidden=false; return; }
+      if(n < 12){ setTimeout(function(){ pollVisit(n+1); }, 350); return; }
+      /* 不蒜子在 localhost / 未识别域名上偶尔会返回离谱的脏数字，退回友好文案 */
+      line.hidden=false; line.innerHTML = "🐾 欢迎来到我的小森林，记得留下脚印哦";
+    }
+    function loadBusuanzi(){
+      if(bsLoaded) return; bsLoaded=true;
+      var bs=document.createElement("script");
+      bs.async=true;
+      bs.src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js";
+      document.body.appendChild(bs);
+      pollVisit(0);
+    }
+    var foot=document.querySelector("footer.site-footer") || line.parentNode || document.body;
+    if(window.IntersectionObserver){
+      var vIO=new IntersectionObserver(function(ens){
+        for(var i=0;i<ens.length;i++){
+          if(ens[i].isIntersecting){ vIO.disconnect(); loadBusuanzi(); return; }
+        }
+      }, { rootMargin:"400px 0px" });
+      vIO.observe(foot);
+    }
+    var idle2 = window.requestIdleCallback || function(c){ return setTimeout(c, 800); };
+    try{ idle2(function(){ setTimeout(loadBusuanzi, 5000); }, { timeout: 7000 }); }
+    catch(e){ setTimeout(loadBusuanzi, 5000); }
   }
+
 })();
 </script>
-<div id="aqLayer" aria-hidden="true"></div>
+<div id="aqLayer" aria-hidden="true"></div><div class="aq-petal-layer" id="aqPetalLayer" aria-hidden="true"></div>
 <script id="aq-js">
 /* ================= 水互动 v1 =================
    原则：只「新增监听」，不改动任何现有处理器；所有监听都是 passive 且不阻止默认行为，
@@ -4045,13 +4272,23 @@ body.dark .lb img{ border-color:#232C25; }
 
   var layer = null;
   var LIVE = 0, MAX_LIVE = 34;      /* 全站同时存活节点上限，防止长时间连点堆积 */
-  var BURST = 6;                    /* 单次点击水滴上限 */
+  var BURST = 10;                   /* 单次点击水滴簇上限（铁律：≤20，这里 10 颗已够"一小簇"） */
   var lastKey = '', lastAt = 0;
+  /* 快速连点时按「触发源」分别节流，互不挤占；
+     任何一个源超频就直接丢弃，不排队、不累积。 */
+  var lastBySrc = {};
 
   function enabled(){
     if(reduceMotion) return false;
     if(html.classList.contains('dnd')) return false;
-    if(document.hidden) return false;
+    if(document.hidden) return false;          /* 页面切后台：一切新效果停 */
+    return true;
+  }
+  /* 合并/丢弃：同一触发源在 ms 内重复触发 → 丢弃后到的 */
+  function gateSrc(src, ms){
+    var t = Date.now();
+    if(lastBySrc[src] && t - lastBySrc[src] < (ms || 300)) return false;
+    lastBySrc[src] = t;
     return true;
   }
   function box(){
@@ -4072,11 +4309,47 @@ body.dark .lb img{ border-color:#232C25; }
     }, ttl);
     return true;
   }
+  /* 给「自己已经定好坐标」的节点用（贴边水花、导航水波细条这类
+     要写 left/top/width 的）。走同一个数量池和回收时钟，
+     只是不再覆盖坐标 —— 否则 spawn() 会把它们打回 (0,0) 变成看不见。 */
+  function spawnAt(el, ttl){
+    var L = box(); if(!L) return false;
+    if(LIVE >= MAX_LIVE) return false;
+    LIVE++;
+    L.appendChild(el);
+    setTimeout(function(){
+      if(el.parentNode) el.parentNode.removeChild(el);
+      LIVE = Math.max(0, LIVE - 1);
+    }, ttl);
+    return true;
+  }
   function gate(key, ms){                        /* 快速连点同一处 → 合并成一次 */
     var t = Date.now();
     if(key === lastKey && t - lastAt < (ms || 320)) return false;
     lastKey = key; lastAt = t;
     return true;
+  }
+
+  /* ---------- 水面桥：屏幕坐标 → 唯一那层 WebGL 水面的坐标 ----------
+     水面 canvas 只铺在首屏封面（#homeScreen）上，所以：
+       · 坐标落在某块 ripple-canvas 里 → 交给 __aqSpawnRipple 扩散
+       · 落在外面 → 静默返回，不报错、不建第二个实例
+     全程复用现有那一层，不新建 WebGL。 */
+  function fireWater(fx, fy, amp){
+    var fire = window.__aqSpawnRipple;
+    if(typeof fire !== 'function') return false;
+    var cvs = document.querySelectorAll('canvas.ripple-canvas');
+    for(var i = 0; i < cvs.length; i++){
+      var cv = cvs[i];
+      if(!cv.offsetWidth) continue;
+      var host = cv.parentNode || cv;
+      var st = host.getBoundingClientRect();
+      if(st.width < 2 || st.height < 2) continue;
+      if(fx < st.left || fx > st.right || fy < st.top || fy > st.bottom) continue;
+      try{ fire(fx - st.left, fy - st.top, amp == null ? 1 : amp); return true; }
+      catch(e){ return false; }
+    }
+    return false;
   }
 
   /* ---------- 通用：点击水花（一圈水光 + ≤6 颗水滴） ---------- */
@@ -4121,16 +4394,15 @@ body.dark .lb img{ border-color:#232C25; }
         if(d <= rad && d < bd){ bd = d; best = el; bx = ex; by = ey; }
       });
       if(!best) return;
-      if(!gate('hs' + Math.round(bx) + ',' + Math.round(by), 340)) return;
-      splash(bx, by, 2.5);                                   /* 先溅一小簇水滴 */
-      var fire = window.__aqSpawnRipple;
-      if(typeof fire !== 'function') return;
-      var st = stage.getBoundingClientRect();
-      var lx = bx - st.left, ly = by - st.top;
-      try{ fire(lx, ly, 0.9); }catch(err){}                  /* 复用现有 WebGL 水面 */
-      setTimeout(function(){                                 /* 再扩散开 */
-        try{ fire(lx, ly, 1.7); }catch(err){}
+      if(!gateSrc('hs', 300)) return;
+      splash(bx, by, 2.4);                                   /* ① 先在该位置溅一小簇水滴 */
+      fireWater(bx, by, 0.85);                               /* ② 复用现有 WebGL 水面，先小后大 */
+      setTimeout(function(){                                 /* ③ 130ms 后扩散开一圈 */
+        if(!enabled()) return;
+        fireWater(bx, by, 1.7);
       }, 130);
+      /* ④ 原来的平滑滚动跳转由现有处理器照常执行 —— 本监听是 passive + capture，
+            既不 preventDefault 也不 stopPropagation，绝不拦跳转。 */
     }, { passive:true, capture:true });
   }
   /* ============ 触发点 2：全站可点卡片 ============
@@ -4151,6 +4423,14 @@ body.dark .lb img{ border-color:#232C25; }
       var diag = Math.sqrt(r.width * r.width + r.height * r.height);
       /* 环扩散到卡片边缘即止：比背景主波纹更轻、更短 */
       splash(x, y, Math.max(2.0, Math.min(6.4, diag / 46)));
+      /* 再沿卡片轮廓溢出一圈小水花（比背景主波纹更轻、更短）。 */
+      var edge = document.createElement('i');
+      edge.className = 'aq-edge';
+      edge.style.width  = Math.round(r.width) + 'px';
+      edge.style.height = Math.round(r.height) + 'px';
+      edge.style.left   = Math.round(r.left) + 'px';
+      edge.style.top    = Math.round(r.top) + 'px';
+      spawnAt(edge, 480);
     }, { passive:true, capture:true });
   }
 
@@ -4189,11 +4469,16 @@ body.dark .lb img{ border-color:#232C25; }
     leaf.className = 'aq-leaf';
     leaf.textContent = '🍃';
     leaf.style.setProperty('--lx', '0px');
-    leaf.style.setProperty('--ly', (ly - top) + 'px');
+    leaf.style.setProperty('--ly', Math.max(40, ly - top) + 'px');
     leaf.style.setProperty('--lr', '196deg');
-    spawn(leaf, lx, top, 3000);                 /* 从屏幕上方落到该条留言上，定格片刻 */
+    /* ttl 给足 3.6s：叶子落到落点 → 停住 → 慢慢淡出，不会半路被回收 */
+    spawn(leaf, lx, top, 3600);
     setTimeout(function(){                      /* 叶子落到留言上的那一瞬，荡开一圈涟漪 */
-      splash(lx, ly, 2.6);
+      if(!enabled()) return;
+      var o = document.createElement('i');
+      o.className = 'aq-splash';
+      o.style.setProperty('--aqs', '2.6');
+      spawn(o, lx, ly, 640);
     }, 1000);
   }
 
@@ -4215,21 +4500,33 @@ body.dark .lb img{ border-color:#232C25; }
       var rip = document.createElement('i');
       rip.className = 'aq-implode';             /* 原位留一圈向内收的小波纹 */
       spawn(rip, cx, cy, 720);
+      /* 顺手让现有 WebGL 水面也在原位收一圈（复用 __aqSpawnRipple，不新增实例） */
+      fireWater(cx, cy, 0.55);
     }, { passive:true });
   }
 
-  /* ============ 触发点 5：顶部导航 / 手机底部 Tab ============ */
+  /* ============ 触发点 5：顶部导航 / 手机底部 Tab ============
+     被点项下方一道细窄水波横向扫过，200ms 内完成。
+     ⚠️ 不能用「给被点元素加 ::after」的写法：.nav-links a::after 是导航下划线、
+        .m-tab.on::after 是 Tab 顶部指示条，两者都已被占用，加进去会互相覆盖。
+        所以改成往 #aqLayer 里放一个绝对定位的细条 —— 与其它水效同一层，零冲突。 */
   var SWEEP_SEL = '.nav-links a,.m-tab,.m-drawer-item,.m-dir-card';
   function bindSweep(){
     document.addEventListener('click', function(e){
       if(!enabled()) return;
       var el = e.target && e.target.closest && e.target.closest(SWEEP_SEL);
       if(!el || !el.classList) return;
-      if(!gate('sw' + (el.className || '') + (el.textContent || '').slice(0, 8), 200)) return;
-      el.classList.remove('aq-sweep');
-      void el.offsetWidth;                      /* 强制重排，让动画能重播 */
-      el.classList.add('aq-sweep');
-      setTimeout(function(){ el.classList.remove('aq-sweep'); }, 240);
+      if(!gateSrc('nav', 180)) return;          /* 连点导航 → 合并成一次 */
+      var r = el.getBoundingClientRect();
+      if(!r.width || !r.height) return;
+      var bar = document.createElement('i');
+      bar.className = 'aq-sweep-bar';
+      /* 细条贴在元素下沿，宽度取元素宽度、居中 —— 视觉上就是「下方一道水波」 */
+      var bw = Math.max(24, Math.round(r.width * 0.86));
+      bar.style.width = bw + 'px';
+      bar.style.left = Math.round(r.left + (r.width - bw) / 2) + 'px';
+      bar.style.top  = Math.round(r.bottom - 3) + 'px';
+      spawnAt(bar, 260);                       /* 200ms 动画 + 60ms 余量 */
     }, { passive:true, capture:true });
   }
 
@@ -4237,7 +4534,9 @@ body.dark .lb img{ border-color:#232C25; }
   function bindWelcome(){
     if(!hoverOK) return;                        /* 手机 / 平板直接不绑定（省电，也不打扰） */
     if(!window.IntersectionObserver) return;
-    var secs = document.querySelectorAll('#detailSection .card');
+    /* 板块的「有内容的块」+ 板块横幅，两类都算一次迎宾 */
+    var secs = document.querySelectorAll('#detailSection .card, #detailSection .sec-banner');
+    if(!secs.length) return;
     var io = new IntersectionObserver(function(ens){
       for(var i = 0; i < ens.length; i++){
         var en = ens[i];
@@ -4245,17 +4544,92 @@ body.dark .lb img{ border-color:#232C25; }
         io.unobserve(en.target);                /* 每个板块整个访问周期只触发一次 */
         if(!enabled()) continue;
         var el = en.target;
+        if(!el.offsetWidth) continue;
         var r = el.getBoundingClientRect();
         var x = r.left + r.width * (0.28 + Math.random() * 0.44);
         var y = r.top + r.height * 0.5;
         y = Math.max(70, Math.min((window.innerHeight || 800) - 70, y));
         var w = document.createElement('i');
-        w.className = 'aq-welcome';
+        w.className = 'aq-welcome' + (/sec-banner/.test(el.className) ? ' aq-welcome--soft' : '');
         w.style.setProperty('--aqw', String(3.4 + Math.random() * 2.6));
         spawn(w, x, y, 1450);
       }
     }, { threshold: 0.22 });
     Array.prototype.forEach.call(secs, function(s){ io.observe(s); });
+  }
+
+  /* ============ 触发点 6 / 7：仅 PC hover 水光 ============
+     铁律要求「触屏设备直接跳过、不绑定事件」—— 所以这里先用 hoverOK 判断，
+     不满足就整段 return，一个监听器都不会挂上去。
+     用 mouseenter/mouseleave 而不是纯 CSS :hover，是为了：
+       · 移出立刻复位，快速划过不会残留半截水光
+       · 不依赖动画重播技巧（void offsetWidth），也不会在滚动时反复触发 */
+  function bindHoverPC(){
+    if(!hoverOK) return;                        /* 手机 / 平板：整段跳过，零监听 */
+    if(reduceMotion) return;
+    /* 6. 作品卡：水光自左向右扫过，约 500ms */
+    Array.prototype.forEach.call(document.querySelectorAll('.work-card'), function(card){
+      card.addEventListener('mouseenter', function(){
+        if(!enabled()) return;
+        if(!gateSrc('wc' + (card.dataset.aqI || (card.dataset.aqI = '!' + Math.random())), 260)) return;
+        card.classList.remove('aq-shine');
+        void card.offsetWidth;
+        card.classList.add('aq-shine');
+      }, { passive:true });
+      card.addEventListener('mouseleave', function(){
+        card.classList.remove('aq-shine');      /* 移出立刻收回，不回放 */
+      }, { passive:true });
+    });
+    /* 7. 证书相框：内边缘一层缓慢流动的微弱水光（持续状态，用 :hover 即可，
+          这里只补一个类来做「首次进入才起动画」的优化） */
+    Array.prototype.forEach.call(document.querySelectorAll('.arc-frame'), function(fr){
+      fr.addEventListener('mouseenter', function(){ fr.classList.add('aq-frame-on'); }, { passive:true });
+      fr.addEventListener('mouseleave', function(){ fr.classList.remove('aq-frame-on'); }, { passive:true });
+    });
+  }
+
+  /* ============ 全屏飘花背景 ============
+     开场一次性铺好 N 瓣，之后完全交给 CSS 无限循环（负 delay 错相位）。
+     所以这里只在 init 时跑一次，不设 setInterval、不逐帧生成 ——
+     页面挂再久，节点数恒定，内存不涨、主线程不被打扰。 */
+  function bindPetals(){
+    var box = document.getElementById('aqPetalLayer');
+    if(!box) return;
+    if(reduceMotion) return;
+    if(html.classList.contains('dnd')) return;
+    if(box.childElementCount) return;          /* 幂等：重复 init 不会翻倍 */
+
+    var narrow = window.innerWidth <= 768;
+    var N = narrow ? 12 : 24;                  /* 手机减半，省电 */
+
+    for(var i = 0; i < N; i++){
+      var petal = document.createElement('i');
+      var kind = i % 5;
+      petal.className = 'aq-petal' + (kind === 1 ? ' aq-petal--leaf'
+                                     : (kind === 3 ? ' aq-petal--deep' : ''));
+
+      /* 尺寸：手机 5~8px，PC 7~13px（都是真实花瓣的长宽比，不是圆点） */
+      var base = narrow ? 5 + Math.random() * 3 : 7 + Math.random() * 6;
+      var w = base.toFixed(1);
+      var h = (base * (1.28 + Math.random() * 0.4)).toFixed(1);
+      petal.style.width  = w + 'px';
+      petal.style.height = h + 'px';
+
+      /* 横向落点铺满整屏；左右摆幅 --px 取 18~62px */
+      petal.style.left = (Math.random() * 100).toFixed(2) + '%';
+      petal.style.setProperty('--px', (18 + Math.random() * 44).toFixed(1) + 'px');
+      /* 周期 14~26s，手机整体再慢一些 */
+      var dur = 14 + Math.random() * 12;
+      petal.style.setProperty('--pdur', dur.toFixed(2) + 's');
+      petal.style.setProperty('--pdur-m', (dur * 1.5).toFixed(2) + 's');
+      /* 负 delay：一开场就散布在各自行程的不同进度上，不会"刷"地一起出现 */
+      petal.style.setProperty('--pdelay', (-Math.random() * dur).toFixed(2) + 's');
+      petal.style.setProperty('--pop', (0.5 + Math.random() * 0.34).toFixed(2));
+      /* 轻微不透明度差异，远看有景深 */
+      petal.style.opacity = (narrow ? 0.6 : 0.72) + '';
+
+      box.appendChild(petal);
+    }
   }
 
   function init(){
@@ -4267,9 +4641,104 @@ body.dark .lb img{ border-color:#232C25; }
     bindBackTop();
     bindSweep();
     bindWelcome();
+    bindHoverPC();                              /* 6/7：非 PC 环境内部直接 return */
+    bindPetals();                               /* 全屏飘花：只在开场铺一次 */
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
+})();
+</script>
+<script>
+/* ============================================================
+   首屏减重 · 横幅背景懒加载   (data-lazybg)
+   ------------------------------------------------------------
+   问题：CSS 的 background-image 没有原生懒加载，浏览器一解析到样式
+        就下载全部背景图。站上 4 张板块横幅合计 535.8KB，而它们全在
+        #detailSection 里（默认 display:none，点了「进入森林」才出现），
+        等于首屏白白多下 40% 流量。
+
+   做法：把图片地址写在 data-lazybg 上，本脚本在元素「进入视口前 1.3 屏」
+        时才把它设回 background-image。滚动到跟前时图已就位，看不到过程。
+
+   兜底（三重）：
+     a) 浏览器不支持 IntersectionObserver → 立即全部加载
+     b) scroll / resize 时按 getBoundingClientRect 再扫一遍
+     c) window.load 后 + 每次点击后补扫一次（点「进入森林」后立刻可见）
+   ⚠️ display:none 的元素 rect 全为 0，用 offsetWidth/offsetHeight 把它们
+      排除掉，否则会在首屏就被判定为「在视口里」而全部加载。
+   ============================================================ */
+(function(){
+  var pend = Array.prototype.slice.call(document.querySelectorAll('[data-lazybg]'));
+  if(!pend.length) return;
+
+  var io = null, ticking = false;
+
+  function apply(el){
+    var u = el.getAttribute('data-lazybg');
+    if(!u) return;
+    el.style.backgroundImage = "url('" + u + "')";
+    el.removeAttribute('data-lazybg');
+    var i = pend.indexOf(el);
+    if(i > -1) pend.splice(i, 1);
+    if(io) io.unobserve(el);
+    if(!pend.length) detach();
+  }
+
+  /* 真的参与布局了吗？display:none 的元素 rect 全 0，不能算「在视口里」 */
+  function laid(el){ return el.offsetWidth > 0 || el.offsetHeight > 0; }
+
+  function near(el){
+    if(!laid(el)) return false;
+    var r = el.getBoundingClientRect(), h = window.innerHeight || 700;
+    return r.top < h * 1.3 && r.bottom > -h * 0.3;
+  }
+
+  /* 手机分页模式（phone-pager）：切到当前页的卡片时立刻加载，
+     别等滚动 —— 分页模式下卡片是 display:none 切换的，IO 不会提前触发 */
+  function inCurrentPhonePage(el){
+    var n = el;
+    while(n && n !== document.body){
+      if(n.classList && n.classList.contains('phone-page')) return true;
+      n = n.parentNode;
+    }
+    return false;
+  }
+
+  function scan(){
+    ticking = false;
+    for(var i = pend.length - 1; i >= 0; i--){
+      if(near(pend[i]) || inCurrentPhonePage(pend[i])) apply(pend[i]);
+    }
+  }
+
+  function onMove(){ if(ticking) return; ticking = true; requestAnimationFrame(scan); }
+
+  function detach(){
+    window.removeEventListener('scroll', onMove);
+    window.removeEventListener('resize', onMove);
+    document.removeEventListener('click', onMove, true);
+  }
+
+  if('IntersectionObserver' in window){
+    /* 根容器外扩 1300px：滚到跟前时图已经加载好了 */
+    io = new IntersectionObserver(function(ens){
+      for(var i = 0; i < ens.length; i++){
+        if(ens[i].isIntersecting) apply(ens[i].target);
+      }
+    }, { rootMargin: '1300px 0px' });
+    pend.forEach(function(el){ io.observe(el); });
+  } else {
+    pend.slice().forEach(apply);
+    return;
+  }
+
+  window.addEventListener('scroll', onMove, { passive: true });
+  window.addEventListener('resize', onMove, { passive: true });
+  /* capture 阶段：点「进入森林」后 detailSection 转为 display:block，补扫一次 */
+  document.addEventListener('click', onMove, true);
+
+  setTimeout(scan, 260);
+  window.addEventListener('load', function(){ setTimeout(scan, 1200); });
 })();
 </script>
 </body>
