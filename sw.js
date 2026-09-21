@@ -5,8 +5,20 @@
 /* v9：6.6MB 的 base64 内联图已抽成 assets/in/*.jpg 外部文件（HTML 7.19MB -> 0.28MB）。
    旧缓存里存的是 7MB 的胖版本，升版本号会在 activate 时整包删掉，强制拉轻量新版。
    v11：留言板接入 Supabase 云端同步（index.html 里的 SUPA_URL / SUPA_KEY 已填），
-        升版本号是为了防止访客拿到 CDN / SW 缓存里的旧 HTML（那时留言还只存本地）。 */
-var CACHE = 'lxy-site-v11';
+        升版本号是为了防止访客拿到 CDN / SW 缓存里的旧 HTML（那时留言还只存本地）。
+   v12：加载策略优化（图片懒加载全覆盖 / 水波纹延迟初始化 / 加载页 1.5s 兜底 /
+        关键图 preload + 字体 CSS 非阻塞 / giscus+不蒜子延迟注入 /
+        板块横幅 data-lazybg 懒加载）。index.html 结构变了，
+        必须升版本号把访客浏览器与 CDN 里的旧 HTML 挤掉。
+   v13：水互动扩展（8 个新触发点复用同一层 WebGL 水面）。
+        其中触发点 5「导航/Tab 水波」原有实现依赖元素 ::after，
+        而 .nav-links a::after 与 .m-tab.on::after 已被占用 → 改为
+        #aqLayer 上的独立节点。HTML/CSS/JS 都变了，升版本号。
+   v14：新增「全屏飘花背景」（#aqPetalLayer，PC 24 瓣 / 手机 12 瓣，
+        开场铺一次后纯 CSS 无限循环）。HTML 多了一个节点、CSS/JS 都变了。
+        同时修掉留言板「云端已删、本机缓存仍显示幽灵留言」的 bug：
+        pull 成功后改为以云端为准重建列表（reconcile），并兜底清理测试残留。 */
+var CACHE = 'lxy-site-v14';
 var SHELL = [
   './',
   './index.html',
