@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#faf8f3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>每日自测 · 10月26日</title>
+<style>
+  :root{
+    --ink:#2c2c2a; --ink2:#6b6862; --ink3:#9a958a;
+    --line:#e3dfd5; --paper:#faf8f3; --card:#ffffff;
+    --warm:#fdf6e8; --warmline:#efe0c2; --accent:#993c1d;
+  }
+  *{box-sizing:border-box;-webkit-text-size-adjust:100%}
+  body{
+    margin:0;padding:18px 14px calc(40px + env(safe-area-inset-bottom));
+    background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:15px;line-height:1.75;
+  }
+  .wrap{max-width:620px;margin:0 auto}
+
+  .topbar{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}
+  h1{font-size:19px;font-weight:600;margin:0;letter-spacing:.3px}
+  .date{font-size:12.5px;color:var(--accent);background:#fdf0ec;border-radius:4px;padding:2px 7px;white-space:nowrap}
+  .sub{font-size:13px;color:var(--ink2);margin:6px 0 0}
+  .rule{height:1px;background:var(--line);margin:14px 0 18px}
+
+  .sec{font-size:12.5px;color:var(--ink3);letter-spacing:1px;margin:24px 0 10px}
+
+  .q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 15px;margin-bottom:12px}
+  .qh{display:flex;gap:8px;align-items:baseline;margin-bottom:8px}
+  .qn{flex:0 0 auto;font-size:12px;color:#fff;background:var(--ink2);border-radius:4px;padding:1px 7px;line-height:1.6}
+  .tag{font-size:12px;color:var(--ink3)}
+  .qbody{font-size:15.5px;line-height:2}
+  .hint{font-size:12.5px;color:var(--ink3);margin-top:8px;padding-top:7px;border-top:1px dashed var(--line)}
+
+  .m{font-family:Georgia,"Times New Roman","Songti SC",serif;font-size:16px}
+  .fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-0.55em;margin:0 3px}
+  .fr>span{padding:0 5px;line-height:1.35;white-space:nowrap}
+  .fr>span+span{border-top:1px solid currentColor;width:100%;text-align:center}
+
+  details{margin-top:10px}
+  summary{cursor:pointer;font-size:13px;color:var(--accent);list-style:none;padding:6px 0;user-select:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"▸ ";font-size:11px}
+  details[open] summary::before{content:"▾ "}
+  .ans{background:var(--warm);border:1px solid var(--warmline);border-radius:8px;padding:11px 13px;margin-top:6px;font-size:14.5px;line-height:2}
+  .ans .m{font-size:15px}
+  .note{font-size:12.5px;color:var(--ink2);margin-top:6px;line-height:1.7}
+
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  td{padding:10px 4px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.85}
+  td:first-child{width:30%;font-family:Georgia,serif;font-weight:600;font-size:15px;padding-top:11px}
+  .lb{display:inline-block;font-size:11px;color:#fff;background:#b8b1a0;border-radius:3px;padding:0 4px;margin-right:5px;line-height:1.5}
+  .ph{color:var(--ink2);font-size:13px}
+
+  .warn{background:#fdf0ec;border:1px solid #f0cfc4;border-radius:8px;padding:10px 13px;font-size:13.5px;color:#8a3a1e;margin:14px 0}
+
+  .plan{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 15px;margin-top:14px}
+  .plan div{padding:5px 0;font-size:14px}
+  .plan b{font-weight:600}
+
+  .foot{margin-top:24px;font-size:12px;color:var(--ink3);text-align:center;line-height:1.9}
+  .foot a{color:var(--accent);text-decoration:none;border-bottom:1px solid #f0cfc4}
+  .stamp{margin-top:6px;font-size:11.5px;color:#b8b1a0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <h1>每日自测</h1>
+    <span class="date">10 月 26 日</span>
+  </div>
+  <div class="sub">闭卷。先在纸上写，写完再看答案。</div>
+  <div class="rule"></div>
+
+  <div class="warn">
+    答案要你写完才点开。写完拍照发给小Q，由他来判——不用自己打分。
+  </div>
+
+  <div class="sec">高数 · 20 分钟 · 5 题</div>
+
+  <div class="q">
+    <div class="qh"><span class="qn">1</span><span class="tag">ε-N · 化简</span></div>
+    <div class="qbody">
+      设 <span class="m">a<sub>n</sub> = <span class="fr"><span>n + 1</span><span>3n − 2</span></span></span>，把下面这个式子化简成一个干净的分式：
+      <div class="m" style="margin-top:4px">|a<sub>n</sub> − <span class="fr"><span>1</span><span>3</span></span>|</div>
+    </div>
+    <div class="hint">只写化简，不用写 N。看两处：分母的 3 有没有漏，绝对值最后有没有变成正的。</div>
+    <details><summary>看答案</summary>
+      <div class="ans">
+        <div class="m">|a<sub>n</sub> − <span class="fr"><span>1</span><span>3</span></span>| = |<span class="fr"><span>3(n + 1) − (3n − 2)</span><span>3(3n − 2)</span></span>|</div>
+        <div class="m">= |<span class="fr"><span>5</span><span>3(3n − 2)</span></span>| = <span class="fr"><span>5</span><span>3(3n − 2)</span></span></div>
+        <div class="note">分子：3n + 3 − 3n + 2 = 5（注意 −(−2) 是 +2，这里最容易写成 −2）。<br>
+        n ≥ 1 时 3n − 2 ≥ 1 &gt; 0，分母是正的，所以 5 本来就是正数，绝对值直接去掉。</div>
+      </div>
+    </details>
+  </div>
+
+  <div class="q">
+    <div class="qh"><span class="qn">2</span><span class="tag">1 的无穷次 · 快法</span></div>
+    <div class="qbody">
+      <span class="m">lim<sub>x→0</sub> (1 + 3x)<sup>1/x</sup> = ?</span>
+    </div>
+    <div class="hint">这是 1<sup>∞</sup> 型。把指数凑成标准形状，不要硬算。</div>
+    <details><summary>看答案</summary>
+      <div class="ans">
+        <div>这是 1<sup>∞</sup> 型，套 <span class="m">(1 + u)<sup>1/u</sup> → e</span>，这里 u = 3x。</div>
+        <div style="margin-top:7px">先把它凑成标准形状：</div>
+        <div class="m" style="margin-top:3px">(1 + 3x)<sup>1/x</sup> = [ (1 + 3x)<sup>1/(3x)</sup> ]<sup>3</sup></div>
+        <div style="margin-top:5px">方括号里整体趋于 e，所以</div>
+        <div class="m" style="margin-top:3px">原式 = e<sup>3</sup></div>
+        <div class="note">口诀：<b>1<sup>∞</sup> 就把指数改造成「分母跟括号里的尾巴一样」</b>。
+        这里是 3x，所以指数要写 1/(3x)，但原来的指数是 1/x，差了 3 倍，外面补一个 3 次方。</div>
+      </div>
+    </details>
+  </div>
+
+  <div class="q">
+    <div class="qh"><span class="qn">3</span><span class="tag">递推数列 · 三步</span></div>
+    <div class="qbody">
+      <span class="m">x<sub>1</sub> = √2</span>，<span class="m">x<sub>n+1</sub> = √(2 + x<sub>n</sub>)</span>。
+      证明它收敛，并求极限。
+    </div>
+    <div class="hint">三步：有界 → 单调 → 取极限。先猜出上界是多少（试算前两项就能看出来）。</div>
+    <details><summary>看答案</summary>
+      <div class="ans">
+        <div><b>① 猜界。</b>算前两项：√2 ≈ 1.41，√(2 + 1.41) ≈ 1.85，还在涨，但不会超过 2。猜上界 2。</div>
+        <div><b>② 证有界。</b>x₁ = √2 &lt; 2。若 x<sub>n</sub> &lt; 2，则 x<sub>n+1</sub> = √(2 + x<sub>n</sub>) &lt; √4 = 2。故对所有 n，x<sub>n</sub> &lt; 2。</div>
+        <div><b>③ 证单调增。</b>要证 √(2 + t) &gt; t（当 0 &lt; t &lt; 2）。两边平方：2 + t &gt; t²，即 t² − t − 2 &lt; 0，即 (t − 2)(t + 1) &lt; 0，t &lt; 2 时成立。</div>
+        <div>单调增 + 有上界 → 收敛。设极限为 L。</div>
+        <div><b>④ 取极限。</b>L = √(2 + L) → L² − L − 2 = 0 → L = 2 或 L = −1。<br>
+        因 x<sub>n</sub> &gt; 0，舍去 −1，得 <b>L = 2</b>。</div>
+        <div class="note">最后那句「因 x<sub>n</sub> &gt; 0 舍去负根」不能省，否则等于有两个答案。</div>
+      </div>
+    </details>
+  </div>
+
+  <div class="q">
+    <div class="qh"><span class="qn">4</span><span class="tag">无穷小比较</span></div>
+    <div class="qbody">
+      当 <span class="m">x → 0</span> 时，<span class="m">1 − cos x</span> 与 <span class="m"><span class="fr"><span>x²</span><span>2</span></span></span> 是什么关系？
+    </div>
+    <div class="hint">三档：高阶、同阶、等价。判断依据是两者比值的极限。</div>
+    <details><summary>看答案</summary>
+      <div class="ans">
+        <div>是<b>等价无穷小</b>。</div>
+        <div style="margin-top:7px">直接引用基本等价式：<span class="m">1 − cos x ~ <span class="fr"><span>x²</span><span>2</span></span></span>（x → 0）。</div>
+        <div style="margin-top:5px">「等价」的意思就是两者比值的极限是 1：</div>
+        <div class="m" style="margin-top:5px">lim<sub>x→0</sub> <span class="fr"><span>1 − cos x</span><span>x²/2</span></span> = 1</div>
+        <div class="note">三档判据：比值 → 1 叫等价；→ 非零常数叫同阶；→ 0 叫高阶。<br>
+        常用等价：<span class="m">sin x ~ x</span>、<span class="m">1 − cos x ~ <span class="fr"><span>x²</span><span>2</span></span></span>、<span class="m">ln(1 + x) ~ x</span>、<span class="m">e<sup>x</sup> − 1 ~ x</span>。</div>
+      </div>
+    </details>
+  </div>
+
+  <div class="q">
+    <div class="qh"><span class="qn">5</span><span class="tag">换元 · 回代</span></div>
+    <div class="qbody">
+      <span class="m">lim<sub>x→0</sub> <span class="fr"><span>e<sup>2x</sup> − 1</span><span>x</span></span> = ?</span>
+    </div>
+    <div class="hint">换元之后别忘了把原变量代回去。</div>
+    <details><summary>看答案</summary>
+      <div class="ans">
+        <div>令 <span class="m">t = 2x</span>，则 <span class="m">x = t/2</span>，<span class="m">x → 0</span> 时 <span class="m">t → 0</span>。</div>
+        <div class="m" style="margin-top:5px">原式 = lim<sub>t→0</sub> <span class="fr"><span>e<sup>t</sup> − 1</span><span>t/2</span></span> = 2 · lim<sub>t→0</sub> <span class="fr"><span>e<sup>t</sup> − 1</span><span>t</span></span> = 2</div>
+        <div class="note">这题就是老毛病：换元成 t 之后，最后一步要写 t 的答案，也要写回 x 的答案。只写一半算没做完。</div>
+      </div>
+    </details>
+  </div>
+
+  <div class="sec">英语 · 15 分钟 · 5 个词</div>
+
+  <div class="q">
+    <div class="qh"><span class="qn">A</span><span class="tag">四级高频 · 第 1 组</span></div>
+    <div class="qbody" style="line-height:1.9;font-size:14.5px">
+      每个词按 5 项写：音标 / 词性+意思 / 拆开记 / 例句 / 同根或易混。先遮住下面，自己默写。
+    </div>
+    <details><summary>看这 5 个词</summary>
+      <div class="ans" style="line-height:1.85">
+        <table>
+          <tr><td>acquire</td><td>
+            <span class="ph">/əˈkwaɪə(r)/</span> · v. 获得，取得（靠努力得来）<br>
+            <span class="lb">拆</span>a + quire（求）→ 去求 → 获得<br>
+            <span class="lb">例</span>It takes years to acquire a new language.<br>
+            <span class="lb">混</span>require 需要 ｜ inquire 询问
+          </td></tr>
+          <tr><td>significant</td><td>
+            <span class="ph">/sɪɡˈnɪfɪkənt/</span> · adj. 重要的；显著的<br>
+            <span class="lb">拆</span>sign（记号）+ fic（做）+ ant → 做出记号 → 值得注意<br>
+            <span class="lb">例</span>There is a significant difference between the two.<br>
+            <span class="lb">混</span>signify 表示 ｜ significance 重要性
+          </td></tr>
+          <tr><td>contribute</td><td>
+            <span class="ph">/kənˈtrɪbjuːt/</span> · v. 贡献；促成（contribute to）<br>
+            <span class="lb">拆</span>con（一起）+ tribute（给）→ 一起给 → 贡献<br>
+            <span class="lb">例</span>Everyone can contribute to the project.<br>
+            <span class="lb">混</span>distribute 分发 ｜ attribute 归因于
+          </td></tr>
+          <tr><td>maintain</td><td>
+            <span class="ph">/meɪnˈteɪn/</span> · v. 维持；主张<br>
+            <span class="lb">拆</span>main（手）+ tain（握住）→ 用手握住 → 维持<br>
+            <span class="lb">例</span>We must maintain a healthy diet.<br>
+            <span class="lb">混</span>maintenance 维护 ｜ obtain 获得
+          </td></tr>
+          <tr><td>approach</td><td>
+            <span class="ph">/əˈprəʊtʃ/</span> · n. 方法，途径 · v. 接近<br>
+            <span class="lb">拆</span>ap（去）+ proach（近）→ 走近 → 接近 → 方法<br>
+            <span class="lb">例</span>We need a new approach to this problem.<br>
+            <span class="lb">混</span>reach 到达 ｜ access 进入
+          </td></tr>
+        </table>
+      </div>
+    </details>
+  </div>
+
+  <div class="plan">
+    <div><b>今天的量（35 分钟）</b></div>
+    <div>1. 高数 5 题，纸上写，20 分钟。卡住超过 3 分钟就跳过，做完一起看答案。</div>
+    <div>2. 英语 5 词，先默写再看，15 分钟。</div>
+    <div>3. 全部写完拍照发给小Q。他判，你不用自己打分。</div>
+  </div>
+
+  <div class="foot">
+    <div>这个页面链接是固定的，内容每天换。加书签就行，不用重新找。</div>
+    <div class="stamp">最后更新 2026-10-26 · 第 1 期</div>
+  </div>
+
+</div>
+</body>
+</html>
